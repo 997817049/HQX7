@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".activity.MainActivity">
+
+    <include android:id="@+id/title"
+             layout="@layout/title_layout"/>
+
+    <View android:id="@+id/popWindow"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"/>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/main_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_above="@+id/model_rg">
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <WebView
+                android:id="@+id/main_webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <RadioGroup android:id="@+id/model_rg"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:orientation="horizontal"
+                android:background="@drawable/model_button_border"
+                android:layout_above="@+id/model_text">
+        <com.zty.hqx7.ztyClass.IconButton
+                android:id="@+id/rg_school"
+                style="@style/model_button"
+                android:textSize="27sp"
+                android:text="@string/rg_school"/>
+        <com.zty.hqx7.ztyClass.IconButton
+                android:id="@+id/rg_study"
+                style="@style/model_button"
+                android:textSize="23sp"
+                android:text="@string/rg_study"/>
+        <com.zty.hqx7.ztyClass.IconButton
+                android:id="@+id/rg_home"
+                style="@style/model_button"
+                android:textSize="22sp"
+                android:text="@string/rg_new"
+                android:checked="true"/>
+        <com.zty.hqx7.ztyClass.IconButton
+                android:id="@+id/rg_base"
+                style="@style/model_button"
+                android:textSize="23sp"
+                android:text="@string/rg_base"/>
+        <com.zty.hqx7.ztyClass.IconButton
+                android:id="@+id/rg_my"
+                style="@style/model_button"
+                android:textSize="25sp"
+                android:text="@string/rg_my"/>
+    </RadioGroup>
+
+    <LinearLayout android:id="@+id/model_text"
+                  android:layout_width="match_parent"
+                  android:layout_marginTop="2dp"
+                  android:layout_height="17dp"
+                  android:layout_marginBottom="2dp"
+                  android:layout_alignParentBottom="true">
+        <TextView android:id="@+id/txt_school"
+                  style="@style/model_text"
+                  android:text="@string/校园"/>
+        <TextView android:id="@+id/txt_study"
+                  style="@style/model_text"
+                  android:text="@string/学习"/>
+        <TextView android:id="@+id/txt_home"
+                  style="@style/model_text"
+                  android:textColor="@color/red"
+                  android:text="@string/首页"/>
+        <TextView android:id="@+id/txt_base"
+                  style="@style/model_text"
+                  android:text="@string/基地"/>
+        <TextView android:id="@+id/txt_my"
+                  style="@style/model_text"
+                  android:text="@string/我的"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="../../../files/study/exam/subExam.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/public/top.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/other.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../../files/public/top.js"></script>
+    <script type="text/javascript" src="../../../files/search/search.js"></script>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content">
+    <!--试题-->
+    <div id="exam-content" style="padding-top: 10px;">
+    </div>
+    <div class="toTopH" >顶部</div>
+</div>
+</body>
+<script>
+    var num = 0;
+
+    init();
+    function init() {
+        dealToTop();
+        $('.toTopH').fadeOut(100);
+        para = window.android.getPara();
+        sub = JSON.parse(para).sub;
+        $.when(
+            $.ajax({
+                url: serverIp + "study/exam/" + sub,
+                type: "POST",
+                data: {
+                    userId:userId,
+                    limit:20
+                },
+
+                success: function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result.length <= 0){
+                        $("#exam-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                        return;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        $("#exam-content").append(
+                            '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>\n' +
+                            '<img src="../../../images/分割线.png" class="line"/>');
+                        num = result[i].id;
+                    }
+                },
+                error:function () {
+                    console.log("ajax失败");
+                }
+            })//loadContent();
+        ).then(function (value) {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function (reason) { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function refresh(){
+        $("#exam-content").html("");
+        loadContent();
+    }
+
+    function loadContent() {
+        $.ajax({
+            url: serverIp + "study/exam/" + sub,
+            type: "POST",
+            data: {
+                userId:userId,
+                limit:20
+            },
+
+            success: function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result.length <= 0){
+                    $("#exam-content").append(
+                        '<div class="line-wrapper">\n' +
+                        '<div class="solid_line"></div>\n' +
+                        '<div class="line_txt">我也是有底线的</div>\n' +
+                        '</div>');
+                    window.android.loadNoMoreData();
+                    return;
+                }
+                for (var i = 0; i < result.length; i++) {
+                    $("#exam-content").append(
+                        '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
+                        '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                        '<span class="exam-title">' + result[i].title + '</span>' +
+                        '</div>\n' +
+                        '<img src="../../../images/分割线.png" class="line"/>');
+                    num = result[i].id;
+                }
+            },
+            error:function () {
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+
+</script>
+</html>

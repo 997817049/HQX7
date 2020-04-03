@@ -1,0 +1,64 @@
+/*exam*/
+.exam-model-wrapper{
+    margin:10px;
+    display: none;
+    z-index: 1;
+}
+.sub-exam-wrapper {
+    margin-top: 10px;
+    width:100%;
+    height:210px;
+}
+.sub-exam-title-wrapper {
+    height: 25px;
+    line-height: 25px;
+    margin-bottom: 10px;
+    width:100%;
+}
+.line_red {
+    height:25px;
+    width:auto;
+    float: left;
+}
+.sub-exam-title {
+    font-size: 16px;
+    font-weight:bold;
+    margin-left:5px;
+    float: left;
+}
+.more {
+    color: #009dda;
+    font-size: 14px;
+    float: right;
+}
+.sub-exam-content{
+    margin-left:10px;
+    width:97%;
+    height:150px;
+}
+.cutoff_rule{
+    margin-top: 20px;
+    width:100%;
+}
+
+/*每一个exam*/
+.exam-wrapper {
+    height: 25px;
+    width: 95%;
+    line-height:25px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+.exam-label {
+    padding: 2px;
+    font-size: 10px;
+    color:#cd0a0a;
+    border:1px solid #cd0a0a;
+    border-radius: 7px;
+    text-align:center;
+}
+.exam-title {
+    font-size: 15px;
+    margin-left: 5px;
+    overflow: hidden;
+}

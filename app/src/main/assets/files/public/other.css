@@ -1,0 +1,16 @@
+.line-wrapper{
+    margin-top: 20px;height: 20px; width: 100%;
+    padding-top: 5px; padding-bottom: 5px;
+}
+.solid_line{
+    height: 0; width: 100%; border-bottom: 1px solid #999999; z-index: 1
+}
+.dashed_line{
+    height: 0; width: 100%; border-bottom: 1px dashed #999999; z-index: 1
+}
+.line_txt{
+    width: auto; padding:3px;font-size: 12px; z-index: 2;margin-top: -10px;flex:1; position: absolute; background-color: white;left: 37%;
+}
+.no_data_info{
+    padding-left: 10px; padding-top: 10px;margin-top: 15px;height: 20px; width: 100%; font-style: italic
+}

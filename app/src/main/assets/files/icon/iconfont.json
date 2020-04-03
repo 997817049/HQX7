@@ -1,0 +1,177 @@
+{
+  "id": "1624485",
+  "name": "HQXIcon",
+  "font_family": "icon",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3230169",
+      "name": "校园",
+      "font_class": "xiaoyuan",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "12613089",
+      "name": "学习",
+      "font_class": "xuexi",
+      "unicode": "e851",
+      "unicode_decimal": 59473
+    },
+    {
+      "icon_id": "13801279",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "4480006",
+      "name": "翻页模式",
+      "font_class": "fanyemoshi",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "8308442",
+      "name": "评论",
+      "font_class": "pinglun",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "10310881",
+      "name": "警告",
+      "font_class": "-zx-jinggao",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "8064889",
+      "name": "收 藏",
+      "font_class": "videoCollect",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "12910617",
+      "name": "my",
+      "font_class": "nickname",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "12910618",
+      "name": "auto",
+      "font_class": "play",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "12910619",
+      "name": "next",
+      "font_class": "next",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "12910620",
+      "name": "more",
+      "font_class": "more",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "12910621",
+      "name": "mess",
+      "font_class": "message",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "12910622",
+      "name": "study",
+      "font_class": "edit",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "12910623",
+      "name": "collect",
+      "font_class": "mark",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "12910624",
+      "name": "catalogue",
+      "font_class": "catalogue",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "12910625",
+      "name": "down",
+      "font_class": "down",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "12910626",
+      "name": "home",
+      "font_class": "qizi",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "12910627",
+      "name": "error",
+      "font_class": "error",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "12910628",
+      "name": "back",
+      "font_class": "back",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "12910629",
+      "name": "bright",
+      "font_class": "bright",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "12910630",
+      "name": "base",
+      "font_class": "jingdian",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "12910631",
+      "name": "search",
+      "font_class": "search",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "12910632",
+      "name": "theme",
+      "font_class": "theme",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "12910633",
+      "name": "refresh",
+      "font_class": "refresh",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    }
+  ]
+}

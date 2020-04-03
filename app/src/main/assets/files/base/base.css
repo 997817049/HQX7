@@ -1,0 +1,19 @@
+﻿body{
+    margin: 0;
+}
+.base {
+    margin-left: 4%;
+    width: 90%;
+    height: 230px;
+    margin-top: 30px;
+    display: inline-block;
+    text-align:center;
+    background-color:rgba(242, 242, 242, 1)
+}
+.base_image {
+    width: 100%;
+    height: 200px
+}
+.base_title {
+    font-weight: bold;
+}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>书籍</title>
+    <link href="../../../files/study/book/book.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../../files/search/search.js"></script>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content" class="content-wrapper">
+    <!--最近阅读模块-->
+    <div id="history-model" class="model-wrapper">
+        <div class="model-title-wrapper">
+            <img src="../../../images/红色短竖线.png" class="line_red" style="">
+            <div class="title">最近阅读</div>
+        </div>
+    </div>
+    <!--分割线-->
+    <img src="../../../images/分割线.png" style="width: 100%"/>
+
+    <!--热门书籍  根据count排序-->
+    <div class="model-wrapper">
+        <!--标题-->
+        <div class="model-title-wrapper">
+            <img src="../../../images/红色短竖线.png" class="line_red">
+            <div class="title">热门书籍</div>
+            <div class="more" onclick="jumpToSub('hot')">更多>></div>
+        </div>
+        <!--内容-->
+        <div id="hot" class="model-content-wrapper">
+        </div>
+    </div>
+    <!--分割线-->
+    <img src="../../../images/分割线.png" style="width: 100%"/>
+
+    <!--新书抢鲜  根据时间/id排序-->
+    <div class="model-wrapper">
+        <!--标题-->
+        <div class="model-title-wrapper">
+            <img src="../../../images/红色短竖线.png" class="line_red">
+            <div class="title">新书抢鲜</div>
+            <div class="more" onclick="jumpToSub('recent')">更多>></div>
+        </div>
+        <!--内容-->
+        <div id="recent" class="model-content-wrapper"></div>
+    </div>
+    <!--分割线-->
+    <img src="../../../images/分割线.png" style="width: 100%"/>
+
+    <!--分类推荐  根据count排序-->
+    <div class="model-wrapper">
+        <!--标题-->
+        <div class="model-title-wrapper">
+            <img src="../../../images/红色短竖线.png" class="line_red">
+            <div class="title">分类推荐</div>
+            <div class="more" onclick="jumpToSub('special')">更多>></div>
+        </div>
+        <!--红色经典 1 -->
+        <div class="special-book-model">
+            <!--标题栏-->
+            <div class="special-book-model-title-wrapper">
+                <!--标题-->
+                <div class="special-book-model-title">红色经典</div>
+                <!--图片-->
+                <div class="special-book-model-img-wrapper">
+                    <img src="../../../images/党.png" class="special-book-model-img">
+                </div>
+            </div>
+            <div id="label1"></div>
+        </div>
+        <!--哲学人生 2 -->
+        <div class="special-book-model">
+            <!--标题栏-->
+            <div class="special-book-model-title-wrapper">
+                <!--标题-->
+                <div class="special-book-model-title">哲学人生</div>
+                <!--图片-->
+                <div class="special-book-model-img-wrapper">
+                    <img src="../../../images/思考.png" class="special-book-model-img">
+                </div>
+            </div>
+            <div id="label2"></div>
+        </div>
+        <!--人物传记 3 -->
+        <div class="special-book-model">
+            <!--标题栏-->
+            <div class="special-book-model-title-wrapper">
+                <!--标题-->
+                <div class="special-book-model-title">人物传记</div>
+                <!--图片-->
+                <div class="special-book-model-img-wrapper">
+                    <img src="../../../images/人.png" class="special-book-model-img">
+                </div>
+            </div>
+            <div id="label3"></div>
+        </div>
+        <!--文艺书籍 8 -->
+        <div class="special-book-model">
+            <!--标题栏-->
+            <div class="special-book-model-title-wrapper">
+                <!--标题-->
+                <div class="special-book-model-title">文艺书籍</div>
+                <!--图片-->
+                <div class="special-book-model-img-wrapper">
+                    <img src="../../../images/艺术家.png" class="special-book-model-img">
+                </div>
+            </div>
+            <div id="label8"></div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    init();
+    function init() {
+        $.when(
+            $.ajax({
+                url: serverIp + "history/study/book",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    limit:1
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        $("#history-model").append(
+                            '<div id="history" style="padding-left: 10px;" class="model-content-wrapper" onclick="">您还没有阅读记录呢！</div>');
+                        return;
+                    }
+                    if(result.data === null){
+                        $("#history-model").append(
+                            '<div id="history" style="padding-left: 10px;" class="model-content-wrapper" onclick="">您还没有阅读记录呢！</div>');
+                        return;
+                    }
+                    result = result.data;
+                    $("#history-model").append(
+                        '<div id="history" style="padding-left: 10px;" class="model-content-wrapper" onclick="readBook(\'' + result.id + '\')">' + result.title + '</div>');
+                },
+                error : function () {
+                }
+            }),//loadHistory
+            $.ajax({
+                url: serverIp + "study/book/hot",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    limit:5,
+                    num:0
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++) {
+                        $("#hot").append(
+                            '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">' +
+                            '    <div class="book-img-wrapper">' +
+                            '        <img src="'+ nginxIp + result[i].picUrl + '" class="book-img">' +
+                            '    </div>' +
+                            '    <div class="book-title">' + result[i].title + '</div>' +
+                            '</div>');
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadModel("hot")
+            $.ajax({
+                url: serverIp + "study/book/recent",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    limit:5,
+                    num:0
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++) {
+                        $("#recent").append(
+                            '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">' +
+                            '    <div class="book-img-wrapper">' +
+                            '        <img src="'+ nginxIp + result[i].picUrl + '" class="book-img">' +
+                            '    </div>' +
+                            '    <div class="book-title">' + result[i].title + '</div>' +
+                            '</div>');
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadModel("recent")
+            $.ajax({
+                url: serverIp + "study/book/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:1,
+                    limit:5,
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++) {
+                        $("#label1").append(
+                            '<div class="book-name" onclick="readBook(\'' + result[i].id + '\')">' + (i + 1) + '. ' + result[i].title+ '</div>');
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadSpecialModel(1)
+            $.ajax({
+                url: serverIp + "study/book/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:2,
+                    limit:5,
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++) {
+                        $("#label2").append(
+                            '<div class="book-name" onclick="readBook(\'' + result[i].id + '\')">' + (i + 1) + '. ' + result[i].title+ '</div>');
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadSpecialModel(2)
+            $.ajax({
+                url: serverIp + "study/book/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:3,
+                    limit:5,
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++) {
+                        $("#label3").append(
+                            '<div class="book-name" onclick="readBook(\'' + result[i].id + '\')">' + (i + 1) + '. ' + result[i].title+ '</div>');
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadSpecialModel(3)
+            $.ajax({
+                url: serverIp + "study/book/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:8,
+                    limit:5,
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++) {
+                        $("#label8").append(
+                            '<div class="book-name" onclick="readBook(\'' + result[i].id + '\')">' + (i + 1) + '. ' + result[i].title+ '</div>');
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            })//loadSpecialModel(8)
+        ).then(function (value) {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function (reason) { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function loadModel(part) {
+        $.ajax({
+            url: serverIp + "study/book/" + part,
+            type:"POST",
+            data:{
+                userId:userId,
+                limit:5,
+                num:0
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                for(var i = 0; i < result.length; i++) {
+                    $("#" + part).append(
+                        '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">' +
+                        '    <div class="book-img-wrapper">' +
+                        '        <img src="'+ nginxIp + result[i].picUrl + '" class="book-img">' +
+                        '    </div>' +
+                        '    <div class="book-title">' + result[i].title + '</div>' +
+                        '</div>');
+                }
+            },
+            error : function () {
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    function loadSpecialModel(label) {
+        $.ajax({
+            url: serverIp + "study/book/special",
+            type:"POST",
+            data:{
+                userId:userId,
+                num:0,
+                label:label,
+                limit:5,
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result.length <= 0){
+                    $("#label" + label).append("暂无内容");
+                    return;
+                }
+                for(var i = 0; i < result.length; i++) {
+                    $("#label" + label).append(
+                        '<div class="book-name">' + (i + 1) + '. ' + result[i].title+ '</div>');
+                }
+            },
+            error : function () {
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    function loadHistory() {
+        $.ajax({
+            url: serverIp + "history/study/book",
+            type:"POST",
+            data:{
+                userId:userId,
+                limit:1
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    $("#history-model").append(
+                        '<div id="history" style="padding-left: 10px;" class="model-content-wrapper" onclick="">您还没有阅读记录呢！</div>');
+                    return;
+                }
+                result = result.data;
+                $("#history-model").append(
+                    '<div id="history" style="padding-left: 10px;" class="model-content-wrapper" onclick="readBook(\'' + result.id + '\')">' + result.title + '</div>');
+            },
+            error : function () {
+            }
+        });
+    }
+
+    function jumpToSub(sub) {
+        var subTitle = "";
+        var htmlUrl = "study/book/subBook.html";
+        switch (sub) {
+            case "hot": subTitle = "热门书籍"; break;
+            case "recent": subTitle = "新书抢鲜"; break;
+            case "special": subTitle = "分类推荐"; htmlUrl = "study/book/specialBook.html";break;
+        }
+
+        window.android.toSub("study", "book", sub, subTitle, htmlUrl);
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+
+</script>
+</html>
+
+

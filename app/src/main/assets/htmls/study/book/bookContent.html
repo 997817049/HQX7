@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>书籍</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../resources/scripts/epub.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+    <link href="../../../files/study/book/bookContent.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/icon/iconfont.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content">
+    <!--顶部标题栏-->
+    <div id="title_wrapper" class="title_wrapper">
+        <div class="title_left">
+            <span class="icon iconback"  style="font-size: 25px" onclick="finish()"></span>
+        </div>
+        <div class="title_right">
+            <span id="auto" class="icon iconfanyemoshi" style="font-size: 16px; margin-top: 2px" onclick="autoPageTurn()"></span>
+            <span id="collect" class="icon iconmark" style="font-size: 27px;" onclick="dealCollect()"></span>
+        </div>
+    </div>
+    <!--阅读区域-->
+    <div class="read-wrapper">
+        <div id="book" class="book"></div>
+        <div class="mask">
+            <div class="left" onclick="prevPage()"></div>
+            <div class="center" onclick="toggleTitleAndMenu()"></div>
+            <div class="right" onclick="nextPage()"></div>
+        </div>
+    </div>
+    <!--下方菜单-->
+    <div id="menu_bar">
+        <!--菜单-->
+        <div id="menu-wrapper" class="menu-wrapper">
+            <div class="menu_icon_wrapper">
+                <span class="icon iconcatalogue" onclick="showSetting(3)"></span>
+            </div>
+            <div class="menu_icon_wrapper">
+                <span class="icon icontheme" onclick="showSetting(2)"></span>
+            </div>
+            <div class="menu_icon_wrapper" onclick="showSetting(1)">
+                <span class="icon iconbright"></span>
+            </div>
+            <div class="menu_icon_wrapper" onclick="showSetting(0)">
+                <span class="icon">ad</span>
+            </div>
+        </div>
+        <!--详细设置-->
+        <div id="setting-wrapper" class="setting-wrapper">
+            <!--字体大小设置-->
+            <div id="setting-0" class="setting-font-size">
+                <div id="min_font" class="setting-font-preview">A</div>
+                <div id="setting-font-size-select" class="setting-font-select"></div>
+                <div id="max_font" class="setting-font-preview">A</div>
+            </div>
+            <!--主题设置--><!--选中时txt为#333-->
+            <div id="setting-1" class="setting-theme"></div>
+            <!--进度条设置-->
+            <div id="setting-2" class="setting-progress">
+                <div class="setting-progress-preview" onclick="prevSection()">上一章</div>
+                <div class="setting-progress-select">
+                    <div class="progress-wrapper">
+                        <input id="progress" class="progress" type="range" max="100" min="0" step="1" disabled=""
+                               onchange="onProgressChange()" oninput="onProgressInput()">
+                    </div>
+                    <div class="text-wrapper">
+                        <span id="setting-progress-text">加载中...</span>
+                    </div>
+                </div>
+                <div class="setting-progress-preview" onclick="nextSection()">下一章</div>
+            </div>
+        </div>
+    </div>
+    <!--目录-->
+    <div id="setting-3" style="display: none">
+        <div class="catalogue">
+            <div id="catalogue-wrapper" class="catalogue-wrapper"></div>
+            <div class="empty">加载中...</div>
+        </div>
+        <div class="catalogue-mask" onclick="hiddenSetting()"></div>
+    </div>
+</div>
+</body>
+<script>
+    var ifTitleAndMenuShow = false;
+    var fontSizeList = [12, 14, 16, 18, 20, 22, 24];
+    var defultFontSizeIndex = parseInt(fontSizeList.length / 2);
+    var themeList = [
+        {
+            name: 'default',
+            style: {
+                body: {
+                    'color': '#000', 'background': '#fff'
+                }
+            }
+        },
+        {
+            name: 'green',
+            style: {
+                body: {
+                    'color': '#000', 'background': '#ceeaba'
+                }
+            }
+        },
+        {
+            name: 'night',
+            style: {
+                body: {
+                    'color': '#fff', 'background': '#000'
+                }
+            }
+        },
+        {
+            name: 'gold',
+            style: {
+                body: {
+                    'color': '#000', 'background': 'rgb(241, 236, 226)'
+                }
+            }
+        }
+    ];
+    var defaultThemeIndex = 0;
+    var settingId = -1;
+    var bookAvailable = false;
+    var isCollect = false;
+    var fontFamilyList = ['Default', 'Cabin', 'Days One', 'Montserrat' ,'Tangerine'];
+    var pageTurnTime = 2000;
+    var isAutoPageTurn = false;
+
+    init();
+    function init() {
+        console.log("初始化literature界面");
+        para = window.android.getPara();
+        para = JSON.parse(para).id;
+        // para=1;
+        $.when(
+            $.ajax({
+                url:serverIp + "study/book",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    id:para//书籍的编号
+                },
+                success:function (result) {
+                    if(result.code === 1) {
+                        $("#content").html("书籍加载失败");
+                        return;
+                    }
+                    result = result.data;
+                    isCollect = result.collect;
+                    if(isCollect) {
+                        var progress = 0;
+                        if(result.progress !== null){
+                            progress = result.progress;
+                        }
+                        document.getElementById("collect").style.color = 'red';
+                    }
+                    initBook(nginxIp + result.fileUrl, progress);
+                }
+            })
+        ).then(function () {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function () { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function finish() {
+        window.android.finish();
+    }
+
+    function initBook(fileUrl, progress) {
+        console.log(progress);
+        this.book = ePub(fileUrl);
+        this.rendition = this.book.renderTo('book', {
+            width: "100%",
+            height: window.innerHeight
+        });
+        rendition.display();
+
+        this.themes = this.rendition.themes;
+
+        // 设置默认字体
+        this.themes.fontSize(fontSizeList[defultFontSizeIndex] + 'px');
+        setFontSetting();
+        document.getElementById("point_" + defultFontSizeIndex).style.visibility = 'visible';
+        //设置默认主题
+        setThemesSetting();
+        this.themes.select("default");
+        this.locations = null;
+        //获取location
+        this.book.ready.then(() => {
+            this.navigation = this.book.navigation;
+            showContent();//处理目录
+            return this.book.locations.generate();
+        }).then(result => {
+                // 保存locations对象
+                this.locations = this.book.locations;
+            var location = progress > 0 ? this.locations.cfiFromPercentage(progress) : 0;
+            this.rendition.display(location).then(() => {
+                pagePropress();
+            });
+            //设置进度条
+            setProgress();
+        });
+        this.section = 0;
+        // 设置进度
+    }
+
+    function dealCollect() {
+        if(!isCollect) {
+            //获取当前百分比
+            var currentLocation = this.book.rendition.currentLocation();
+            var progress = currentLocation.end.percentage;
+            applyCollect(progress);
+        } else {
+            cancelCollect();
+        }
+    }
+
+    function cancelCollect() {
+        $.when(
+            $.ajax({
+                url:serverIp + "collect/cancel",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    model:'study',
+                    part:'book',
+                    id:para,//电影的编号
+                    progress:null
+                },
+                success:function () {},
+                error:function () {}
+            })
+        ).then(function (value) {
+            if(isCollect){
+                showMsg('取消收藏', 'center');
+                isCollect = !isCollect;
+            }
+            document.getElementById("collect").style.color = '#333333';
+        },function (reason) {
+            if(isCollect){
+                showMsg('操作失败 请稍后再试', 'center');
+            }
+        });
+    }
+
+    function applyCollect(progress) {
+        $.when(
+            $.ajax({
+                url:serverIp + "collect/apply",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    model:'study',
+                    part:'book',
+                    id:para,//电影的编号
+                    progress:progress
+                },
+                success:function () {},
+                error:function () {}
+            })
+        ).then(function (value) {
+            if(!isCollect){
+                showMsg('收藏成功', 'center');
+                isCollect = !isCollect;
+            }
+            document.getElementById("collect").style.color = 'red';
+        },function (reason) {
+            if(!isCollect){
+                showMsg('收藏失败', 'center');
+            }
+        });
+    }
+
+    function autoPageTurn() {
+        isAutoPageTurn = !isAutoPageTurn;
+        if(isAutoPageTurn){
+            this.interval = setInterval("nextPage()",pageTurnTime);
+            document.getElementById("auto").style.color = 'red';
+            showMsg("点击音量键 调节翻页速度", 'center');
+        } else {
+            clearInterval(this.interval);//停止
+            document.getElementById("auto").style.color = '#333333';
+        }
+    }
+
+    function showContent(){
+        $(".empty").hide();
+        setContent();//设置目录
+        $(".catalogue-wrapper").show();
+    }
+
+    function setContent() {
+        var list = this.navigation.toc;
+        document.getElementById("catalogue-wrapper").innerHTML = "";
+        for(var i = 0; i < list.length; i++) {
+            $("#catalogue-wrapper").append(
+                '<div class="catalogue-item" onclick="jumpTo(\'' + list[i].href  + '\')">\n' +
+                '<span class="text">' + list[i].label+ '</span>\n' +
+                '</div>');
+        }
+    }
+
+    function jumpTo(href) {
+        //隐藏标题栏和菜单栏
+        if(ifTitleAndMenuShow) toggleTitleAndMenu();
+        this.book.rendition.display(href).then(() => {
+            pagePropress();
+        });
+    }
+
+    function setSection(num) {
+        this.section = num;
+        if(isCollect && this.section !== 0){
+            applyCollect(progress);
+        }
+    }
+
+    function prevSection() {
+        // 当章节数大于0，并且电子书已经解析完毕了我们才能使用返回上一章
+        if(this.section > 0 && bookAvailable){
+            this.section--;
+            this.book.ready.then(() => {
+                displaySection();
+            });
+        }
+    }
+
+    function nextSection() {
+        if(this.section < this.book.spine.length-1 && bookAvailable){
+            this.section++;
+            this.book.ready.then(() => {
+                displaySection();
+            });
+        }
+    }
+
+    function displaySection() {
+        var sectionInfo = this.book.section(this.section);
+        if(sectionInfo && sectionInfo.href){
+            this.book.rendition.display(sectionInfo.href).then(() => {
+                // 获得当前章节的百分比并设置
+                var currentLocation = this.book.rendition.currentLocation();
+                var progress = currentLocation.end.percentage;
+                this.setProgressValue(Math.floor(progress*100));
+            });
+        }
+    }
+
+    function onProgressInput() {
+        if(!bookAvailable)return;
+        var percent = document.getElementById("progress").value;
+        setProgressValue(percent);
+    }
+
+    function onProgressChange() {
+        if(!bookAvailable)return;
+        var percent = document.getElementById("progress").value / 100;
+        var location = percent > 0 ? this.locations.cfiFromPercentage(percent) : 0;
+        this.rendition.display(location).then(() => {
+            pagePropress();
+        });
+        console.log(this.section);
+    }
+
+    function setProgress() {
+        $('#progress').removeAttr("disabled");
+        bookAvailable = true;
+        pagePropress();
+    }
+
+    function setProgressValue(num) {
+        document.getElementById("progress").style.backgroundSize = num  + ' 100%';
+        document.getElementById("progress").value = num;
+        document.getElementById("setting-progress-text").innerHTML = num + '%';
+    }
+
+    function setThemesSetting() {
+        document.getElementById("setting-1").innerHTML = "";
+        for (var i = 0; i < themeList.length; i++) {
+            //注册所有主题
+            this.themes.register(themeList[i].name, themeList[i].style);
+            //设置 主题设置
+            $("#setting-1").append(
+                '<div class="setting-theme-item" onclick="setTheme(\'' + i + '\')">' +
+                '<div class="setting-theme-preview" style="background-color: '+ themeList[i].style.body.background + '"></div>' +
+                '<div class="setting-theme-text">' + themeList[i].name + '</div>' +
+                '</div>'
+            );
+        }
+    }
+
+    function setTheme(index) {
+        this.themes.select(themeList[index].name);
+        defaultThemeIndex = index;
+    }
+
+    function setFontSetting() {
+        document.getElementById("min_font").style.fontSize = fontSizeList[0] + "px";
+        document.getElementById("max_font").style.fontSize = fontSizeList[fontSizeList.length - 1] + "px";
+        document.getElementById("setting-font-size-select").innerHTML = "";
+        for(var i = 0; i < fontSizeList.length; i++) {
+            $("#setting-font-size-select").append(
+                '<div class="select-wrapper" onclick="setFontSize(\'' + i + '\')">' +
+                '<div class="line"></div>' +
+                '<div class="point-wrapper">' +
+                '<div id="point_' + i + '" class="point">' +
+                '<div class="small-point"></div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="line"></div>' +
+                '</div>');
+        }
+
+        // 设置字体
+        // document.getElementById("setting-font-family").innerHTML = "";
+        // for(var j = 0; j < fontFamilyList.length; j++) {
+        //     var content = document.getElementById("setting-font-family").innerHTML;
+        //     $("#setting-font-size-select").html(content +
+        //         '<div class="setting-font-family-text-wrapper">' + fontFamilyList[j] + '</div>\n' +
+        //         '<div class="setting-font-family-icon-wrapper">\n' +
+        //         '<span class="icon-forward"></span>\n' +
+        //         '</div>');
+        // }
+    }
+
+    function setFontFamily() {
+    //     <!--字体设置-->
+    // <div id="setting-font-family" class="setting-font-family" onclick="setFontFamily()">
+    //         <div class="setting-font-family-text-wrapper">{{defaultFontFamily}}</div>
+    //     <div class="setting-font-family-icon-wrapper">
+    //         <span class="icon-forward"></span>
+    //         </div>
+    //         </div>
+    }
+
+    function setFontSize(index) {
+        document.getElementById("point_" + defultFontSizeIndex).style.visibility = 'hidden';
+        document.getElementById("point_" + index).style.visibility = 'visible';
+        defultFontSizeIndex = index;
+        if (this.themes) {
+            this.themes.fontSize(fontSizeList[index] + 'px');
+        }
+    }
+
+    function hiddenSetting() {
+        if (settingId !== -1){
+            document.getElementById("setting-" + settingId).style.display = 'none';
+        }
+        document.getElementById("setting-wrapper").style.visibility = 'hidden';
+        settingId = -1;
+    }
+
+    function showSetting(id){
+        if(settingId === id) return;
+        if(settingId === -1) {
+            document.getElementById("setting-wrapper").style.visibility = 'visible';
+        } else {
+            document.getElementById("setting-" + settingId).style.display = 'none';
+        }
+        document.getElementById("setting-" + id).style.display = 'flex';
+        settingId = id;
+    }
+
+    function toggleTitleAndMenu(){
+        if(document.getElementById("title_wrapper").style.visibility !== 'visible'){
+            document.getElementById("title_wrapper").style.visibility = 'visible';
+        }
+        if(document.getElementById("menu-wrapper").style.visibility !== 'visible'){
+            document.getElementById("menu-wrapper").style.visibility = 'visible';
+        }
+        ifTitleAndMenuShow = !ifTitleAndMenuShow;
+        if (ifTitleAndMenuShow){//显示
+            $(".title_wrapper").slideDown();
+            $(".menu-wrapper").slideDown();
+        } else {//隐藏
+            $(".title_wrapper").slideUp();
+            $(".menu-wrapper").slideUp();
+            hiddenSetting();
+        }
+    }
+
+    function pagePropress() {
+        // 获得当前章节的百分比并设置
+        var currentLocation = this.rendition.currentLocation();
+        var progress = currentLocation.end.percentage;
+        this.setProgressValue(Math.floor(progress*100));
+        if(currentLocation.start){
+            var section = currentLocation.start.index;
+            setSection(section); // 修改当前章节数
+        }
+    }
+
+    function prevPage() {
+        if (this.rendition) {
+            this.rendition.prev().then(() => {
+                pagePropress();
+            });
+        }
+    }
+
+    function nextPage() {
+        if (this.rendition) {
+            this.rendition.next().then(() => {
+                pagePropress();
+            });
+        }
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+
+    function addPageTurnSpeed(){
+        if(pageTurnTime <= 1000) {
+            showMsg("翻页速度已经到极限");
+            return;
+        }
+        showMsg("翻页速度加快");
+        pageTurnTime -= 1000;
+        clearInterval(this.interval);//停止
+        this.interval = setInterval("nextPage()",pageTurnTime);
+    }
+
+    function subPageTurnSpeed(){
+        if(pageTurnTime >= 10000) {
+            showMsg("翻页速度已经到极限");
+            return;
+        }
+        showMsg("翻页速度减慢");
+        pageTurnTime += 1000;
+        clearInterval(this.interval);//停止
+        this.interval = setInterval("nextPage()",pageTurnTime);
+    }
+
+</script>
+</html>

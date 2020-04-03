@@ -1,0 +1,60 @@
+body{
+    margin: 0;
+}
+.content-wrapper{
+    width: 100%; height: 100%; margin-left:0; margin-top: 20px; z-index: 1;display: none;
+}
+.model-wrapper{
+    margin: 10px
+}
+.line_red{
+    height:25px;width:auto;float: left;
+}
+.model-title-wrapper{
+    width: 100%;
+}
+.title{
+    font-size: 16px;font-weight:bold; display: inline-block; margin-left: 5px;
+}
+.more{
+    font-size: 14px; color: #009dda; display: inline-block; float: right; margin-right: 20px
+}
+.model-content-wrapper{
+    margin-top: 10px;
+}
+.book-wrapper{
+    width: 30%; height: 170px;display: inline-block; margin-top: 10px; margin-left: 10px; vertical-align:top;overflow:hidden
+}
+.book-img-wrapper{
+    height: 135px;
+}
+.book-img {
+    height: 100%;
+    width: 100%
+}
+.book-title{
+    line-height: 25px;height: 25px;font-size: 15px;margin-top: 10px;
+}
+.special-book-model{
+    vertical-align: top; height: 200px; width: 40%; padding: 10px; margin-top: 15px; display: inline-block; border:1px solid;border-radius:5px
+}
+.special-book-model-title-wrapper{
+    height: 60px;
+}
+.special-book-model-title{
+    font-size: 15px; line-height: 50px; display: inline-block
+}
+.special-book-model-img-wrapper {
+    height: 100%;
+    width: 40%;
+    float: right;
+    display: inline-block;
+}
+.special-book-model-img{
+    height: 100%; width: 100%
+}
+.book-name{
+    height: 20px; font-size: 14px; margin-top: 5px; overflow: hidden
+}
+
+

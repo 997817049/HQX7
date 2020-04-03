@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="../../files/main/styles.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <script type="text/javascript" src="../../resources/scripts/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../../resources/scripts/bootstrap.min.js"></script>
+</head>
+<style>*,body,html,div,p,img{border:0;margin:0;padding:0;} </style>
+<body>
+
+<div style="margin-top: 10px; font-size: 20px;">
+    <div style="position:relative" onclick="window.android.goUserData()" >
+        <img id="head" style="width: 20%; margin-left: 10%; border-radius: 50%;" src="../../images/首页/head.png"/>
+        <span id="nick" style="position:absolute; left:40%; top:30%;"></span>
+        <span id="showing" style="position:absolute; font-size: 15px; left:40%; top:60%; color: #6C6C6C"></span>
+    </div>
+</div>
+
+<div style="margin-left: 10%; margin-right: 10%; font-size: 20px; font-weight: 700">
+    <div>
+        <img style="width: 100%; height: 3px;" src="../../images/首页/u58.png"/>
+        <span>我的应用</span>
+        <img style="width: 100%; height: 3px;" src="../../images/首页/u58.png"/>
+    </div>
+
+    <div style="position:relative">
+        <img  style="width: 15%; border-radius: 50%;" src="../../images/首页/show.png"/>
+        <span style="position:absolute; left:60%; top:30%;">我的公告</span>
+    </div>
+
+    <div style="position:relative">
+        <img style="width: 100%" src="../../images/首页/u58.png"/>
+        <img style="width: 15%; border-radius: 50%;" src="../../images/首页/test.png"/>
+        <span style="position:absolute; left:60%; top:50%;">专项测试</span>
+    </div>
+
+    <div style="position:relative" onclick="window.android.goCollection()">
+        <img style="width: 100%" src="../../images/首页/u58.png"/>
+        <img style="width: 15%; border-radius: 50%;" src="../../images/首页/collection.png"/>
+        <span style="position:absolute; left:60%; top:50%;">我的收藏</span>
+    </div>
+
+    <div style="position:relative">
+        <img style="width: 100%" src="../../images/首页/u58.png"/>
+        <img style="width: 15%; border-radius: 50%;" src="../../images/首页/application.png"/>
+        <span style="position:absolute; left:60%; top:50%;">义工申请</span>
+    </div>
+
+    <div style="position:relative">
+        <img style="width: 100%" src="../../images/首页/u58.png"/>
+        <img style="width: 15%; border-radius: 50%;" src="../../images/首页/help.png"/>
+        <span style="position:absolute; left:60%; top:30%;">反馈与帮助</span>
+        <img style="width: 100%" src="../../images/首页/u58.png"/>
+    </div>
+</div>
+
+<div id="space" style="height: 70px;"></div>
+
+</body>
+<script>
+    function getUser(){
+        var user = window.android.getUser();
+        user = eval('(' + user + ')');
+        var nick = user.nick;
+        var showing = user.showing;
+
+        document.getElementById("nick").innerHTML = nick;
+        document.getElementById("showing").innerHTML = showing;
+    };
+    getUser();
+
+    function adjustView(){
+        var width = document.body.clientWidth;
+
+        var fontSize = width / 24;
+        var imageSize = width / 12;
+
+        document.getElementById('school_image').style.margin = fontSize + 'px';
+        document.getElementById('home_image').style.margin = fontSize + 'px';
+        document.getElementById('study_image').style.margin = fontSize + 'px';
+        document.getElementById('main_image').style.margin = fontSize + 'px';
+        document.getElementById('me_image').style.margin = fontSize + 'px';
+
+        document.getElementById('school_image').style.width = imageSize + 'px';
+        document.getElementById('home_image').style.width = imageSize + 'px';
+        document.getElementById('study_image').style.width = imageSize + 'px';
+        document.getElementById('main_image').style.width = imageSize + 'px';
+        document.getElementById('me_image').style.width = imageSize + 'px';
+
+        document.getElementById('foot_tag').style.fontSize = fontSize + 'px';
+        document.getElementById('school_tag').style.margin = fontSize + 'px';
+        document.getElementById('study_tag').style.margin = fontSize + 'px';
+        document.getElementById('main_tag').style.margin = fontSize + 'px';
+        document.getElementById('home_tag').style.margin = fontSize + 'px';
+        document.getElementById('me_tag').style.margin = fontSize + 'px';
+
+        document.getElementById('foot_tag').style.marginTop = -fontSize / 2 + 'px';
+
+        document.getElementById('foot').style.height = (fontSize * 3 + imageSize) + 'px';
+        document.getElementById('space').style.height = (fontSize * 3 + imageSize) + 'px';
+    };
+</script>
+</html>

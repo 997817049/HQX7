@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <RelativeLayout android:layout_width="match_parent"
+                  android:layout_height="60dp"
+                  android:background="@color/red">
+        <ImageView android:layout_width="85dp"
+                   android:layout_height="70dp"
+                   android:layout_alignParentStart="true"
+                   android:layout_marginStart="15dp"
+                   android:src="@mipmap/hqx_label"/>
+        <com.zty.hqx7.ztyClass.IconView
+                   android:id="@+id/search"
+                   android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:layout_alignParentEnd="true"
+                   android:layout_marginEnd="15dp"
+                   android:gravity="center"
+                   android:textColor="@color/white"
+                   android:text="@string/label_search"
+                   android:textSize="30sp"/>
+    </RelativeLayout>
+    <TextView android:id="@+id/base_label"
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:background="@color/pick"
+              android:text="@string/红色基地"
+              android:gravity="center"
+              android:textSize="18sp"
+              android:textStyle="bold"
+              android:textColor="@color/red"
+              android:visibility="gone"/>
+    <HorizontalScrollView android:id="@+id/study_select"
+                          android:layout_width="match_parent"
+                          android:layout_height="50dp"
+                          android:background="@drawable/base_border"
+                          android:visibility="gone"
+                          android:scrollbars="none">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:gravity="center">
+            <RadioGroup android:id="@+id/study_sub_buttonGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/pick"
+                        android:orientation="horizontal">
+                <RadioButton android:id="@+id/exam"
+                             android:text="@string/答题"
+                             style="@style/study_sub_model"/>
+                <RadioButton android:id="@+id/literature"
+                             android:text="@string/书籍"
+                             android:checked="true"
+                             style="@style/study_sub_model"/>
+                <RadioButton android:id="@+id/teleplay"
+                             android:text="@string/电视"
+                             style="@style/study_sub_model"/>
+                <RadioButton android:id="@+id/film"
+                             android:text="@string/电影"
+                             style="@style/study_sub_model"/>
+                <RadioButton android:id="@+id/variety"
+                             android:text="@string/综艺"
+                             style="@style/study_sub_model"/>
+                <RadioButton android:id="@+id/documentary"
+                             android:text="@string/纪录片"
+                             style="@style/study_sub_model"/>
+                <RadioButton android:id="@+id/drama"
+                             android:text="@string/歌舞剧"
+                             android:layout_marginEnd="20dp"
+                             style="@style/study_sub_model"/>
+            </RadioGroup>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>
+

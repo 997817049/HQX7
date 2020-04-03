@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>分类推荐</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../../files/public/top.js"></script>
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/classify.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/top.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/other.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/study/video/subTV.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content" style="z-index: 1; display: none">
+    <!--分类-->
+    <div class="scroll-wrapper" >
+        <div class="scroll-inner">
+        </div>
+    </div>
+    <div id="video-content"></div>
+    <div class="toTopH">顶部</div>
+</div>
+
+</body>
+
+<script>
+    label = 0;
+    num = 0;
+
+    init();
+    function init() {
+        para = window.android.getPara();
+        para = JSON.parse(para);
+        dealToTop();
+        $('.toTopH').fadeOut(100);
+        $.when(
+            $.ajax({
+                url: serverIp + "classify/study",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part:para.part
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    $(".scroll-inner").html('<div class="scroll-item">分类：</div>');
+                    for (var i = 0; i < result.length; i++) {
+                        $(".scroll-inner").append(
+                            '<div id="label_' + result[i].num + '" class="scroll-item" ' +
+                            'onclick="dealLabel(\'' + result[i].num + '\')">' + result[i].msg + '</div>');
+                        if(i === 0) {
+                            label = result[i].num;
+                            $("#label_"+ result[i].num).css('color', 'red');
+                        }
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadClassify();
+            $.ajax({
+                url: serverIp + "study/video/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part:para.part,
+                    num:num,
+                    limit:20,
+                    label:label
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result.length <= 0){
+                        $("#video-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                        window.android.loadNoMoreData();
+                        return;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        $("#video-content").append(
+                            '<div class="tv" onclick="readContent(\'' + result[i].id +  '\')">' +
+                            '<div class="tv_image_div">' +
+                            '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                            '</div>' +
+                            '<div class="tv_title">' +
+                            '<span class="tv_title_text">' + result[i].title + '</span>' +
+                            '</div>' +
+                            '<div class="tv_character">' +
+                            '<span class="tv_text">' + result[i].actor + '</span>' +
+                            '</div>' +
+                            '<div class="tv_synopsis">' +
+                            '<span class="tv_text">' + result[i].synopsis + '</span>' +
+                            '</div>' +
+                            '<img class="line" src="../../../images/分割线.png"/>' +
+                            '</div>');
+                        num = result[i].id;
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            })//loadContent();
+        ).then(function (value) {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function (reason) { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    //加载页面
+    function loadContent() {
+        $.ajax({
+            url: serverIp + "study/video/special",
+            type:"POST",
+            data:{
+                userId:userId,
+                part:para.part,
+                num:num,
+                limit:20,
+                label:label
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result.length <= 0){
+                    if(num === 0) {
+                        $("#video-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                    } else {
+                        $("#video-content").append(
+                            '<div class="line-wrapper">\n' +
+                            '<div class="solid_line"></div>\n' +
+                            '<div class="line_txt">我也是有底线的</div>\n' +
+                            '</div>');
+                    }
+                    window.android.loadNoMoreData();
+                    return;
+                }
+                for (var i = 0; i < result.length; i++) {
+                    $("#video-content").append(
+                        '<div class="tv" onclick="readContent(\'' + result[i].id +  '\')">' +
+                        '<div class="tv_image_div">' +
+                        '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                        '</div>' +
+                        '<div class="tv_title">' +
+                        '<span class="tv_title_text">' + result[i].title + '</span>' +
+                        '</div>' +
+                        '<div class="tv_character">' +
+                        '<span class="tv_text">' + result[i].actor + '</span>' +
+                        '</div>' +
+                        '<div class="tv_synopsis">' +
+                        '<span class="tv_text">' + result[i].synopsis + '</span>' +
+                        '</div>' +
+                        '<img class="line" src="../../../images/分割线.png"/>' +
+                        '</div>');
+                    num = result[i].id;
+                }
+            },
+            error : function () {
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    function dealLabel(arg) {
+        $("#label_"+ label).css('color', 'black');
+        $("#label_"+ arg).css('color', 'red');
+        label = arg;
+        refresh();
+    }
+
+    function refresh(){
+        $("#video-content").html("");
+        num = 0;
+        loadContent();
+    }
+
+    function readContent(id) {
+        window.android.toVideoContent(para.part, id);
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+</script>
+</html>

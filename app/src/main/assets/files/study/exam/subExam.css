@@ -1,0 +1,15 @@
+body{
+    margin: 0;
+}
+.exam-wrapper{
+    height: 27px;width: 95%;line-height:20px;overflow: hidden;
+}
+.exam-label{
+    margin-left:5px; padding: 2px; font-size: 10px;color:#cd0a0a;border:1px solid #cd0a0a;border-radius: 7px;text-align:center;
+}
+.exam-title{
+    width: 70%; font-size: 15px;margin-left: 10px;overflow: hidden;
+}
+.line{
+    width: 100%; margin-top: 5px; vertical-align:top
+}

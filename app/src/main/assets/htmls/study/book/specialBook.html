@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新书抢鲜</title>
+    <link href="../../../files/public/classify.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/top.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/study/book/subBook.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/public/other.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../../files/public/top.js"></script>
+    <script type="text/javascript" src="../../../files/search/search.js"></script>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content" style="z-index: 1; display: none">
+    <div class="scroll-wrapper" >
+        <div class="scroll-inner"></div>
+    </div>
+    <div id="book-content"></div>
+    <div class="toTopH" >顶部</div>
+</div>
+</body>
+<script>
+    label = 1;
+    num = 0;
+
+    init();
+    function init() {
+        $.when(
+            $.ajax({
+                url: serverIp + "classify/study",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part:"book"
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    $(".scroll-inner").html('<div class="scroll-item">分类：</div>');
+                    for (var i = 0; i < result.length; i++) {
+                        $(".scroll-inner").append(
+                            '<div id="label_' + result[i].num + '" class="scroll-item" ' +
+                            'onclick="dealLabel(\'' + result[i].num + '\')">' + result[i].msg + '</div>');
+                        if(i === 0) {
+                            label = result[i].num;
+                            $("#label_"+ result[i].num).css('color', 'red');
+                        }
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadClassify();
+            $.ajax({
+                url: serverIp + "study/book/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    limit:20,
+                    num:num,
+                    label:label
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result.length <= 0){
+                        $("#book-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                        window.android.loadNoMoreData();
+                        return;
+                    }
+                    for(var i = 0; i < result.length; i++) {
+                        $("#book-content").append(
+                            '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">\n' +
+                            '    <div class="book-img-wrapper">\n' +
+                            '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                            '    </div>\n' +
+                            '    <div class="book-title">'+ result[i].title +'</div>\n' +
+                            '    <div class="book-synopsis">'+ result[i].synopsis + '</li>\n' +
+                            '    </div>\n' +
+                            '    <div class="book-bottom">\n' +
+                            '        <div class="book-author">'+ result[i].author + '</div>\n' +
+                            '        <div class="book-label">'+ result[i].label.msg + '</div>\n' +
+                            '    </div>\n' +
+                            '    <img class="cutoff_rule" src="../../../images/分割线.png"/>\n' +
+                            '</div>');
+                        num = result[i].id;
+                    }
+                },
+                error : function () {
+                    key = "";
+                    console.log("ajax失败");
+                }
+            })//loadContent();
+        ).then(function (value) {//都成功时
+            dealToTop();
+            $('.toTopH').fadeOut(100);
+            $("#mask").hide();
+            $("#content").show();
+        }, function (reason) { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function refresh(){
+        $("#book-content").html("");
+        num = 0;
+        loadContent();
+    }
+
+    function loadContent() {
+        $.ajax({
+            url: serverIp + "study/book/special",
+            type:"POST",
+            data:{
+                userId:userId,
+                limit:20,
+                num:num,
+                label:label
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result.length <= 0){
+                    if(num === 0) {
+                        $("#book-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                    } else {
+                        $("#book-content").append(
+                            '<div class="line-wrapper">\n' +
+                            '<div class="solid_line"></div>\n' +
+                            '<div class="line_txt">我也是有底线的</div>\n' +
+                            '</div>');
+                    }
+                    window.android.loadNoMoreData();
+                    return;
+                }
+                for(var i = 0; i < result.length; i++) {
+                    $("#book-content").append(
+                        '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">\n' +
+                        '    <div class="book-img-wrapper">\n' +
+                        '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                        '    </div>\n' +
+                        '    <div class="book-title">'+ result[i].title +'</div>\n' +
+                        '    <div class="book-synopsis">'+ result[i].synopsis + '</li>\n' +
+                        '    </div>\n' +
+                        '    <div class="book-bottom">\n' +
+                        '        <div class="book-author">'+ result[i].author + '</div>\n' +
+                        '        <div class="book-label">'+ result[i].label.msg + '</div>\n' +
+                        '    </div>\n' +
+                        '    <img class="cutoff_rule" src="../../../images/分割线.png"/>\n' +
+                        '</div>');
+                    num = result[i].id;
+                }
+            },
+            error : function () {
+                key = "";
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    function dealLabel(arg) {
+        document.getElementById("label_" + label).style.color = 'black';
+        document.getElementById("label_" + arg).style.color = 'red';
+        label = arg;
+        num = 0;
+        $("#book-content").html('');
+        loadContent();
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+</script>
+</html>

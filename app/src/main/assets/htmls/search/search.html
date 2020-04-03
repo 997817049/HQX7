@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../../files/public/search.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/base/base.css" type="text/css" rel="stylesheet">
+    <link href="../../files/study/exam/subExam.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/study/book/subBook.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/study/video/subTV.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/public/other.css" type="text/css" rel="stylesheet">
+    <link href="../../files/icon/iconfont.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../files/search/search.js"></script>
+</head>
+<body>
+<div class="search-bar">
+    <span class="icon iconback"  style="float: left;font-size:23px;height:38px;line-height: 38px; display: inline-block" onclick="finish()"></span>
+    <button class="search-button" onclick="dealSearch()" >搜索</button>
+    <input id="input" type="text" placeholder="请输入关键词" name="search" class="search-input" >
+</div>
+<div id="word-model" style="display:block">
+    <div id="hotWord-model" class="search-model">
+    </div>
+    <div class="history-model">
+        <div class="search-history-wrapper">
+            <div class="search-history">历史记录</div>
+            <div class="search-clear" onclick="clearHistoryWord()">全部清除</div>
+        </div>
+        <div id="history-word">
+        </div>
+    </div>
+</div>
+<div id="content" style="display: block">
+    <div id="exam-content-wrapper" style="display: none">
+        <div id="exam-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('study', 'exam')">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+    <div id="book-content-wrapper"  style="display: none">
+        <div id="book-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('study', 'book')">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+    <div id="teleplay-content-wrapper"  style="display: none">
+        <div id="teleplay-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('study', 'teleplay')">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+    <div id="film-content-wrapper"  style="display: none">
+        <div id="film-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('study', 'film')">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+    <div id="variety-content-wrapper"  style="display: none">
+        <div id="variety-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('study', 'variety')">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+    <div id="documentary-content-wrapper"  style="display: none">
+        <div id="documentary-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('study', 'documentary')">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+    <div id="drama-content-wrapper"  style="display: none">
+        <div id="drama-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('study', 'drama')">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+    <div id="base-content-wrapper"  style="display: none">
+        <div id="base-content" style="width: 100%;"></div>
+        <div class="more" onclick="getMore('base', null)">查看更多</div>
+        <div class="line-wrapper" style="display: block">
+            <div class="dashed_line"></div>
+            <div class="line_txt">我是一条分割线</div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    wordArr = null; //历史查找词汇
+    word = null;//正在查找词汇
+
+    init();
+    function init() {
+        $.when(
+            //加载热点词汇
+            $.ajax({
+                url: serverIp + "search/hotword",
+                type:"POST",
+                data:{
+                    userId:userId
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    $("#hotWord-model").html('');
+                    for(var i = 0; i < result.length; i++) {
+                        $("#hotWord-model").append(
+                            '<div class="word" onclick="searchExistWord(\'' + result[i] +  '\')">' + result[i] + '</div>');
+                    }
+                },
+                error : function () {
+                }
+            }),
+            //加载历史搜索词汇
+            $.ajax({
+                url: serverIp + "search/history_word",
+                type:"POST",
+                data:{
+                    userId:userId
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    wordArr = result;
+                    $("#history-word").html('');
+                    for(var i = 0; i < result.length; i++) {
+                        $("#history-word").prepend(
+                            '<div id="' + result[i] + '" class="history-word" onclick="searchExistWord(\'' + result[i] +  '\')">' + result[i] + '</div>');
+                    }
+                },
+                error : function () {
+                }
+            })
+        ).then(function (value) {
+        },function (reason) {
+            return;
+        });
+    }
+
+    function clearHistoryWord() {
+        wordArr = new Array();
+        $("#history-word").html('');
+        $(".history-model").hide();
+        //删除数据库中的查找历史
+        $.ajax({
+            url: serverIp + "delete/history_word",
+            type:"POST",
+            data:{
+                userId:userId
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+            },
+            error : function () {}
+        })
+    }
+
+    function dealSearch() {
+        $(".history-model").show();
+        word = $(".search-input").val();
+        //判断word是否存在
+        var index = wordArr.indexOf(word);
+        if(index !== -1){
+            wordArr.splice(index, 1);
+            $("#" + word).hide();
+        }
+        wordArr.push(word);
+        if(wordArr.length>5){
+            var first = wordArr.shift();
+            $("#" + first).hide();
+        }
+        if(word === undefined || word === null || word.toString().trim().length <= 0) return;
+        $("#history-word").prepend(
+            '<div id="' + word + '" class="history-word" onclick="searchExistWord(\'' + word +  '\')">' + word + '</div>');
+        search(word);
+    }
+
+    function searchExistWord(word) {
+        $(".search-input").val(word);
+        console.log("**")
+        dealSearch();
+    }
+
+    function search() {
+        $("#word-model").hide();
+        $("#exam-content-wrapper").hide();
+        $("#book-content-wrapper").hide();
+        $("#video-content-wrapper").hide();
+        $("#base-content-wrapper").hide();
+        searchBase(word);
+        searchExam(word);
+        searchBook(word);
+        searchVideo("teleplay");
+        searchVideo("film");
+        searchVideo("variety");
+        searchVideo("documentary");
+        searchVideo("drama");
+    }
+
+    function searchBase() {
+        $.ajax({
+            url: serverIp + "search",
+            type:"POST",
+            data:{
+                userId:userId,
+                word:word,
+                part:"base",
+                sub:null,
+                num:0,
+                limit:3
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0) return;
+                $("#base-content").html('');
+                for(var i = 0; i < result.length; i++) {
+                    $("#base-content").append(
+                        '<div class="base" onclick="readBase(\'' + (nginxIp + result[i].htmlUrl) + '\',\'' + result[i].id + '\')">' +
+                        '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                        '<span class="base_title">' + result[i].title + '</span>' +
+                        '</div>');
+                }
+                $("#base-content-wrapper").show();
+            },
+            error : function () {
+            }
+        })
+    }
+
+    function searchExam() {
+        $.ajax({
+            url: serverIp + "search",
+            type:"POST",
+            data:{
+                userId:userId,
+                word:word,
+                part:"study",
+                sub:"exam",
+                num:0,
+                limit:3
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0)return;
+                $("#exam-content").html('');
+                for (var i = 0; i < result.length; i++) {
+                    $("#exam-content").append(
+                        '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
+                        '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                        '<span class="exam-title">' + result[i].title + '</span>' +
+                        '</div>\n' +
+                        '<img src="../../images/分割线.png" class="line"/>');
+                }
+                $("#exam-content-wrapper").show();
+            },
+            error : function () {
+            }
+        })
+    }
+
+    function searchBook() {
+        $.ajax({
+            url: serverIp + "search",
+            type:"POST",
+            data:{
+                userId:userId,
+                word:word,
+                part:"study",
+                sub:"book",
+                num:0,
+                limit:3
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0)return;
+                $("#book-content").html('');
+                for(var i = 0; i < result.length; i++) {
+                    $("#book-content").append(
+                        '<div class="book-wrapper" onclick="readBook(\'' +result[i].id + '\')">\n' +
+                        '    <div class="book-img-wrapper">\n' +
+                        '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                        '    </div>\n' +
+                        '    <div class="book-title">'+ result[i].title +'</div>\n' +
+                        '    <div class="book-synopsis">'+ result[i].synopsis + '</span>\n' +
+                        '    </div>\n' +
+                        '    <div class="book-bottom">\n' +
+                        '        <div class="book-author">'+ result[i].author + '</div>\n' +
+                        '        <div class="book-label">'+ result[i].label.msg + '</div>\n' +
+                        '    </div>\n' +
+                        '    <img class="line" src="../../images/分割线.png"/>\n' +
+                        '</div>');
+                }
+                $("#book-content-wrapper").show();
+            },
+            error : function () {}
+        })
+    }
+
+    function searchVideo(sub) {
+        $.ajax({
+            url: serverIp + "search",
+            type:"POST",
+            data:{
+                userId:userId,
+                word:word,
+                part:"study",
+                sub:sub,
+                num:0,
+                limit:3
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0)return;
+                $("#" + sub + "-content").html('');
+                for (var i = 0; i < result.length; i++) {
+                    $("#" + sub + "-content").append(
+                        '<div class="tv" onclick="readVideo(\'' + sub + '\',\'' + result[i].id +  '\')">' +
+                        '<div class="tv_image_div">' +
+                        '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                        '</div>' +
+                        '<div class="tv_title">' +
+                        '<span class="tv_title_text">' + result[i].title + '</span>' +
+                        '</div>' +
+                        '<div class="tv_character">' +
+                        '<span class="tv_text">' + result[i].actor + '</span>' +
+                        '</div>' +
+                        '<div class="tv_synopsis">' +
+                        '<span class="tv_text">' + result[i].synopsis + '</span>' +
+                        '</div>' +
+                        '<img class="line" src="../../images/分割线.png"/>' +
+                        '</div>');
+                }
+                $("#" + sub + "-content-wrapper").show();
+            },
+            error : function () {
+            }
+        })
+    }
+
+    function getMore(part, sub) {
+        window.android.getMore(part, sub, word);
+    }
+
+    function finish() {
+        window.android.finish();
+    }
+
+    $("#input").bind("input propertychange",function(event){
+        var word = $(".search-input").val();
+        if(word === undefined || word.toString().length <= 0) {
+            $("#exam-content-wrapper").hide();
+            $("#book-content-wrapper").hide();
+            $("#video-content-wrapper").hide();
+            $("#base-content-wrapper").hide();
+            $("#word-model").show();
+        }
+    });
+
+</script>
+</html>

@@ -1,0 +1,57 @@
+body{
+    margin: 0;
+}
+.line{
+    width: 100%; margin-top: 5px;
+}
+/*part 每一个*/
+.tv{
+    margin-top: 10px
+}
+.tv_image_div {
+    margin-left:10%;
+    margin-top:5px;
+    width:25%;
+    height: 120px;
+}
+.tv_image {
+    height: 100%;
+    width: 100%
+}
+.tv_title {
+    margin-left:40%;
+    margin-top:-120px;
+    width:55%;
+    height: 25px;
+}
+.tv_title_text{
+    font-style:normal;
+    font-weight:bold;
+}
+.tv_character {
+    margin-left:40%;
+    margin-top:2px;
+    width: 52%;
+    height:20px;
+    overflow: hidden;
+}
+.tv_character_text{
+    font-size:12px;
+    color:#6C6C6C;
+}
+.tv_synopsis{
+    margin-left:40%;
+    margin-top: 5px;
+    width:55%;
+    height:68px;
+    overflow: hidden;
+}
+.tv_synopsis_text{
+    font-size:14px;
+    color:#6C6C6C;
+}
+.tv_text{
+    font-size:14px;
+    color:#6C6C6C;
+}
+

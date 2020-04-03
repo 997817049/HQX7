@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>答题</title>
+    <link href="../../../files/study/exam/examContent.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/icon/iconfont.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../resources/scripts/alert.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+</head>
+<body style="padding-bottom: 15px;">
+
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content" style="display: none; z-index: 1">
+    <!--顶部标题栏-->
+    <div id="title_bar_wrapper" class="title_bar_wrapper">
+        <div class="title_bar_left">
+            <span class="icon iconback"  style="font-size: 25px;" onclick="finish()"></span>
+        </div>
+        <div class="title_bar_right">
+            <span id="collect" class="icon iconmore" style="font-size: 22px;" onclick=""></span>
+        </div>
+    </div>
+
+    <!--倒计时-->
+    <div id="time-model" class="time-wrapper">
+        <div class="secs-wrapper">
+            <div id="secs" class="time-num">00</div>
+            <div class="time-txt">秒</div>
+        </div>
+        <div class="min-wrapper">
+            <div id="min" class="time-num">00</div>
+            <div class="time-txt">分</div>
+        </div>
+    </div>
+
+    <!--题目-->
+    <div id="question-model" class="question-wrapper">
+        <!--标题-->
+        <div class="question-title-wrapper">
+            <div id="type" class="question-title-bold"></div>
+            <div id="count" class="question-count" style="margin-right: 10px;"></div>
+            <div class="question-count">/</div>
+            <div id="currentId" class="question-id" style="font-weight: bold; ">id</div>
+        </div>
+        <!--题目-->
+        <div class="question"></div>
+
+        <!--单选-->
+        <div id="单选题" class="option-wrapper">
+            <div class="radio">
+                <label>
+                    <input id="radio_A" type="radio" name="radio" value="A" />
+                    <div id="radio_img_A" class="option"></div>
+                    <span id="optionA1" style="font-size: 14px;"></span>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input id="radio_B" type="radio" name="radio" value="B" />
+                    <div id="radio_img_B" class="option"></div>
+                    <span id="optionB1" style="font-size: 14px;"></span>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input id="radio_C" type="radio" name="radio" value="C" />
+                    <div id="radio_img_C" class="option"></div>
+                    <span id="optionC1" style="font-size: 14px;"></span>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input id="radio_D" type="radio" name="radio" value="D" />
+                    <div id="radio_img_D" class="option"></div>
+                    <span id="optionD1" style="font-size: 14px;"></span>
+                </label>
+            </div>
+        </div>
+        <!--多选-->
+        <div id="多选题" class="option-wrapper">
+            <div class="radio">
+                <label>
+                    <input id="checkbox_A" type="checkbox" name="checkbox" value="A" />
+                    <div id="checkbox_img_A" class="option"></div>
+                    <span id="optionA2" style="font-size: 14px;"></span>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input id="checkbox_B" type="checkbox" name="checkbox" value="B" />
+                    <div id="checkbox_img_B" class="option"></div>
+                    <span id="optionB2" style="font-size: 14px;"></span>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input id="checkbox_C" type="checkbox" name="checkbox" value="C" />
+                    <div id="checkbox_img_C" class="option"></div>
+                    <span id="optionC2" style="font-size: 14px;"></span>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input id="checkbox_D" type="checkbox" name="checkbox" value="D" />
+                    <div id="checkbox_img_D" class="option"></div>
+                    <span id="optionD2" style="font-size: 14px;"></span>
+                </label>
+            </div>
+        </div>
+        <!--填空-->
+        <div id="填空题" class="option-wrapper">
+            <input id="fill_blank" type="text" style="padding-left: 5px;" class="txt_input" placeholder="输入答案" />
+        </div>
+        <!--论述题-->
+        <div id="论述题" class="option-wrapper" style="font-size: 12px; font-style: italic">
+            本题不作答 可在确认后查看答案
+        </div>
+
+        <div style="height: 30px;">
+            <button id="confirm" class="button-next" onclick="dealConfirm()">确认</button>
+            <button id="next" class="button-next" style="display: none" onclick="dealNext()">下一题</button>
+        </div>
+    </div>
+
+    <!--解析-->
+    <div id="analysis-model" class="question-wrapper">
+        <!--标题-->
+        <div class="question-title-wrapper">
+            <div class="question-title-bold">答案解析</div>
+        </div>
+        <!--答案-->
+        <div class="answer-label">正确答案：</div>
+        <div class="answer">ABC</div>
+        <!--解析-->
+        <div class="analysis-label">解析：</div>
+        <div class="analysis">解析</div>
+    </div>
+
+    <!--结束-->
+    <div id="end-model" style="margin-top: 150px;" class="question-wrapper">
+        <!--标题-->
+        <div class="sorce-title-wrapper">
+            <div class="sorce-title-label">正确题目数</div>
+            <div id="correct" class="sorce-title">7</div>
+        </div>
+        <div class="score-content-wrapper">
+            <div class="score-content-label-wrapper">
+                <div class="score-content">题目数：</div>
+                <div id="num" class="score-content">7</div>
+            </div>
+            <div class="score-content-label-wrapper">
+                <div class="score-content">错误题数：</div>
+                <div id="error" class="score-content">7</div>
+            </div>
+            <div class="score-content-label-wrapper">
+                <div class="score-content">正确率：</div>
+                <div id="ratio" class="score-content">7</div>
+            </div>
+            <div class="score-content-label-wrapper">
+                <div class="score-content">用时：</div>
+                <div id="useTime" class="score-content">7</div>
+            </div>
+        </div>
+        <div class="button-wrapper">
+            <div class="button" onclick="finish()">完成</div>
+            <div class="button" onclick="tryAgin()">再试一次</div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    num = 0;//当前做的题目数
+    totalTime = 0;
+    minute = 0;//剩余时间
+    second = 0;
+    time = 0;//当前已用时间
+    error = 0;
+    question = null;//当前正在答的题
+
+    init();
+    function init() {
+        document.body.style.minHeight =  screen_h + "px";
+        para = window.android.getPara();
+        para = JSON.parse(para).id;
+        // para = 2;
+        $.when(
+            $.ajax({
+                url: serverIp + "study/exam",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    id:para
+                },
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    minute = result.time;
+                    totalTime = result.time;
+                    document.getElementById("min").innerHTML = minute;
+                    $("#count").html(result.count);
+                },
+                error : function () {
+                    key = "";
+                    console.log("ajax失败");
+                }
+            }),//loadExamInfo();
+            $.ajax({
+                url: serverIp + "study/exam/content",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    id:para
+                },
+                success:function (result) {
+                    if(result.code === 1) {
+                        $("#content").html("试题加载失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result.length <= 0 || result == null) {
+                        $("#content").html("暂无试题");
+                        return;
+                    }
+                    console.log("result" + result);
+                    questionList = result;
+                    $("#time-model").show();
+                    dealQuestion();
+                    $("#question-model").show();
+                    setInterval("Timer()",1000);
+                },
+                error : function () {}
+            })//loadExamContent()
+        ).then(function () {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function () { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+
+    }
+
+    function dealQuestion() {
+        question = questionList[num];
+        var typeStr = question.type.msg;
+        document.getElementById("type").innerHTML = typeStr;
+        $("#currentId").html(question.num);
+        $(".question").html(question.question);
+        document.getElementById(typeStr).style.display = 'block';
+        if(typeStr === '填空题') {
+
+        } else if (typeStr === '单选题') {
+            document.getElementById('optionA1').innerHTML = question.optionA;
+            document.getElementById('optionB1').innerHTML = question.optionB;
+            document.getElementById('optionC1').innerHTML = question.optionC;
+            document.getElementById('optionD1').innerHTML = question.optionD;
+        } else if (typeStr === '多选题'){
+            document.getElementById('optionA2').innerHTML = question.optionA;
+            document.getElementById('optionB2').innerHTML = question.optionB;
+            document.getElementById('optionC2').innerHTML = question.optionC;
+            document.getElementById('optionD2').innerHTML = question.optionD;
+        }
+        //解析
+        $(".answer").html(question.answer);
+        $(".analysis").html(question.analysis);
+        num++;
+    }
+
+    function dealNext() {
+        $("#analysis-model").hide();
+        var typeStr = question.type.msg;
+        //恢复每一题
+        document.getElementById(typeStr).style.display = 'none';
+        if(typeStr === '填空题') {
+            document.getElementById("fill_blank").value = '';
+            $("#fill_blank").removeAttr("disabled");
+        }
+        else if(typeStr === '单选题') {
+            var arr = ['A','B', 'C', 'D'];
+            $("#radio_" + arr).removeAttr('checked');
+            for(var i = 0; i < 4; i++) {
+                $("#radio_img_" + arr[i]).removeAttr('style','');
+            }
+            $("input[type=\"radio\"]").removeAttr("disabled");
+        }
+        else if(typeStr === '多选题') {
+            var arr = ['A','B', 'C', 'D'];
+            for(var i = 0; i < 4; i++) {
+                $("#checkbox_" + arr[i]).removeAttr("checked");
+                $("#checkbox_img_" + arr[i]).removeAttr('style','');
+            }
+            $("input[type=\"checkbox\"]").removeAttr("disabled");
+        }
+        //设置按钮
+        $("#next").hide();
+        $("#confirm").show();
+        if(num < questionList.length){
+            dealQuestion();
+        } else {
+            $("#time-model").hide();
+            $("#question-model").hide();
+            $("#correct").html(questionList.length - error);
+            $("#num").html(questionList.length);
+            $("#error").html(error);
+            var score = (questionList.length - error) / questionList.length * 100;
+            $("#ratio").html(score + '%');
+            var m_time = parseInt(time / 60);
+            var s_time = time % 60;
+            $("#useTime").html(checkTime(m_time) + ':' + checkTime(s_time));
+            $("#end-model").show();
+            applyCollect(score/10);
+        }
+    }
+
+    function dealConfirm() {
+        var answer=''
+        var typeStr = question.type.msg;
+        //判断答案
+        if(typeStr === '填空题') {
+            answer = document.getElementById("fill_blank").value;
+            if(answer === null || answer === undefined || answer.toString().trim().length <= 0){
+                alert('请填写答案');
+                return;
+            }
+            $("#fill_blank").attr("disabled","disabled");
+            if(answer !== question.answer) {
+                document.getElementById("fill_blank").style.color = 'red';
+                error++;
+            } else {
+                document.getElementById("fill_blank").style.color = 'green';
+            }
+        } else if (typeStr === '单选题') {
+            answer =$('input[type="radio"]:checked').val();
+            if(answer === null || answer === undefined || answer.toString().trim().length <= 0){
+                alert('请填写答案');
+                return;
+            }
+            $("input[type=\"radio\"]").attr("disabled","disabled");
+            if(answer !== question.answer) {
+                $("#radio_img_" + answer).css('background', 'url(../../../images/红选择.png) no-repeat');
+                $("#radio_img_" + answer).css('background-size', 'cover');
+                error++;
+            }
+            $("#radio_img_" + question.answer).css('background', 'url(../../../images/绿选择.png) no-repeat');
+            $("#radio_img_" + question.answer).css('background-size', 'cover');
+        } else if (typeStr === '多选题'){
+            $("input[type='checkbox']:checked").each(function () {
+                var tmp = $(this).val();
+                if(question.answer.indexOf(tmp) === -1){
+                    $("#checkbox_img_" + tmp).css('background', 'url(../../../images/红选择.png) no-repeat');
+                    $("#checkbox_img_" + tmp).css('background-size', 'cover');
+                }
+                answer += $(this).val();
+            });
+            if(answer === null || answer === undefined || answer.toString().trim().length <= 0){
+                alert('请填写答案');
+                return;
+            }
+            $("input[type=\"checkbox\"]").attr("disabled","disabled");
+            for(var i = 0; i < question.answer.length; i++) {
+                var tmp = question.answer.charAt(i);
+                $("#checkbox_img_" + tmp).css('background', 'url(../../../images/绿选择.png) no-repeat');
+                $("#checkbox_img_" + tmp).css('background-size', 'cover');
+            }
+            if(answer !== question.answer) {
+                error++;
+            }
+        }
+
+        //显示
+        $("#analysis-model").show();
+        $("#next").show();
+        $("#confirm").hide();
+    }
+
+    function applyCollect(score) {
+        $.ajax({
+            url:serverIp + "collect/apply",
+            type:"POST",
+            data:{
+                userId:userId,
+                part:'study',
+                sub:'exam',
+                id:para,//电影的编号
+                progress:score
+            },
+            success:function () {},
+            error:function () {}
+        });
+    }
+
+    function Timer(){
+        time++;
+        if(second <= 0){
+            if(minute <= 0) return;
+            minute--;
+            second = 59;
+            minute = checkTime(minute);
+            document.getElementById("min").innerHTML = minute;
+        } else {
+            second--;
+        }
+        second = checkTime(second);
+        document.getElementById("secs").innerHTML = second;
+    }
+
+    //将0-9的数字前面加上0，例1变为01
+    function checkTime(i){
+        if (i<10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    function finish() {
+        window.android.finish();
+    }
+
+    function tryAgin() {
+        num = 0;//当前做的题目数
+        minute = totalTime;//剩余时间
+        second = 0;
+        time = 0;//当前已用时间
+        error = 0;
+        $("#time-model").show();
+        dealQuestion();
+        $("#question-model").show();
+        setInterval("Timer()",1000);
+        $("#end-model").hide();
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+</script>
+</html>

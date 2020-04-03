@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>答题</title>
+    <link href="../../../files/study/exam/exam.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../../files/search/search.js"></script>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<!--答题模块-->
+<div id="content" class="exam-model-wrapper">
+    <!--最新题库-->
+    <div class="sub-exam-wrapper">
+        <!--模块标题-->
+        <div class="sub-exam-title-wrapper">
+            <img src="../../../images/红色短竖线.png" class="line_red">
+            <span class="sub-exam-title">最新题库</span>
+            <span onclick="jumpToSub('recent')" class="more">更多>></span>
+        </div>
+        <!--模块内容-->
+        <div id="recentExam" class="sub-exam-content"></div>
+    </div>
+    <!--分割线-->
+    <img src="../../../images/分割线.png" class="cutoff_rule"/>
+    <!--考研政治-->
+    <div class="sub-exam-wrapper">
+        <!--模块标题-->
+        <div class="sub-exam-title-wrapper">
+            <img src="../../../images/红色短竖线.png" class="line_red">
+            <span class="sub-exam-title">考研政治</span>
+            <span onclick="jumpToSub('special')" class="more"></span>
+        </div>
+        <!--模块内容-->
+        <div id="graduateExam" class="sub-exam-content"></div>
+    </div>
+    <!--分割线-->
+    <img src="../../../images/分割线.png" class="cutoff_rule"/>
+    <!--专项答题-->
+    <div class="sub-exam-wrapper">
+        <!--模块标题-->
+        <div class="sub-exam-title-wrapper">
+            <img src="../../../images/红色短竖线.png" class="line_red">
+            <span class="sub-exam-title">专项答题</span>
+            <span onclick="jumpToSub('special')" class="more">更多>></span>
+        </div>
+        <!--模块内容-->
+        <div id="specialExam" class="sub-exam-content"></div>
+    </div>
+</div>
+</body>
+<script>
+    init();
+    function init() {
+        $.when(
+            $.ajax({
+                url: serverIp + "study/exam/recent",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    limit:5
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#recentExam").append(
+                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>');
+                    }
+                },
+                error : function () {
+                }
+            }),//loadRecentExam();
+            $.ajax({
+                url: serverIp + "study/exam/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:1,
+                    limit:5
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#graduateExam").append(
+                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>');
+                    }
+                },
+                error : function () {}
+            }),//loadSubExam(1, 5);
+            $.ajax({
+                url: serverIp + "study/exam/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:1,
+                    limit:1
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#specialExam").append(
+                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>');
+                    }
+                },
+                error : function () {}
+            }),//loadSubExam(1, 1);
+            $.ajax({
+                url: serverIp + "study/exam/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:2,
+                    limit:1
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#specialExam").append(
+                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>');
+                    }
+                },
+                error : function () {}
+            }),//loadSubExam(2, 1)
+            $.ajax({
+                url: serverIp + "study/exam/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:2,
+                    limit:1
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#specialExam").append(
+                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>');
+                    }
+                },
+                error : function () {}
+            }),//loadSubExam(3, 1)
+            $.ajax({
+                url: serverIp + "study/exam/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:4,
+                    limit:1
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#specialExam").append(
+                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>');
+                    }
+                },
+                error : function () {}
+            }),//loadSubExam(4, 1)
+            $.ajax({
+                url: serverIp + "study/exam/special",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:0,
+                    label:5,
+                    limit:1
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#specialExam").append(
+                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                            '<span class="exam-title">' + result[i].title + '</span>' +
+                            '</div>');
+                    }
+                },
+                error : function () {}
+            })//loadSubExam(5, 1)
+        ).then(function () {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function () { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function loadRecentExam() {
+        $.ajax({
+            url: serverIp + "study/exam/recent",
+            type:"POST",
+            data:{
+                userId:userId,
+                num:0,
+                limit:5
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                for (var i = 0; i < result.length; i++) {
+                    $("#recentExam").append(
+                    '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                    '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                    '<span class="exam-title">' + result[i].title + '</span>' +
+                    '</div>');
+            }
+            },
+            error : function () {
+                key = "";
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    function loadSubExam(label, limit) {
+        $.ajax({
+            url: serverIp + "study/exam/special",
+            type:"POST",
+            data:{
+                userId:userId,
+                num:0,
+                label:label,
+                limit:limit
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                var flag;
+                if(label === 0) {
+                    flag = "#graduateExam";
+                } else {
+                    flag = "#specialExam";
+                }
+                for (var i = 0; i < result.length; i++) {
+                    $(flag).append(content +
+                        '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
+                        '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                        '<span class="exam-title">' + result[i].title + '</span>' +
+                        '</div>');
+                }
+            },
+            error : function () {
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    function jumpToSub(sub) {
+        var subTitle = "";
+        var htmlUrl = "study/exam/subExam.html";
+        switch (sub) {
+            case "recent": subTitle = "最新题库"; break;
+            case "special": subTitle = "专项答题"; htmlUrl = "study/exam/specialExam.html";
+                break;
+        }
+        window.android.toSub("study", "exam", sub, subTitle, htmlUrl);
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+</script>
+</html>

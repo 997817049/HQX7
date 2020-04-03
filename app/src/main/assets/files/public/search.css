@@ -1,0 +1,60 @@
+body {
+    margin:0;
+    padding:0;
+    font-weight:500;
+    font-family:"Microsoft YaHei","宋体","Segoe UI","Lucida Grande",Helvetica,Arial,sans-serif,FreeSans,Arimo;
+}
+.search-bar{
+    padding:10px 10px 10px 2px;height: 42px;
+}
+.search-from{
+    position:relative;width:90%;margin:0 auto;
+}
+.search-input{
+    box-sizing:border-box;
+    width:70%;
+    height:38px;
+    border:2px solid #c5464a;
+    border-radius:5px 0 0 5px ;
+    background:transparent;
+    display: inline-block;
+    float: right;
+    padding-left:13px;
+}
+.search-button{
+    font-size:13px;
+    color:#F9F0DA;
+    height:38px;
+    cursor:pointer;
+    background:#c5464a;
+    border-radius:0 5px 5px 0;
+    width:20%;
+    border:none;
+    display: inline-block;
+    float: right;
+}
+
+.search-model{
+    width: 90%; padding:2% 5%; border-bottom: 1px solid darkgray;
+}
+.history-model{
+    width: 90%; padding:2% 5%; border-bottom: 1px solid darkgray;
+}
+.search-history-wrapper{
+    width: 100%; padding-right: 5px;
+}
+.search-history{
+    font-size: 12px;display: inline-block;line-height: 21px;
+}
+.search-clear{
+    font-size: 12px;float: right; margin-right: 5px; display: inline-block;line-height: 21px;
+}
+.word{
+    height: 20px;line-height: 20px; font-size: 14px; padding: 5px 10px;background-color: gainsboro;border-radius: 5px; display: inline-block;margin-top: 10px;margin-left: 5px;
+}
+.history-word{
+    height: 20px;line-height: 20px; font-size: 14px; padding: 5px 10px;background-color: gainsboro;border-radius: 5px; display: inline-block;margin-top: 10px;margin-left: 5px;
+}
+.more{
+    margin-top: 5px;font-size: 12px; color: dodgerblue; float: right;
+}

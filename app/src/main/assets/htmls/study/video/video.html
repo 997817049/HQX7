@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电视</title>
+    <link href="../../../files/study/video/rotation.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/study/video/tv.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/study/video/scrollBar.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content" style="display: none;z-index: 1;">
+    <!--轮播  热播-->
+    <div class="container">
+        <div class="a-list">
+            <a id="img1" href="#" target="_blank" class="current">
+                <img src="http://www.jq22.com/img/cs/500x500-1.png">
+            </a>
+            <a id="img2" href="#" target="_blank">
+                <img src="http://www.jq22.com/img/cs/500x500-2.png">
+            </a>
+            <a id="img3" href="#" target="_blank">
+                <img src="http://www.jq22.com/img/cs/500x500-3.png">
+            </a>
+            <a id="img4" href="#" target="_blank">
+                <img src="http://www.jq22.com/img/cs/500x500-4.png">
+            </a>
+        </div>
+
+        <div class="circle">
+            <ul>
+                <li class="current"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+
+        <div class="left">&lt;</div>
+        <div class="right">&gt;</div>
+    </div>
+
+    <!--按钮-->
+    <div class="scroll-wrapper">
+        <div class="scroll-inner-wrapper">
+            <div class="score-content">
+                <div class="bar-wrapper" onclick="jumpToSub('special')">
+                    <img src="../../../images/全部内容.png" class="bar-img">
+                    <div class="bar-txt">全部内容</div>
+                </div>
+                <div class="bar-wrapper" onclick="jumpToSub('collect')">
+                    <img src="../../../images/收藏bar.png" class="bar-img">
+                    <div class="bar-txt">我的收藏</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--内容-->
+    <!--热播  根据count排序  6个-->
+    <div class="model-wrapper">
+        <!--标题-->
+        <div class="model-title-wrapper">
+            <div class="title" onclick="jumpToSub('hot')">热播>></div>
+        </div>
+        <!--内容-->
+        <div id="hot" class="model-content-wrapper"></div>
+    </div>
+
+    <!--今日推荐  根据生成时间排序-->
+    <div class="model-wrapper">
+        <!--标题-->
+        <div class="model-title-wrapper">
+            <div class="title" onclick="jumpToSub('recent')">今日推荐>></div>
+        </div>
+        <!--内容-->
+        <div id="recent" class="model-content-wrapper">
+        </div>
+    </div>
+
+    <!--猜你喜欢  根据算法计算-->
+    <div class="model-wrapper">
+        <!--标题-->
+        <div class="model-title-wrapper">
+            <div class="title">猜你喜欢>></div>
+        </div>
+        <!--内容-->
+        <div id="" class="model-content-wrapper">
+        </div>
+    </div>
+
+    <!--分类推荐 -->
+    <!--每一类 六个-->
+</div>
+</body>
+<script>
+    var speed = 3000; //轮播速度
+    var num = 4; //轮播图片张数
+    var index = 1; //当前轮播图片序号
+
+    $(function() {
+        var interval = setInterval('play()', speed);
+
+        //鼠标移入/移出圆点
+        $(".circle li").mouseenter(function() {
+            clearInterval(interval); //停止轮播
+            index = $(this).index();
+            play();
+            return false;
+        }).mouseleave(function() {
+            interval = setInterval('play()', speed); //开启轮播
+            return false;
+        })
+
+        //移入图片
+        $(".container").mouseenter(function() {
+            $(".left,.right").fadeTo(500, 0.6);
+        }).mouseleave(function() {
+            $(".left,.right").fadeTo(500, 0);
+        })
+
+        //左右箭头点击
+        $(".left").click(function() {
+            index = index - 2;
+            if (index < 0) {
+                index = 3;
+            }
+            play();
+        })
+        $(".right").click(function() {
+            play();
+        })
+    })
+
+    /*轮播展示*/
+    function play() {
+        var ele = $(".a-list a");
+        if (index == num) {
+            index = 0;
+        }
+        //轮播图片
+        $(".a-list a").removeClass('current').eq(index).addClass('current');
+        //轮播圆点
+        $(".circle li").removeClass('current').eq(index).addClass('current');
+        index++;
+    }
+</script>
+<script>
+    init();
+    function init() {
+        para = window.android.getPara();
+        console.log("para" + para);
+        $.when(
+            $.ajax({
+                url: serverIp + "classify/study",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part:para
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        loadSub(result[i]);
+                    }
+                },
+                error : function () {}
+            }),//获取全部分类
+            $.ajax({
+                url: serverIp + "study/video/hot",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part: para,
+                    num:0,
+                    limit:10
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    //前四个滚动
+                    for(var i = 0; i < 4 && i < result.length; i++) {
+                        $("#img" + i).html('<img src="' + nginxIp + result[i].picUrl + '">');
+                    }
+                    //后六个显示
+                    var min = result.length > 6 ? result.length - 6 : 0;
+                    for(var i = result.length - 1; i >= min; i--) {
+                        $("#hot").append(
+                            '<div class="tv3-wrapper" onclick="readContent(\'' + result[i].id +  '\')">\n' +
+                            '<div class="tv3-img-wrapper">\n' +
+                            '<img src="' + nginxIp + result[i].picUrl + '" class="tv-img">\n' +
+                            '</div>\n' +
+                            '<div class="tv-title">' + result[i].title + '</div>\n' +
+                            '</div>');
+                    }
+                },
+                error : function () {
+                    key = "";
+                    console.log("ajax失败");
+                }
+            }),//loadHot();
+            $.ajax({
+                url: serverIp + "study/video/recent",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part: para,
+                    num:0,
+                    limit:6
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++) {
+                        $("#recent").append(
+                            '<div class="tv2-wrapper" onclick="readContent(\'' + result[i].id + '\')">\n' +
+                            '<div class="tv2-img-wrapper">\n' +
+                            '<img src="' + nginxIp + result[i].picUrl + '" class="tv-img">\n' +
+                            '</div>\n' +
+                            '<div class="tv-title">' + result[i].title + '</div>\n' +
+                            '</div>');
+                    }
+                },
+                error : function () {
+                    key = "";
+                    console.log("ajax失败");
+                }
+            })//loadRecent();
+        ).then(function () {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function () { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function loadSub(label) {
+        $.ajax({
+            url: serverIp + "study/video/special",
+            type:"POST",
+            data:{
+                userId:userId,
+                part:para,
+                num:0,
+                limit:6,
+                label:label.num
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result.length <= 0){
+                    return;
+                }
+                $("#content").append(
+                    '<div class="model-wrapper">\n' +
+                    '<div class="model-title-wrapper">\n' +
+                    '<div class="title">' + label.msg + '</div>\n' +
+                    '</div>\n' +
+                    '<div id="' + label.english + '" class="model-content-wrapper">\n' +
+                    '</div>\n' +
+                    '</div>\n'
+                );
+                for (var i = 0; i < result.length; i++) {
+                    $("#" + label.english).append(
+                        '<div class="tv2-wrapper" onclick="readContent(\'' + result[i].id + '\')">\n' +
+                        '<div class="tv2-img-wrapper">\n' +
+                        '<img src="' + nginxIp + result[i].picUrl + '" class="tv-img">\n' +
+                        '</div>\n' +
+                        '<div class="tv-title">' + result[i].title + '</div>\n' +
+                        '</div>');
+                    num = result[i].id;
+                }
+            },
+            error : function () {
+                console.log("ajax失败");
+            }
+        });
+    }
+
+    function jumpToSub(sub) {
+        var subTitle = "";
+        var htmlUrl = "study/video/subVideo.html";
+        switch (sub) {
+            case "hot": subTitle = "热播"; break;
+            case "recent": subTitle = "今日推荐"; break;
+            case "special": subTitle = "分类推荐"; htmlUrl = "study/video/specialVideo.html";break;
+            case "collect": subTitle = "我的收藏"; htmlUrl = "study/video/collectVideo.html";break;
+        }
+        window.android.toSub("study", para, sub, subTitle, htmlUrl);
+    }
+
+    function readContent(id) {
+        window.android.toContent('study/video/videoContent.html', "study", para, id);
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+</script>
+</html>

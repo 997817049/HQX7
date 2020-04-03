@@ -1,0 +1,70 @@
+/*轮播*/
+body {
+    margin:0;
+    padding:0;
+    overflow-x:hidden;
+}
+.container {
+    position:relative;
+    /*
+        设置图片的宽高(和图片一致则不用再同步图片宽高)
+    */
+    width:100%;
+    height:200px;
+    /*边框可去除*/
+    overflow:hidden;
+}
+.container img {
+    /*
+        设置图片的宽高(和图片一致只设置上面)
+    */
+    width:100%;
+    height:200px;
+}
+.container a {
+    display:none;
+}
+/* 当前正显示图片 */
+.container a.current {
+    display:block;
+}
+.container ul {
+    position:absolute;
+    top:97%;
+    left:50%;
+    margin:-40px;
+    /* ul的一半宽度,便于居中 */
+    list-style:none;
+}
+.container li {
+    float:left;
+    width:5px;
+    height:5px;
+    margin-top: 20px;
+    margin-right:10px;
+    background-color:#fff;
+    border-radius:50%;
+}
+.container li.current {
+    background-color:red;
+    opacity:0.5;
+    /*兼容IE8-*/
+    filter:alpha(opacity=50);
+}
+.left,.right {
+    position:absolute;
+    font-size:20px;
+    padding:0px 3px;
+    top:47%;
+    color:#fff;
+    background-color:#222;
+    opacity:0;
+    /*兼容IE8-*/
+    filter:alpha(opacity=50);
+}
+.left:hover,.right:hover,.container li {
+    cursor:pointer;
+}
+.right {
+    right:0px;
+}

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>查找</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="../../files/public/top.css" type="text/css" rel="stylesheet">
+    <link href="../../files/public/public.css" type="text/css" rel="stylesheet">
+    <link href="../../files/public/other.css" type="text/css" rel="stylesheet">
+    <link href="../../files/base/base.css" type="text/css" rel="stylesheet">
+    <link href="../../files/study/exam/subExam.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/study/book/subBook.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/study/video/subTV.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../files/public/top.js"></script>
+    <script type="text/javascript" src="../../files/search/search.js"></script>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content" style="z-index: 1; display: none">
+    <div id="search-content"></div>
+    <div class="toTopH">顶部</div>
+</div>
+</body>
+<script>
+    num = 0;
+    init();
+    function init() {
+        para = window.android.getPara();
+        para = JSON.parse(para);
+        $("#search-content").html('');
+        $.when(
+            $.ajax({
+                url: serverIp + "search",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    word:para.word,
+                    part:para.part,
+                    sub:para.sub,
+                    num:num,
+                    limit:20
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    if(para.part === 'base'){
+                        dealBase(result);
+                        return;
+                    }
+                    switch (para.sub) {
+                        case "book": dealBook(result);return;
+                        case "exam": dealExam(result);return;
+                        default: dealVideo(result); return;
+                    }
+                },
+                error : function () {
+                }
+            })
+        ).then(function (value) {//都成功时
+            dealToTop();
+            $('.toTopH').fadeOut(100);
+            $("#mask").hide();
+            $("#content").show();
+        }, function (reason) { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function refresh(){
+        $("#search-content").html("");
+        loadContent();
+    }
+
+    function loadContent() {
+        $.ajax({
+            url: serverIp + "search",
+            type:"POST",
+            data:{
+                userId:userId,
+                word:para.word,
+                part:para.part,
+                sub:para.sub,
+                num:num,
+                limit:20
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                if(para.part === 'base'){
+                    dealBase(result);
+                    return;
+                }
+                switch (para.sub) {
+                    case "book": dealBook(result);return;
+                    case "exam": dealExam(result);return;
+                    default: dealVideo(result); return;
+                }
+            },
+            error : function () {
+            }
+        })
+    }
+
+    function dealBase(result) {
+        result = JSON.parse(result.data);
+        if(result.length <= 0){
+            if(num === 0) {
+                $("#search-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+            } else {
+                $("#search-content").append(
+                    '<div class="line-wrapper">\n' +
+                    '<div class="solid_line"></div>\n' +
+                    '<div class="line_txt">我也是有底线的</div>\n' +
+                    '</div>');
+            }
+            window.android.loadNoMoreData();
+            return;
+        }
+        for (var i = 0; i < result.length; i++) {
+            $("#search-content").append(
+                '<div class="base" onclick="readBase(\'' + (nginxIp + result[i].htmlUrl) + '\',\'' + result[i].id + '\')">' +
+                '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                '<span class="base_title">' + result[i].title + '</span>' +
+                '</div>');
+            num = result[i].id;
+        }
+    }
+
+    function dealExam(result) {
+        result = JSON.parse(result.data);
+        if(result.length <= 0){
+            if(num === 0) {
+                $("#search-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+            } else {
+                $("#search-content").append(
+                    '<div class="line-wrapper">\n' +
+                    '<div class="solid_line"></div>\n' +
+                    '<div class="line_txt">我也是有底线的</div>\n' +
+                    '</div>');
+            }
+            window.android.loadNoMoreData();
+            return;
+        }
+        for (var i = 0; i < result.length; i++) {
+            $("#search-content").append(
+                '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
+                '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                '<span class="exam-title">' + result[i].title + '</span>' +
+                '</div>\n' +
+                '<img src="../../images/分割线.png" class="line"/>');
+            num = result[i].id;
+        }
+    }
+
+    function dealBook(result) {
+        result = JSON.parse(result.data);
+        if(result.length <= 0){
+            if(num === 0) {
+                $("#search-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+            } else {
+                $("#search-content").append(
+                    '<div class="line-wrapper">\n' +
+                    '<div class="solid_line"></div>\n' +
+                    '<div class="line_txt">我也是有底线的</div>\n' +
+                    '</div>');
+            }
+            window.android.loadNoMoreData();
+            return;
+        }
+        for(var i = 0; i < result.length; i++) {
+            $("#search-content").append(
+                '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">\n' +
+                '    <div class="book-img-wrapper">\n' +
+                '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                '    </div>\n' +
+                '    <div class="book-title">'+ result[i].title +'</div>\n' +
+                '    <div class="book-synopsis">'+ result[i].synopsis + '</span>\n' +
+                '    </div>\n' +
+                '    <div class="book-bottom">\n' +
+                '        <div class="book-author">'+ result[i].author + '</div>\n' +
+                '        <div class="book-label">'+ result[i].label.msg + '</div>\n' +
+                '    </div>\n' +
+                '    <img class="line" src="../../../images/分割线.png"/>\n' +
+                '</div>');
+            num = result[i].id;
+        }
+    }
+
+    function dealVideo(result){
+        result = JSON.parse(result.data);
+        if(result.length <= 0){
+            if(num === 0) {
+                $("#search-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+            } else {
+                $("#search-content").append(
+                    '<div class="line-wrapper">\n' +
+                    '<div class="solid_line"></div>\n' +
+                    '<div class="line_txt">我也是有底线的</div>\n' +
+                    '</div>');
+            }
+            window.android.loadNoMoreData();
+            return;
+        }
+        $("#search-content").html('');
+        for (var i = 0; i < result.length; i++) {
+            $("#search-content").append(
+                '<div class="tv" onclick="readVideo(\'' + result[i].id +  '\')">' +
+                '<div class="tv_image_div">' +
+                '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                '</div>' +
+                '<div class="tv_title">' +
+                '<span class="tv_title_text">' + result[i].title + '</span>' +
+                '</div>' +
+                '<div class="tv_character">' +
+                '<span class="tv_text">' + result[i].actor + '</span>' +
+                '</div>' +
+                '<div class="tv_synopsis">' +
+                '<span class="tv_text">' + result[i].synopsis + '</span>' +
+                '</div>' +
+                '<img class="line" src="../../images/分割线.png"/>' +
+                '</div>');
+            num = result[i].id;
+        }
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+</script>
+</html>

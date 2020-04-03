@@ -1,0 +1,39 @@
+
+/*内容*/
+.model-wrapper{
+   width: 100%;
+}
+.model-title-wrapper{
+    margin-top: 20px;
+    padding-left: 10px;
+    color: indianred;
+}
+.title{
+    font-size: 16px;font-weight:bold; display: inline-block;
+}
+.model-content-wrapper{
+
+}
+/*一行三个*/
+.tv3-wrapper{
+    width: 29%; height: 170px;display: inline-block; margin-top: 10px; margin-left: 10px; vertical-align:top;overflow:hidden
+}
+.tv3-img-wrapper{
+    height: 135px;
+}
+.tv-img {
+    height: 100%;
+    width: 100%
+}
+.tv-title{
+    line-height: 25px;height: 25px;font-size: 15px;margin-top: 10px;
+}
+
+/*一行两个*/
+.tv2-wrapper{
+    width: 45%; height: 140px;display: inline-block; margin-top: 10px; margin-left: 10px; vertical-align:top;overflow:hidden
+}
+.tv2-img-wrapper{
+    height: 100px;
+}
+

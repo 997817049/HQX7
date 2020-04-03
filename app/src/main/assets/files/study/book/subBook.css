@@ -1,0 +1,51 @@
+body{
+    margin: 0;
+}
+.book-wrapper{
+    margin-top: 10px
+}
+.book-img-wrapper {
+    margin-left:10%;
+    margin-top:5px;
+    width:25%;
+    height: 120px;
+}
+.book-img {
+    height: 100%;
+    width: 100%
+}
+.book-title {
+    margin-left:40%;
+    margin-top:-120px;
+    width:55%;
+    height: 25px;
+    font-weight:bold;
+}
+.book-synopsis{
+    margin-left:40%;
+    margin-top: 2px;
+    width:55%;
+    height:72px;
+    font-size:15px;
+    color:#6C6C6C;
+    overflow:hidden
+}
+.book-bottom {
+    margin-left:40%;
+    margin-top:8px;
+    width: 55%;
+    height:20px;
+    font-size:12px;
+    color:#6C6C6C;
+}
+.book-author{
+    display: inline-block;
+}
+.book-label{
+    color: orange; line-height: 20px; text-align: center; border:1px solid;float: right; display: inline-block
+}
+.line{
+    width: 100%;
+    margin-top: 20px;
+}
+

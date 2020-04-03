@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>红色基地</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="../../files/base/base.css" type="text/css" rel="stylesheet">
+    <link href="../../files/public/top.css" type="text/css" rel="stylesheet">
+    <link href="../../files/public/other.css" type="text/css" rel="stylesheet">
+    <link href="../../files/public/public.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../files/public/top.js"></script>
+</head>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+</div>
+<div id="content" style="z-index: 1;display: none;">
+    <div id="base" style="width: 100%;"></div>
+    <div class="line-wrapper">
+        <div class="solid_line"></div>
+        <div class="line_txt">我也是有底线的</div>
+    </div>
+    <div class="toTopH" >顶部</div>
+</div>
+</body>
+<script>
+    var num = 0;
+
+    init();
+    function init(){
+        console.log("base.html: 初始化base界面");
+        dealToTop();
+        $('.toTopH').fadeOut(200);
+        $.when(
+            $.ajax({
+            url: serverIp + "base",
+            type:"POST",
+            data:{
+                userId:userId,
+                num:num,
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result.length <= 0) {
+                    $(".line-wrapper").show();
+                    window.android.loadNoMoreData();
+                    return;
+                }
+                for (var i = 0; i < result.length; i++) {
+                    $("#base").append(
+                        '<div class="base" onclick="readContent(\'' + (nginxIp + result[i].htmlUrl) + '\',\'' + result[i].id + '\')">' +
+                        '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                        '<span class="base_title">' + result[i].title + '</span>' +
+                        '</div>');
+                    num = result[i].id;
+                }
+            },//readContent(\'' + result[i].id + '\',\'' + (nginxIp + result[i].htmlUrl) + '\')
+            error:function () {
+            }
+        })//loadContent();
+        ).then(function (value) {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+        }, function (reason) { //有一个失败时
+            $("#load-txt").html("加载失败")
+        });
+
+    }
+
+    function refresh() {
+        $("#base").html("");
+        num = 0;
+        loadContent();
+    }
+
+    //加载页面
+    function loadContent() {
+        $.ajax({
+            url: serverIp + "base",
+            type:"POST",
+            data:{
+                userId:userId,
+                num:num,
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result.length <= 0) {
+                    $(".line-wrapper").show();
+                    window.android.loadNoMoreData();
+                    return;
+                }
+                for (var i = 0; i < result.length; i++) {
+                    var context = $("#base").html();//该模块已有的数据
+                    console.log(result[i].id);
+                    $("#base").html(context +
+                        '<div class="base" onclick="readContent(\'' + (nginxIp + result[i].htmlUrl)+ '\',\'' + result[i].id + '\')">' +
+                        '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                        '<span class="base_title">' + result[i].title + '</span>' +
+                        '</div>');
+                    num = result[i].id;
+                }
+            },
+
+            error:function () {
+                console.log("ajax请求发生错误")
+            }
+        });
+    }
+
+    function readContent(htmlUrl, id) {
+        window.android.toContent(htmlUrl, "base", "", id);
+    }
+
+    function clearPara() {
+        key = "";
+        province = "";
+        city = "";
+    }
+
+</script>
+</html>

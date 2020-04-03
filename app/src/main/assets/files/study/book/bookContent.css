@@ -1,0 +1,272 @@
+body{
+    padding: 0;
+    margin: 0;
+}
+/*顶部标题栏*/
+.title_wrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    display: flex;
+    width: 100%;
+    height: 48px;
+    background: white;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, .15);
+    align-items: center;
+    visibility: hidden;
+    padding-left: 5px;
+}
+.title_left {
+    flex: 30px 0 1;
+    display: flex;
+    line-height: 48px;
+}
+.title_right {
+    flex: 1;
+    display: flex;
+    line-height: 48px;
+    justify-content: flex-end;
+    margin-right: 15px;
+}
+/*阅读区域*/
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.left{
+    flex: 0 0 100px;
+}
+.center{
+    flex: 1;
+}
+.right{
+    flex: 0 0 100px;
+}
+
+/*下方菜单*/
+.menu-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 101;
+    display: flex;
+    visibility: hidden;
+    width: 100%;
+    height: 48px;
+    background: white;
+    box-shadow: 0 -8px 8px rgba(0, 0, 0, .15);
+    align-items: center;
+}
+.hide-box-shadow{
+    box-shadow: none;
+}
+.menu_icon_wrapper {
+    flex: 1;
+    text-align: center;
+}
+.icon-progress {
+    font-size: 22px;
+}
+.icon-bright {
+    font-size: 22px;
+}
+/*详细设置*/
+.setting-wrapper {
+    position: absolute;
+    bottom: 48px;
+    left: 0;
+    z-index: 101;
+    width: 100%;
+    height: 60px;
+    background: white;
+    box-shadow: 0 -8px 8px rgba(0, 0, 0, .15);
+    visibility: hidden;
+}
+/*字体大小设置*/
+.setting-font-size {
+    display: none;
+    height: 100%;
+}
+.setting-font-preview {
+    flex: 0 0 40px;
+    text-align: center;
+    line-height: 60px;
+}
+.setting-font-select{
+    flex: 1;
+    display: flex;
+}
+.select-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+.line {
+    flex: 1;
+    height: 0;
+    border-top: 1px solid #ccc;
+}
+.point-wrapper {
+    position: relative;
+    flex: 0 0 0;
+    width: 0;
+    height: 7px;
+    border-left: 1px solid #ccc;
+}
+.point {
+    position: absolute;
+    top: -8px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, .15);
+    visibility: hidden;
+}
+.small-point {
+    margin-top: 42%;
+    margin-left: 42%;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: black;
+}
+/*字体设置*/
+.setting-font-family {
+    flex: 1;
+    font-size: 14px;
+@include center;
+}
+.setting-font-family-text-wrapper {
+@include center;
+}
+.setting-font-family-icon-wrapper {
+@include center;
+}
+
+/*主题设置*/
+.setting-theme{
+    height: 100%;
+    display: none;
+}
+.setting-theme-item{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.setting-theme-preview{
+    flex: 1;
+    box-sizing: border-box;
+}
+.setting-theme-text{
+    flex: 0 0 20px;
+    font-size: 14px;
+    collapse: #ccc;
+    text-align: center;
+}
+/*进度条设置*/
+.setting-progress{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+.setting-progress-preview{
+    flex: 0 0 60px;
+    text-align: center;
+    line-height: 60px;
+    color: #333;
+    font-size: 12px;
+}
+.setting-progress-select{
+    flex: 1;
+    display: flex;
+}
+.progress-wrapper{
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    line-height: 40px;
+}
+.progress{
+    width: 100%;
+    -webkit-appearance: none;
+    height: 2px;
+    background: -webkit-linear-gradient(#999, #999) no-repeat, #ddd;
+    background-size: 0 100%;
+
+}
+:focus{
+    outline: none;
+}
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .15);
+    border: 1px solid #ddd;
+}
+.text-wrapper{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: #333;
+    font-size: 12px;
+    text-align: center;
+}
+/*目录*/
+.catalogue {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 102;
+    width: 80%;
+    height: 100%;
+    background: white;
+}
+.catalogue-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    display: none;
+}
+.catalogue-item {
+    padding: 20px 15px;
+    border-bottom: 1px solid #f4f4f4;
+}
+.text {
+    font-size: 14px;
+    color: #333;
+}
+.empty {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    line-height: 600px;
+}
+.catalogue-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(51, 51, 51, .8);
+}
