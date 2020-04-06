@@ -7,7 +7,7 @@
     <link href="../../../files/public/public.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../../files/public/public.js"></script>
-    <script type="text/javascript" src="../../../files/search/search.js"></script>
+    <script type="text/javascript" src="../../../files/public/readContent.js"></script>
 </head>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -128,6 +128,8 @@
 </div>
 </body>
 <script>
+    var userId = window.android.getUserId();
+
     init();
     function init() {
         $.when(
@@ -177,7 +179,7 @@
                         $("#hot").append(
                             '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">' +
                             '    <div class="book-img-wrapper">' +
-                            '        <img src="'+ nginxIp + result[i].picUrl + '" class="book-img">' +
+                            '        <img src="'+ result[i].picUrl + '" class="book-img">' +
                             '    </div>' +
                             '    <div class="book-title">' + result[i].title + '</div>' +
                             '</div>');
@@ -206,7 +208,7 @@
                         $("#recent").append(
                             '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">' +
                             '    <div class="book-img-wrapper">' +
-                            '        <img src="'+ nginxIp + result[i].picUrl + '" class="book-img">' +
+                            '        <img src="'+ result[i].picUrl + '" class="book-img">' +
                             '    </div>' +
                             '    <div class="book-title">' + result[i].title + '</div>' +
                             '</div>');
@@ -345,7 +347,7 @@
                     $("#" + part).append(
                         '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">' +
                         '    <div class="book-img-wrapper">' +
-                        '        <img src="'+ nginxIp + result[i].picUrl + '" class="book-img">' +
+                        '        <img src="' + result[i].picUrl + '" class="book-img">' +
                         '    </div>' +
                         '    <div class="book-title">' + result[i].title + '</div>' +
                         '</div>');

@@ -7,7 +7,7 @@
     <link href="../../../files/public/public.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../../files/public/public.js"></script>
-    <script type="text/javascript" src="../../../files/search/search.js"></script>
+    <script type="text/javascript" src="../../../files/public/readContent.js"></script>
 </head>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -65,6 +65,8 @@
 </div>
 </body>
 <script>
+    var userId = 1;
+        // var userId = window.android.getUserId();
     init();
     function init() {
         $.when(
@@ -84,11 +86,7 @@
                     }
                     result = result.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#recentExam").append(
-                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>');
+                        writeHtml($("#recentExam"), JSON.stringify(result[i]));
                     }
                 },
                 error : function () {
@@ -111,11 +109,7 @@
                     }
                     result = result.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#graduateExam").append(
-                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>');
+                        writeHtml($("#graduateExam"), JSON.stringify(result[i]));
                     }
                 },
                 error : function () {}
@@ -137,11 +131,7 @@
                     }
                     result = result.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#specialExam").append(
-                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>');
+                        writeHtml($("#specialExam"), JSON.stringify(result[i]));
                     }
                 },
                 error : function () {}
@@ -163,11 +153,7 @@
                     }
                     result = result.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#specialExam").append(
-                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>');
+                        writeHtml($("#specialExam"), JSON.stringify(result[i]));
                     }
                 },
                 error : function () {}
@@ -189,11 +175,7 @@
                     }
                     result = result.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#specialExam").append(
-                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>');
+                        writeHtml($("#specialExam"), JSON.stringify(result[i]));
                     }
                 },
                 error : function () {}
@@ -215,11 +197,7 @@
                     }
                     result = result.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#specialExam").append(
-                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>');
+                        writeHtml($("#specialExam"), JSON.stringify(result[i]));
                     }
                 },
                 error : function () {}
@@ -241,11 +219,7 @@
                     }
                     result = result.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#specialExam").append(
-                            '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>');
+                        writeHtml($("#specialExam"), JSON.stringify(result[i]));
                     }
                 },
                 error : function () {}
@@ -256,74 +230,6 @@
         }, function () { //有一个失败时
             $("#load-txt").html("加载失败");
             $(".load-btn-wrapper").show();
-        });
-    }
-
-    function loadRecentExam() {
-        $.ajax({
-            url: serverIp + "study/exam/recent",
-            type:"POST",
-            data:{
-                userId:userId,
-                num:0,
-                limit:5
-            },
-
-            success:function (result) {
-                if(result.code === 1) {
-                    console.log("从服务器获取数据失败");
-                    return;
-                }
-                result = result.data;
-                for (var i = 0; i < result.length; i++) {
-                    $("#recentExam").append(
-                    '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                    '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                    '<span class="exam-title">' + result[i].title + '</span>' +
-                    '</div>');
-            }
-            },
-            error : function () {
-                key = "";
-                console.log("ajax失败");
-            }
-        });
-    }
-
-    function loadSubExam(label, limit) {
-        $.ajax({
-            url: serverIp + "study/exam/special",
-            type:"POST",
-            data:{
-                userId:userId,
-                num:0,
-                label:label,
-                limit:limit
-            },
-
-            success:function (result) {
-                if(result.code === 1) {
-                    console.log("从服务器获取数据失败");
-                    return;
-                }
-                result = result.data;
-                var flag;
-                if(label === 0) {
-                    flag = "#graduateExam";
-                } else {
-                    flag = "#specialExam";
-                }
-                for (var i = 0; i < result.length; i++) {
-                    $(flag).append(content +
-                        '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">' +
-                        '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                        '<span class="exam-title">' + result[i].title + '</span>' +
-                        '</div>');
-                }
-            },
-            error : function () {
-                console.log("ajax失败");
-            }
         });
     }
 
@@ -346,5 +252,18 @@
             init();
         }
     );
+
+    function writeHtml(dom, obj) {
+        obj = JSON.parse(obj);
+        var html = '<div class="exam-wrapper" onclick="readExam(\'' + obj.id + '\')">' +
+            '<span class="exam-label">' + obj.label.msg + '</span>' +
+            '<span class="exam-title">' + obj.title + '</span>';
+        if(obj.collect){
+            html += '<span class="exam-score">' + obj.progress + '</span>';
+        }
+        html += '</div>';
+        dom.append(html);
+    }
 </script>
 </html>
+

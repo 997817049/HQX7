@@ -12,6 +12,7 @@
     <script type="text/javascript" src="../../resources/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../files/public/public.js"></script>
     <script type="text/javascript" src="../../files/public/top.js"></script>
+    <script type="text/javascript" src="../../files/public/readContent.js"></script>
 </head>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -35,7 +36,7 @@
 </body>
 <script>
     var num = 0;
-
+    var userId = window.android.getUserId();
     init();
     function init(){
         console.log("base.html: 初始化base界面");
@@ -63,13 +64,13 @@
                 }
                 for (var i = 0; i < result.length; i++) {
                     $("#base").append(
-                        '<div class="base" onclick="readContent(\'' + (nginxIp + result[i].htmlUrl) + '\',\'' + result[i].id + '\')">' +
-                        '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                        '<div class="base" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id + '\')">' +
+                        '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
                         '<span class="base_title">' + result[i].title + '</span>' +
                         '</div>');
                     num = result[i].id;
                 }
-            },//readContent(\'' + result[i].id + '\',\'' + (nginxIp + result[i].htmlUrl) + '\')
+            },//
             error:function () {
             }
         })//loadContent();
@@ -113,8 +114,8 @@
                     var context = $("#base").html();//该模块已有的数据
                     console.log(result[i].id);
                     $("#base").html(context +
-                        '<div class="base" onclick="readContent(\'' + (nginxIp + result[i].htmlUrl)+ '\',\'' + result[i].id + '\')">' +
-                        '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                        '<div class="base" onclick="readBase(\'' + result[i].htmlUrl+ '\',\'' + result[i].id + '\')">' +
+                        '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
                         '<span class="base_title">' + result[i].title + '</span>' +
                         '</div>');
                     num = result[i].id;
@@ -125,10 +126,6 @@
                 console.log("ajax请求发生错误")
             }
         });
-    }
-
-    function readContent(htmlUrl, id) {
-        window.android.toContent(htmlUrl, "base", "", id);
     }
 
     function clearPara() {

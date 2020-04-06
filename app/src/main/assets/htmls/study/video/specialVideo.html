@@ -43,6 +43,7 @@
 <script>
     label = 0;
     num = 0;
+    var userId = window.android.getUserId();
 
     init();
     function init() {
@@ -106,7 +107,7 @@
                         $("#video-content").append(
                             '<div class="tv" onclick="readContent(\'' + result[i].id +  '\')">' +
                             '<div class="tv_image_div">' +
-                            '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                            '<img class="tv_image" src="'+ result[i].picUrl + '"/>' +
                             '</div>' +
                             '<div class="tv_title">' +
                             '<span class="tv_title_text">' + result[i].title + '</span>' +
@@ -171,7 +172,7 @@
                     $("#video-content").append(
                         '<div class="tv" onclick="readContent(\'' + result[i].id +  '\')">' +
                         '<div class="tv_image_div">' +
-                        '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                        '<img class="tv_image" src="' + result[i].picUrl + '"/>' +
                         '</div>' +
                         '<div class="tv_title">' +
                         '<span class="tv_title_text">' + result[i].title + '</span>' +

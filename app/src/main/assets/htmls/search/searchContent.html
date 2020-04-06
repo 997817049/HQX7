@@ -38,6 +38,8 @@
 </body>
 <script>
     num = 0;
+    var userId = window.android.getUserId();
+
     init();
     function init() {
         para = window.android.getPara();
@@ -140,8 +142,8 @@
         }
         for (var i = 0; i < result.length; i++) {
             $("#search-content").append(
-                '<div class="base" onclick="readBase(\'' + (nginxIp + result[i].htmlUrl) + '\',\'' + result[i].id + '\')">' +
-                '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                '<div class="base" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id + '\')">' +
+                '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
                 '<span class="base_title">' + result[i].title + '</span>' +
                 '</div>');
             num = result[i].id;
@@ -193,7 +195,7 @@
             $("#search-content").append(
                 '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">\n' +
                 '    <div class="book-img-wrapper">\n' +
-                '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                '        <img class="book-img" src="' + result[i].picUrl + '"/>\n' +
                 '    </div>\n' +
                 '    <div class="book-title">'+ result[i].title +'</div>\n' +
                 '    <div class="book-synopsis">'+ result[i].synopsis + '</span>\n' +
@@ -228,7 +230,7 @@
             $("#search-content").append(
                 '<div class="tv" onclick="readVideo(\'' + result[i].id +  '\')">' +
                 '<div class="tv_image_div">' +
-                '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                '<img class="tv_image" src="'+ result[i].picUrl + '"/>' +
                 '</div>' +
                 '<div class="tv_title">' +
                 '<span class="tv_title_text">' + result[i].title + '</span>' +

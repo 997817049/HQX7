@@ -146,6 +146,7 @@
     var fontFamilyList = ['Default', 'Cabin', 'Days One', 'Montserrat' ,'Tangerine'];
     var pageTurnTime = 2000;
     var isAutoPageTurn = false;
+    var userId = window.android.getUserId();
 
     init();
     function init() {
@@ -175,7 +176,7 @@
                         }
                         document.getElementById("collect").style.color = 'red';
                     }
-                    initBook(nginxIp + result.fileUrl, progress);
+                    initBook(result.fileUrl, progress);
                 }
             })
         ).then(function () {//都成功时

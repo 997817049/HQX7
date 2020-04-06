@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../../files/public/public.js"></script>
     <script type="text/javascript" src="../../../files/public/top.js"></script>
     <script type="text/javascript" src="../../../resources/scripts/iscroll.js"></script>
-    <script type="text/javascript" src="../../../files/search/search.js"></script>
+    <script type="text/javascript" src="../../../files/public/readContent.js"></script>
 </head>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -45,6 +45,7 @@
 <script>
     var label = 1;
     var num = 0;
+    var userId = window.android.getUserId();
 
     init();
     function init() {
@@ -101,12 +102,7 @@
                         return;
                     }
                     for (var i = 0; i < result.length; i++) {
-                        $("#exam-content").append(
-                            '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>\n' +
-                            '<img src="../../../images/分割线.png" class="line"/>');
+                        writeHtml($("#exam-content"), JSON.parse(result[i]));
                         num = result[i].id;
                     }
                 },
@@ -160,12 +156,7 @@
                     return;
                 }
                 for (var i = 0; i < result.length; i++) {
-                    $("#exam-content").append(
-                        '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
-                        '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                        '<span class="exam-title">' + result[i].title + '</span>' +
-                        '</div>\n' +
-                        '<img src="../../../images/分割线.png" class="line"/>');
+                    writeHtml($("#exam-content"), JSON.parse(result[i]));
                     num = result[i].id;
                 }
             },
@@ -192,5 +183,17 @@
             init();
         }
     );
+
+    function writeHtml(dom, obj) {
+        obj = JSON.parse(obj);
+        var html = '<div class="exam-wrapper" onclick="readExam(\'' + obj.id + '\')">' +
+            '<span class="exam-label">' + obj.label.msg + '</span>' +
+            '<span class="exam-title">' + obj.title + '</span>';
+        if(obj.collect){
+            html += '<span class="exam-score">' + obj.progress + '</span>';
+        }
+        html += '</div><img src="../../../images/分割线.png" class="line"/>';
+        dom.append(html);
+    }
 </script>
 </html>

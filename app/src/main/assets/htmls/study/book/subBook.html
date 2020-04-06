@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../../files/public/public.js"></script>
     <script type="text/javascript" src="../../../files/public/top.js"></script>
-    <script type="text/javascript" src="../../../files/search/search.js"></script>
+    <script type="text/javascript" src="../../../files/public/readContent.js"></script>
 </head>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -31,6 +31,8 @@
 </div>
 </body>
 <script>
+    var userId = window.android.getUserId();
+
     init();
     function init() {
         para = window.android.getPara();

@@ -161,6 +161,8 @@
     }
 </script>
 <script>
+    var userId = window.android.getUserId();
+
     init();
     function init() {
         para = window.android.getPara();
@@ -202,24 +204,19 @@
                         return;
                     }
                     result = result.data;
-                    //前四个滚动
-                    for(var i = 0; i < 4 && i < result.length; i++) {
-                        $("#img" + i).html('<img src="' + nginxIp + result[i].picUrl + '">');
-                    }
-                    //后六个显示
-                    var min = result.length > 6 ? result.length - 6 : 0;
-                    for(var i = result.length - 1; i >= min; i--) {
+                    //滚动 & 在下方显示
+                    for(var i = 0; i < result.length; i++) {
+                        $("#img" + i).html('<img src="' +  result[i].picUrl + '">');
                         $("#hot").append(
                             '<div class="tv3-wrapper" onclick="readContent(\'' + result[i].id +  '\')">\n' +
                             '<div class="tv3-img-wrapper">\n' +
-                            '<img src="' + nginxIp + result[i].picUrl + '" class="tv-img">\n' +
+                            '<img src="' +  result[i].picUrl + '" class="tv-img">\n' +
                             '</div>\n' +
                             '<div class="tv-title">' + result[i].title + '</div>\n' +
                             '</div>');
                     }
                 },
                 error : function () {
-                    key = "";
                     console.log("ajax失败");
                 }
             }),//loadHot();
@@ -243,14 +240,13 @@
                         $("#recent").append(
                             '<div class="tv2-wrapper" onclick="readContent(\'' + result[i].id + '\')">\n' +
                             '<div class="tv2-img-wrapper">\n' +
-                            '<img src="' + nginxIp + result[i].picUrl + '" class="tv-img">\n' +
+                            '<img src="' +  result[i].picUrl + '" class="tv-img">\n' +
                             '</div>\n' +
                             '<div class="tv-title">' + result[i].title + '</div>\n' +
                             '</div>');
                     }
                 },
                 error : function () {
-                    key = "";
                     console.log("ajax失败");
                 }
             })//loadRecent();
@@ -297,7 +293,7 @@
                     $("#" + label.english).append(
                         '<div class="tv2-wrapper" onclick="readContent(\'' + result[i].id + '\')">\n' +
                         '<div class="tv2-img-wrapper">\n' +
-                        '<img src="' + nginxIp + result[i].picUrl + '" class="tv-img">\n' +
+                        '<img src="' +  result[i].picUrl + '" class="tv-img">\n' +
                         '</div>\n' +
                         '<div class="tv-title">' + result[i].title + '</div>\n' +
                         '</div>');

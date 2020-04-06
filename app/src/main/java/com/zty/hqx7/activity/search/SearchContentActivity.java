@@ -10,10 +10,14 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.TextView;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.zty.hqx7.R;
+import com.zty.hqx7.activity.MainActivity;
 import com.zty.hqx7.activity.study.ContentActivity;
+import com.zty.hqx7.model.User;
+import com.zty.hqx7.util.SharedPreUtil;
 import com.zty.hqx7.util.WebViewUtil;
 import com.zty.hqx7.ztyClass.IconView;
 
@@ -115,6 +119,13 @@ public class SearchContentActivity extends AppCompatActivity {
         @JavascriptInterface
         public void finish(){
             SearchContentActivity.this.finish();
+        }
+
+        @JavascriptInterface
+        public int getUserId() {
+            String userStr = (String) SharedPreUtil.getParam(SearchContentActivity.this, SharedPreUtil.LOGIN_DATA, "");
+            User user = JSON.parseObject(userStr, User.class);
+            return user.getId();
         }
     }
 }

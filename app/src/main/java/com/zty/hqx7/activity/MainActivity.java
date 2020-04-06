@@ -353,5 +353,12 @@ public class MainActivity extends AppCompatActivity {
         public void loadNoMoreData(){
             mainRefreshLayout.finishLoadMoreWithNoMoreData();
         }
+
+        @JavascriptInterface
+        public int getUserId() {
+            String userStr = (String) SharedPreUtil.getParam(MainActivity.this, SharedPreUtil.LOGIN_DATA, "");
+            User user = JSON.parseObject(userStr, User.class);
+            return user.getId();
+        }
     }
 }

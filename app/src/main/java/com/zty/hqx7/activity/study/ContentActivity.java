@@ -9,8 +9,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zty.hqx7.R;
+import com.zty.hqx7.activity.MainActivity;
+import com.zty.hqx7.model.User;
+import com.zty.hqx7.util.SharedPreUtil;
 import com.zty.hqx7.util.WebViewUtil;
 
 /**
@@ -80,6 +84,13 @@ public class ContentActivity extends AppCompatActivity {
         @JavascriptInterface
         public String getPara(){
             return ContentActivity.para.toJSONString();
+        }
+
+        @JavascriptInterface
+        public int getUserId() {
+            String userStr = (String) SharedPreUtil.getParam(ContentActivity.this, SharedPreUtil.LOGIN_DATA, "");
+            User user = JSON.parseObject(userStr, User.class);
+            return user.getId();
         }
     }
 }

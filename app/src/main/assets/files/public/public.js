@@ -1,10 +1,7 @@
 serverIp = "http://192.168.0.105:8081/";
-nginxIp = "http://49.4.114.114:81/hqx_static/";
 
 screen_h = $(window).height();
 screen_w = $(window).width();
-
-userId = 1;
 
 //简单提示框
 function showMsg(text, position) {

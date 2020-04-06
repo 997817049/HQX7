@@ -11,7 +11,7 @@
     <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../../files/public/public.js"></script>
     <script type="text/javascript" src="../../../files/public/top.js"></script>
-    <script type="text/javascript" src="../../../files/search/search.js"></script>
+    <script type="text/javascript" src="../../../files/public/readContent.js"></script>
 </head>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -38,6 +38,7 @@
 <script>
     label = 1;
     num = 0;
+    var userId = window.android.getUserId();
 
     init();
     function init() {
@@ -96,7 +97,7 @@
                         $("#book-content").append(
                             '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">\n' +
                             '    <div class="book-img-wrapper">\n' +
-                            '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                            '        <img class="book-img" src="' + result[i].picUrl + '"/>\n' +
                             '    </div>\n' +
                             '    <div class="book-title">'+ result[i].title +'</div>\n' +
                             '    <div class="book-synopsis">'+ result[i].synopsis + '</li>\n' +
@@ -166,7 +167,7 @@
                     $("#book-content").append(
                         '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">\n' +
                         '    <div class="book-img-wrapper">\n' +
-                        '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                        '        <img class="book-img" src="'+ result[i].picUrl + '"/>\n' +
                         '    </div>\n' +
                         '    <div class="book-title">'+ result[i].title +'</div>\n' +
                         '    <div class="book-synopsis">'+ result[i].synopsis + '</li>\n' +

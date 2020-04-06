@@ -103,6 +103,8 @@
     wordArr = null; //历史查找词汇
     word = null;//正在查找词汇
 
+    var userId = window.android.getUserId();
+
     init();
     function init() {
         $.when(
@@ -246,8 +248,8 @@
                 $("#base-content").html('');
                 for(var i = 0; i < result.length; i++) {
                     $("#base-content").append(
-                        '<div class="base" onclick="readBase(\'' + (nginxIp + result[i].htmlUrl) + '\',\'' + result[i].id + '\')">' +
-                        '<img src="'+ nginxIp + result[i].picUrl +'" class="base_image"/>' +
+                        '<div class="base" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id + '\')">' +
+                        '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
                         '<span class="base_title">' + result[i].title + '</span>' +
                         '</div>');
                 }
@@ -319,7 +321,7 @@
                     $("#book-content").append(
                         '<div class="book-wrapper" onclick="readBook(\'' +result[i].id + '\')">\n' +
                         '    <div class="book-img-wrapper">\n' +
-                        '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                        '        <img class="book-img" src="' + result[i].picUrl + '"/>\n' +
                         '    </div>\n' +
                         '    <div class="book-title">'+ result[i].title +'</div>\n' +
                         '    <div class="book-synopsis">'+ result[i].synopsis + '</span>\n' +
@@ -362,7 +364,7 @@
                     $("#" + sub + "-content").append(
                         '<div class="tv" onclick="readVideo(\'' + sub + '\',\'' + result[i].id +  '\')">' +
                         '<div class="tv_image_div">' +
-                        '<img class="tv_image" src="'+ nginxIp + result[i].picUrl + '"/>' +
+                        '<img class="tv_image" src="'+ result[i].picUrl + '"/>' +
                         '</div>' +
                         '<div class="tv_title">' +
                         '<span class="tv_title_text">' + result[i].title + '</span>' +

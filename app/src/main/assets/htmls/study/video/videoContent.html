@@ -91,7 +91,7 @@
 <script>
     var options = {
         controls: true, // 是否显示控制条
-        poster: nginxIp + 'images/study/film/tmp.bmp', // 视频封面图地址
+        poster: 'http://49.4.114.114:81/hqx_static/ztyImages/study/film/tmp.bmp', // 视频封面图地址
         preload: 'auto',
         autoplay: false,
         fluid: false, // 自适应宽高
@@ -120,6 +120,7 @@
     var isCollect = false;
     var progress = 0;
     var ifTitleAndMenuShow = true;
+    var userId = window.android.getUserId();
 
     init();
     function init() {
@@ -205,7 +206,7 @@
             showMsg("暂无该视频资源", 'center');
             return
         }
-        url = nginxIp + urlMap.get(i + "");
+        url = urlMap.get(i + "");
         $(".video_wrapper").html(
             '<video id="myVideo' + i + '" style="height: 100%; width: 100%"' +
             'class="video-js vjs-big-play-centered" data-setup=\'{}\'>' +

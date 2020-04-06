@@ -62,3 +62,16 @@
     margin-left: 5px;
     overflow: hidden;
 }
+.exam-score{
+    float: right;
+    border:1px solid;
+    height: 20px;
+    color: orange;
+    font-size: 10px;
+    padding: 0 2px;
+    text-align:center;
+    border-radius: 5px;
+    line-height: 20px;
+}
+
+
