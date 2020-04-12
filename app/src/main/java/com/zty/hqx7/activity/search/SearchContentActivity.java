@@ -25,6 +25,7 @@ import com.zty.hqx7.ztyClass.IconView;
  * 具体看某一项的查找内容
  * */
 public class SearchContentActivity extends AppCompatActivity {
+    private static final String rootPath = "file:///android_asset/htmls/";
     private static final String htmlPath = "file:///android_asset/htmls/search/searchContent.html";
     private static JSONObject para;
     private RefreshLayout refreshLayout;//刷新布局
@@ -54,7 +55,8 @@ public class SearchContentActivity extends AppCompatActivity {
     }
 
     private void dealBarColor(){
-        getWindow().setStatusBarColor(Color.WHITE);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.red));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.red));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//android6.0以后可以对状态栏文字颜色和图标进行修改
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
@@ -74,14 +76,14 @@ public class SearchContentActivity extends AppCompatActivity {
                 SearchContentActivity.this.finish();
             }
         });
-        String part = (String) para.get("part");
-        if(part.equals("base")){
+        String model = (String) para.get("model");
+        if(model.equals("base")){
             titleView.setText("基地查找");
             return;
         }
-        String sub = (String) para.get("sub");
+        String part = (String) para.get("part");
         String title = "";
-        switch (sub){
+        switch (part){
             case "exam": title = "答题"; break;
             case "book": title = "书籍"; break;
             case "teleplay": title = "电视"; break;
@@ -90,7 +92,7 @@ public class SearchContentActivity extends AppCompatActivity {
             case "documentary": title = "纪录片"; break;
             case "drama": title = "答题"; break;
         }
-        titleView.setText(title + "查找");
+        titleView.setText(String.format("%s查找", title));
     }
 
     private class SearchContentJSInterface {
@@ -102,10 +104,11 @@ public class SearchContentActivity extends AppCompatActivity {
         @JavascriptInterface
         public void toContent(String htmlUrl, String model, String part, String id){
             JSONObject obj = new JSONObject();
-            obj.put("htmlUrl", htmlUrl);
+            obj.put("htmlUrl",rootPath + htmlUrl);
             obj.put("model", model);
             obj.put("part", part);
             obj.put("id", Integer.valueOf(id));
+            System.out.println(obj);
             ContentActivity.setPara(obj);
             Intent intent = new Intent(SearchContentActivity.this, ContentActivity.class);
             startActivity(intent);

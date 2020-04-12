@@ -39,20 +39,21 @@ public class SearchActivity extends AppCompatActivity {
         @JavascriptInterface
         public void toContent(String htmlUrl, String model, String part, String id){
             JSONObject obj = new JSONObject();
-            obj.put("htmlUrl", htmlUrl);
+            obj.put("htmlUrl", htmlPath + htmlUrl);
             obj.put("model", model);
             obj.put("part", part);
             obj.put("id", Integer.valueOf(id));
+            System.out.println(obj);
             ContentActivity.setPara(obj);
             Intent intent = new Intent(SearchActivity.this, ContentActivity.class);
             startActivity(intent);
         }
 
         @JavascriptInterface
-        public void getMore(String part, String sub, String word){
+        public void getMore(String model, String part, String word){
             JSONObject obj = new JSONObject();
+            obj.put("model", model);
             obj.put("part", part);
-            obj.put("sub", sub);
             obj.put("word", word);
             SearchContentActivity.setPara(obj);
             Intent intent = new Intent(SearchActivity.this, SearchContentActivity.class);

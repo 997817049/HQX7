@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../resources/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../files/public/public.js"></script>
     <script type="text/javascript" src="../../files/public/top.js"></script>
-    <script type="text/javascript" src="../../files/search/search.js"></script>
+    <script type="text/javascript" src="../../files/public/readContent.js"></script>
 </head>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -52,8 +52,8 @@
                 data:{
                     userId:userId,
                     word:para.word,
+                    model:para.model,
                     part:para.part,
-                    sub:para.sub,
                     num:num,
                     limit:20
                 },
@@ -63,11 +63,11 @@
                         console.log("从服务器获取数据失败");
                         return;
                     }
-                    if(para.part === 'base'){
+                    if(para.model === 'base'){
                         dealBase(result);
                         return;
                     }
-                    switch (para.sub) {
+                    switch (para.part) {
                         case "book": dealBook(result);return;
                         case "exam": dealExam(result);return;
                         default: dealVideo(result); return;
@@ -99,8 +99,8 @@
             data:{
                 userId:userId,
                 word:para.word,
+                model:para.model,
                 part:para.part,
-                sub:para.sub,
                 num:num,
                 limit:20
             },
@@ -110,11 +110,11 @@
                     console.log("从服务器获取数据失败");
                     return;
                 }
-                if(para.part === 'base'){
+                if(para.model === 'base'){
                     dealBase(result);
                     return;
                 }
-                switch (para.sub) {
+                switch (para.part) {
                     case "book": dealBook(result);return;
                     case "exam": dealExam(result);return;
                     default: dealVideo(result); return;
@@ -204,7 +204,7 @@
                 '        <div class="book-author">'+ result[i].author + '</div>\n' +
                 '        <div class="book-label">'+ result[i].label.msg + '</div>\n' +
                 '    </div>\n' +
-                '    <img class="line" src="../../../images/分割线.png"/>\n' +
+                '    <img class="line" src="../../images/分割线.png"/>\n' +
                 '</div>');
             num = result[i].id;
         }
@@ -228,7 +228,7 @@
         $("#search-content").html('');
         for (var i = 0; i < result.length; i++) {
             $("#search-content").append(
-                '<div class="tv" onclick="readVideo(\'' + result[i].id +  '\')">' +
+                '<div class="tv" onclick="readVideo(\'' + para.part + '\',\'' + result[i].id +  '\')">' +
                 '<div class="tv_image_div">' +
                 '<img class="tv_image" src="'+ result[i].picUrl + '"/>' +
                 '</div>' +

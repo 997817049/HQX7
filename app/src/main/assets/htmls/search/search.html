@@ -12,7 +12,7 @@
     <link href="../../files/icon/iconfont.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="../../resources/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../files/public/public.js"></script>
-    <script type="text/javascript" src="../../files/search/search.js"></script>
+    <script type="text/javascript" src="../../files/public/readContent.js"></script>
 </head>
 <body>
 <div class="search-bar">
@@ -103,8 +103,8 @@
     wordArr = null; //历史查找词汇
     word = null;//正在查找词汇
 
-    var userId = window.android.getUserId();
-
+    // var userId = window.android.getUserId();
+    userId = 1;
     init();
     function init() {
         $.when(
@@ -232,8 +232,8 @@
             data:{
                 userId:userId,
                 word:word,
-                part:"base",
-                sub:null,
+                model:"base",
+                part:null,
                 num:0,
                 limit:3
             },
@@ -267,8 +267,8 @@
             data:{
                 userId:userId,
                 word:word,
-                part:"study",
-                sub:"exam",
+                model:"study",
+                part:"exam",
                 num:0,
                 limit:3
             },
@@ -303,8 +303,8 @@
             data:{
                 userId:userId,
                 word:word,
-                part:"study",
-                sub:"book",
+                model:"study",
+                part:"book",
                 num:0,
                 limit:3
             },
@@ -339,15 +339,15 @@
         })
     }
 
-    function searchVideo(sub) {
+    function searchVideo(part) {
         $.ajax({
             url: serverIp + "search",
             type:"POST",
             data:{
                 userId:userId,
                 word:word,
-                part:"study",
-                sub:sub,
+                model:"study",
+                part:part,
                 num:0,
                 limit:3
             },
@@ -359,10 +359,10 @@
                 }
                 result = JSON.parse(result.data);
                 if(result.length === 0)return;
-                $("#" + sub + "-content").html('');
+                $("#" + part + "-content").html('');
                 for (var i = 0; i < result.length; i++) {
-                    $("#" + sub + "-content").append(
-                        '<div class="tv" onclick="readVideo(\'' + sub + '\',\'' + result[i].id +  '\')">' +
+                    $("#" + part + "-content").append(
+                        '<div class="tv" onclick="readVideo(\'' + part + '\',\'' + result[i].id +  '\')">' +
                         '<div class="tv_image_div">' +
                         '<img class="tv_image" src="'+ result[i].picUrl + '"/>' +
                         '</div>' +
@@ -378,15 +378,15 @@
                         '<img class="line" src="../../images/分割线.png"/>' +
                         '</div>');
                 }
-                $("#" + sub + "-content-wrapper").show();
+                $("#" + part + "-content-wrapper").show();
             },
             error : function () {
             }
         })
     }
 
-    function getMore(part, sub) {
-        window.android.getMore(part, sub, word);
+    function getMore(model, part) {
+        window.android.getMore(model, part, word);
     }
 
     function finish() {
