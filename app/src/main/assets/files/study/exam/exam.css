@@ -44,25 +44,33 @@
 /*每一个exam*/
 .exam-wrapper {
     height: 25px;
-    width: 90%;
+    width: 100%;
     line-height:25px;
     margin-top: 10px;
     overflow: hidden;
 }
 .exam-label {
-    padding: 2px;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 2px;
     font-size: 10px;
     color:#cd0a0a;
     border:1px solid #cd0a0a;
     border-radius: 7px;
     text-align:center;
+    vertical-align: top;
 }
 .exam-title {
+    height: 25px;
+    width: 70%;
+    display: inline-block;
     font-size: 15px;
     margin-left: 5px;
     overflow: hidden;
 }
 .exam-score{
+    display: inline-block;
     float: right;
     border:1px solid;
     height: 20px;

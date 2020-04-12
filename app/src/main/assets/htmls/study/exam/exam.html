@@ -65,8 +65,8 @@
 </div>
 </body>
 <script>
-    // var userId = 1;
-    var userId = window.android.getUserId();
+    var userId = 1;
+    // var userId = window.android.getUserId();
     init();
     function init() {
         $.when(
@@ -256,10 +256,10 @@
     function writeHtml(dom, obj) {
         obj = JSON.parse(obj);
         var html = '<div class="exam-wrapper" onclick="readExam(\'' + obj.id + '\')">' +
-            '<span class="exam-label">' + obj.label.msg + '</span>' +
-            '<span class="exam-title">' + obj.title + '</span>';
+            '<div class="exam-label">' + obj.label.msg + '</div>' +
+            '<div class="exam-title">' + obj.title + '</div>';
         if(obj.collect){
-            html += '<span class="exam-score">' + obj.progress + '</span>';
+            html += '<div class="exam-score">' + obj.progress + '</div>';
         }
         html += '</div>';
         dom.append(html);
