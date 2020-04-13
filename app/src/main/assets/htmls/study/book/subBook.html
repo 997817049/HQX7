@@ -58,7 +58,7 @@
                         $("#book-content").append(
                             '<div class="book-wrapper" onclick="readBook(\'' +result[i].id + '\')">\n' +
                             '    <div class="book-img-wrapper">\n' +
-                            '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                            '        <img class="book-img" src="' + result[i].picUrl + '"/>\n' +
                             '    </div>\n' +
                             '    <div class="book-title">'+ result[i].title +'</div>\n' +
                             '    <div class="book-synopsis">'+ result[i].synopsis + '</span>\n' +
@@ -112,7 +112,7 @@
                     $("#book-content").append(
                         '<div class="book-wrapper" onclick="readBook(\'' +result[i].id + '\')">\n' +
                         '    <div class="book-img-wrapper">\n' +
-                        '        <img class="book-img" src="' + nginxIp + result[i].picUrl + '"/>\n' +
+                        '        <img class="book-img" src="' + result[i].picUrl + '"/>\n' +
                         '    </div>\n' +
                         '    <div class="book-title">'+ result[i].title +'</div>\n' +
                         '    <div class="book-synopsis">'+ result[i].synopsis + '</span>\n' +

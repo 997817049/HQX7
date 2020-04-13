@@ -2,12 +2,37 @@ body{
     margin: 0;
 }
 .exam-wrapper{
-    height: 27px;width: 95%;line-height:20px;overflow: hidden;
+    height: 27px;width: 100%;line-height:27px;overflow: hidden;
 }
 .exam-label{
-    margin-left:5px; padding: 2px; font-size: 10px;color:#cd0a0a;border:1px solid #cd0a0a;border-radius: 7px;text-align:center;
+    height: 22px;
+    line-height: 22px;
+    display: inline-block;
+    margin-left:5px;
+    padding: 0 2px;
+    font-size: 10px;
+    color:#cd0a0a;
+    border:1px solid #cd0a0a;
+    border-radius: 7px;
+    text-align:center;
+    vertical-align: top;
+}
+.exam-score{
+    display: inline-block;
+    float: right;
+    border:1px solid;
+    height: 22px;
+    color: orange;
+    font-size: 10px;
+    padding: 0 2px;
+    text-align:center;
+    border-radius: 5px;
+    line-height: 22px;
+    margin-right: 10px;
 }
 .exam-title{
+    height: 25px;
+    display: inline-block;
     width: 70%; font-size: 15px;margin-left: 10px;overflow: hidden;
 }
 .line{

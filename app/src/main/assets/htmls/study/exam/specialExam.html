@@ -46,7 +46,7 @@
     var label = 1;
     var num = 0;
     var userId = window.android.getUserId();
-
+    console.log(userId);
     init();
     function init() {
         dealToTop();
@@ -102,7 +102,7 @@
                         return;
                     }
                     for (var i = 0; i < result.length; i++) {
-                        writeHtml($("#exam-content"), JSON.parse(result[i]));
+                        writeHtml($("#exam-content"), JSON.stringify(result[i]));
                         num = result[i].id;
                     }
                 },
@@ -156,7 +156,7 @@
                     return;
                 }
                 for (var i = 0; i < result.length; i++) {
-                    writeHtml($("#exam-content"), JSON.parse(result[i]));
+                    writeHtml($("#exam-content"), JSON.stringify(result[i]));
                     num = result[i].id;
                 }
             },
@@ -187,10 +187,10 @@
     function writeHtml(dom, obj) {
         obj = JSON.parse(obj);
         var html = '<div class="exam-wrapper" onclick="readExam(\'' + obj.id + '\')">' +
-            '<span class="exam-label">' + obj.label.msg + '</span>' +
-            '<span class="exam-title">' + obj.title + '</span>';
+            '<div class="exam-label">' + obj.label.msg + '</div>' +
+            '<div class="exam-title">' + obj.title + '</div>';
         if(obj.collect){
-            html += '<span class="exam-score">' + obj.progress + '</span>';
+            html += '<div class="exam-score">' + obj.progress + '</div>';
         }
         html += '</div><img src="../../../images/分割线.png" class="line"/>';
         dom.append(html);

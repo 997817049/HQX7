@@ -66,12 +66,7 @@
                         return;
                     }
                     for (var i = 0; i < result.length; i++) {
-                        $("#exam-content").append(
-                            '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
-                            '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                            '<span class="exam-title">' + result[i].title + '</span>' +
-                            '</div>\n' +
-                            '<img src="../../../images/分割线.png" class="line"/>');
+                        writeHtml($("#exam-content"), JSON.stringify(result[i]));
                         num = result[i].id;
                     }
                 },
@@ -118,12 +113,7 @@
                     return;
                 }
                 for (var i = 0; i < result.length; i++) {
-                    $("#exam-content").append(
-                        '<div class="exam-wrapper"onclick="readExam(\'' + result[i].id + '\')">\n' +
-                        '<span class="exam-label">' + result[i].label.msg + '</span>' +
-                        '<span class="exam-title">' + result[i].title + '</span>' +
-                        '</div>\n' +
-                        '<img src="../../../images/分割线.png" class="line"/>');
+                    writeHtml($("#exam-content"), JSON.stringify(result[i]));
                     num = result[i].id;
                 }
             },
@@ -142,5 +132,16 @@
         }
     );
 
+    function writeHtml(dom, obj) {
+        obj = JSON.parse(obj);
+        var html = '<div class="exam-wrapper" onclick="readExam(\'' + obj.id + '\')">' +
+            '<div class="exam-label">' + obj.label.msg + '</div>' +
+            '<div class="exam-title">' + obj.title + '</div>';
+        if(obj.collect){
+            html += '<div class="exam-score">' + obj.progress + '</div>';
+        }
+        html += '</div><img src="../../../images/分割线.png" class="line"/>';
+        dom.append(html);
+    }
 </script>
 </html>

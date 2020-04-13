@@ -1,5 +1,5 @@
-// serverIp = "http://192.168.0.105:8081/";
-serverIp = "http://49.4.114.114:81/";
+serverIp = "http://49.4.114.114:8888/";
+// serverIp = "http://49.4.114.114:81/";http://192.168.0.105:8081/
 screen_h = $(window).height();
 screen_w = $(window).width();
 
@@ -7,7 +7,6 @@ screen_w = $(window).width();
 function showMsg(text, position) {
     var show = $('.show_msg').length;
     if (show > 0) {
-
     } else {
         var div = $('<div></div>');
         div.addClass('show_msg');

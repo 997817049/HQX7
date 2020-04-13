@@ -75,7 +75,7 @@ public class SubStudyActivity extends AppCompatActivity {
         TextView titleView = findViewById(R.id.study_sub_title);
         titleView.setText(title);
         String sub = (String) para.get("sub");
-        if(sub.equals("hot") || title.equals("recent")){
+        if(sub.equals("hot") || sub.equals("recent")){
             refreshLayout.setEnableLoadMore(false);
         }
     }
@@ -89,7 +89,11 @@ public class SubStudyActivity extends AppCompatActivity {
         @JavascriptInterface
         public void toContent(String htmlUrl, String model, String part, String id){
             JSONObject obj = new JSONObject();
-            obj.put("htmlUrl", htmlPath + htmlUrl);
+            if(model.equals("base")){
+                obj.put("htmlUrl", htmlUrl);
+            } else {
+                obj.put("htmlUrl", htmlPath + htmlUrl);
+            }
             obj.put("model", model);
             obj.put("part", part);
             obj.put("id", Integer.valueOf(id));

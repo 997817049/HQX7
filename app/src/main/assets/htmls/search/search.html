@@ -103,8 +103,7 @@
     wordArr = null; //历史查找词汇
     word = null;//正在查找词汇
 
-    // var userId = window.android.getUserId();
-    userId = 1;
+    var userId = window.android.getUserId();
     init();
     function init() {
         $.when(
@@ -213,7 +212,11 @@
         $("#word-model").hide();
         $("#exam-content-wrapper").hide();
         $("#book-content-wrapper").hide();
-        $("#video-content-wrapper").hide();
+        $("#teleplay-content-wrapper").hide();
+        $("#film-content-wrapper").hide();
+        $("#variety-content-wrapper").hide();
+        $("#documentary-content-wrapper").hide();
+        $("#drama-content-wrapper").hide();
         $("#base-content-wrapper").hide();
         searchBase(word);
         searchExam(word);
@@ -398,7 +401,11 @@
         if(word === undefined || word.toString().length <= 0) {
             $("#exam-content-wrapper").hide();
             $("#book-content-wrapper").hide();
-            $("#video-content-wrapper").hide();
+            $("#teleplay-content-wrapper").hide();
+            $("#film-content-wrapper").hide();
+            $("#variety-content-wrapper").hide();
+            $("#documentary-content-wrapper").hide();
+            $("#drama-content-wrapper").hide();
             $("#base-content-wrapper").hide();
             $("#word-model").show();
         }

@@ -340,7 +340,11 @@ public class MainActivity extends AppCompatActivity {
         @JavascriptInterface
         public void toContent(String htmlUrl, String model, String part, String id){
             JSONObject obj = new JSONObject();
-            obj.put("htmlUrl", htmlPath + htmlUrl);
+            if(model.equals("base")){
+                obj.put("htmlUrl", htmlUrl);
+            } else {
+                obj.put("htmlUrl", htmlPath + htmlUrl);
+            }
             obj.put("model", model);
             obj.put("part", part);
             obj.put("id", Integer.valueOf(id));
