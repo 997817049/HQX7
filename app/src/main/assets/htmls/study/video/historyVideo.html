@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的追剧</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <script type="text/javascript" src="../../../resources/scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../../files/public/top.js"></script>
+    <link href="../../../files/public/top.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/public.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/public/other.css" type="text/css" rel="stylesheet">
+    <link href="../../../files/study/video/historyVideo.css" type="text/css" rel="stylesheet"/>
+</head>
+<style>
+
+</style>
+<body>
+<div id="mask" class="mask-wrapper">
+    <div class="load_more_box">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="load-txt" class="load-info">加载中</div>
+    <div class="load-btn-wrapper">
+        <button class="load-btn">刷 新</button>
+    </div>
+</div>
+<div id="content" style="z-index: 1; display: none">
+    <div id="video-content">
+    </div>
+    <div class="toTopH">顶部</div>
+</div>
+
+</body>
+<script>
+    num = 0;
+    // var userId = window.android.getUserId();
+    userId = 1;
+    init();
+    function init() {
+        // para = window.android.getPara();
+        // para = JSON.parse(para);
+        para = new Object();
+        para.part = "teleplay";
+        dealToTop();
+        $('.toTopH').fadeOut(100);
+        $.when(
+            $.ajax({
+                url: serverIp + "history/study/video",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part:para.part,
+                    num:num,
+                    limit:20
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result == null || result.length <= 0){
+                        $("#video-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                        window.android.loadNoMoreData();
+                        return;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        writeHtml($("#video-content"), JSON.stringify(result[i]));
+                    }
+                    num += result.length;
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            })
+        ).then(function (value) {//都成功时
+            $("#mask").hide();
+            $("#content").show();
+            loadContent();
+        }, function (reason) { //有一个失败时
+            $("#load-txt").html("加载失败");
+            $(".load-btn-wrapper").show();
+        });
+    }
+
+    function refresh(){
+        $("#video-content").html("");
+        num = 0;
+        loadContent();
+    }
+
+    function loadContent() {
+        $.ajax({
+            url: serverIp + "history/study/video",
+            type:"POST",
+            data:{
+                userId:userId,
+                part:para.part,
+                num:num,
+                limit:20
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result == null || result.length <= 0){
+                    if(num === 0) {
+                        $("#video-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                    } else {
+                        $("#video-content").append(
+                            '<div class="line-wrapper">\n' +
+                            '<div class="solid_line"></div>\n' +
+                            '<div class="line_txt">我也是有底线的</div>\n' +
+                            '</div>');
+                    }
+                    window.android.loadNoMoreData();
+                    return;
+                }
+                for (var i = 0; i < result.length; i++) {
+                    writeHtml($("#video-content"), JSON.stringify(result[i]));
+                }
+                num += result.length;
+            },
+            error : function () {
+                console.log("ajax失败");
+            }
+        })
+    }
+
+    function readContent(id) {
+        window.android.toContent('study/video/videoContent.html', "study", para.part, id);
+    }
+
+    $(".load-btn-wrapper").click(
+        function () {
+            console.log("刷新")
+            $("#load-txt").html("加载中");
+            $(".load-btn-wrapper").hide();
+            init();
+        }
+    );
+
+    function writeHtml(dom, obj) {
+        obj = JSON.parse(obj);
+        var html = '<div class="tv" onclick="readContent()">\n' +
+            '            <div class="tv2-img-wrapper">\n' +
+            '                <img src="' + obj.picUrl + '" class="tv-img"/>\n' +
+            '            </div>\n' +
+            '            <div class="title-wrapper">\n' +
+            '                <span class="title_text">' + obj.title + '</span>\n' +
+            '            </div>\n' +
+            '            <div class="num-wrapper">\n' +
+            '                <span class="tv_text">共' + obj.num + '集</span>\n' +
+            '            </div>\n' +
+            '            <div class="character-wrapper">\n' +
+            '                <span class="tv_text">' + obj.actor + '</span>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '        <img class="line" src="../../../images/分割线.png"/>';
+        dom.append(html);
+    }
+</script>
+</html>

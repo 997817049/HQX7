@@ -1,0 +1,44 @@
+body{
+    margin: 0;
+}
+.line{
+    width: 100%; margin-top: 5px;
+}
+/*part 每一个*/
+.tv2-img-wrapper{
+    margin-left:7px; width: 40%; height: 100px;
+}
+.tv-img {
+    height: 100%;
+    width: 100%
+}
+.title-wrapper {
+    margin-left:45%;
+    margin-top:-100px;
+    width:55%;
+    height: 25px;
+}
+.title_text{
+    font-size: 20px;
+    font-style:normal;
+    font-weight:bold;
+}
+.num-wrapper {
+    margin-left:45%;
+    margin-top:2px;
+    width: 52%;
+    height:20px;
+    overflow: hidden;
+}
+.character-wrapper {
+    margin-left:45%;
+    margin-top: 10px;
+    width: 52%;
+    height:43px;
+    overflow: hidden;
+}
+.tv_text{
+    font-size:14px;
+    color:#6C6C6C;
+}
+
