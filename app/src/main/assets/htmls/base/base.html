@@ -14,6 +14,54 @@
     <script type="text/javascript" src="../../files/public/top.js"></script>
     <script type="text/javascript" src="../../files/public/readContent.js"></script>
 </head>
+<style>
+    .address-wrapper{
+        margin: 10px; width: 95%; height: 20px;line-height: 20px;
+    }
+    .address-bar-wrapper{
+        height: 20px; width: 20px; display: inline-block
+    }
+    .address-txt{
+        font-size: 15px; display: inline-block;
+    }
+    .one-wrapper{
+        width: 90%;
+        height: 100px;
+        display: inline-block;
+        margin-top: 10px;
+        margin-left: 20px;
+        vertical-align:top;
+        overflow:hidden;
+    }
+    .one-image-wrapper{
+        width: 40%;
+        height: 100%;
+    }
+    .one_title {
+        height: 50px; margin-left: 43%; margin-top: -90px; font-size: 16px; font-weight: bold; overflow: hidden
+    }
+    .one-address{
+        margin-left: 43%; margin-top: 15px; font-size: 14px; font-weight: bold; color:#6C6C6C;
+    }
+    .one-image{
+        width: 100%; height: 100%
+    }
+    .model{
+        margin: 10px; width: 95%; background-color: white;
+        border-radius: 5px;box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
+    }
+    .model-title{
+        width: 100%;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        font-size: 18px;
+        font-weight: bold;
+        border-bottom:1px solid gainsboro;
+        /*background-color: #FFF1F0;*/
+        /*color: #cd0a0a;*/
+    }
+</style>
 <body>
 <div id="mask" class="mask-wrapper">
     <div class="load_more_box">
@@ -26,9 +74,26 @@
     <div id="load-txt" class="load-info">加载中</div>
 </div>
 <div id="content" style="z-index: 1;display: none;">
+    <!--地址栏-->
+    <div class="address-wrapper">
+        <div class="address-bar-wrapper">
+            <img src="../../images/附近.png" class="one-image">
+        </div>
+        <div id="address" class="address-txt">欢呼声 哈哈哈</div>
+    </div>
+    <!--附近-->
+    <div id="around" class="model">
+        <div class="model-title">我的附近</div>
+    </div>
+    <!--热门-->
+    <div id="hot" class="model">
+        <div class="model-title">热门景点</div>
+    </div>
+    <!--<div style="margin-left: 10px; font-size: 18px;font-weight: bold;">全部内容</div>-->
     <div id="base" style="width: 100%;"></div>
+
     <div class="line-wrapper">
-        <div class="solid_line"></div>
+        <div class="dashed_line"></div>
         <div class="line_txt">我也是有底线的</div>
     </div>
     <div class="toTopH" >顶部</div>
@@ -36,43 +101,114 @@
 </body>
 <script>
     var num = 0;
+    $("#mask").hide();
+    $("#content").show();
     var userId = window.android.getUserId();
+    var address = window.android.getAddress();
+    var addressArr = address.split(',');
+
     init();
     function init(){
         console.log("base.html: 初始化base界面");
         dealToTop();
         $('.toTopH').fadeOut(200);
+        $("#address").html(address);
         $.when(
             $.ajax({
-            url: serverIp + "base",
-            type:"POST",
-            data:{
-                userId:userId,
-                num:num,
-            },
+                url: serverIp + "base/around",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    province:addressArr[0],
+                    city:addressArr[1],
+                    limit:6
+                },
 
-            success:function (result) {
-                if(result.code === 1) {
-                    console.log("从服务器获取数据失败");
-                    return;
-                }
-                result = result.data;
-                if(result.length <= 0) {
-                    $(".line-wrapper").show();
-                    window.android.loadNoMoreData();
-                    return;
-                }
-                for (var i = 0; i < result.length; i++) {
-                    $("#base").append(
-                        '<div class="base" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id + '\')">' +
-                        '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
-                        '<span class="base_title">' + result[i].title + '</span>' +
-                        '</div>');
-                    num = result[i].id;
-                }
-            },//
-            error:function () {
-            }
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result == null || result.length <= 0) {
+                        $("#around").hide();
+                        return;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        $("#around").append(
+                            '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
+                            '<div class="one-image-wrapper">\n' +
+                            '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
+                            '</div>\n' +
+                            '<div class="one_title">' + result[i].title + '</div>\n' +
+                            '<div class="one-address">'+ result[i].province + ' ' + result[i].city + '</div>\n' +
+                            '</div>');
+                    }
+                },
+
+                error:function () {}
+            }),//around
+            $.ajax({
+                url: serverIp + "base/hot",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    limit:6
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result == null || result.length <= 0) {
+                        $("#hot").hide();
+                        return;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        $("#hot").append(
+                            '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
+                            '<div class="one-image-wrapper">\n' +
+                            '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
+                            '</div>\n' +
+                            '<div class="one_title">' + result[i].title + '</div>\n' +
+                            '<div class="one-address">'+ result[i].province + ' ' + result[i].city + '</div>\n' +
+                            '</div>');
+                    }
+                },
+
+                error:function () {}
+            }),//hot
+            $.ajax({
+                url: serverIp + "base",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    num:num,
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    if(result.length <= 0) {
+                        $(".line-wrapper").show();
+                        window.android.loadNoMoreData();
+                        return;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        $("#base").append(
+                            '<div class="base" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id + '\')">' +
+                            '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
+                            '<span class="base_title">' + result[i].title + '</span>' +
+                            '</div>');
+                        num = result[i].id;
+                    }
+                },//
+                error:function () {}
         })//loadContent();
         ).then(function (value) {//都成功时
             $("#mask").hide();
@@ -85,8 +221,86 @@
 
     function refresh() {
         $("#base").html("");
+        $("#around").html('');
+        $("#hot").html('');
         num = 0;
+        loadHot();
+        loadAround();
         loadContent();
+    }
+
+    //加载页面
+    function loadAround() {
+        $.ajax({
+            url: serverIp + "base/around",
+            type:"POST",
+            data:{
+                userId:userId,
+                province:addressArr[0],
+                city:addressArr[1],
+                limit:6
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result == null || result.length <= 0) {
+                    $("#around").hide();
+                    return;
+                }
+                for (var i = 0; i < result.length; i++) {
+                    $("#around").append(
+                        '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
+                        '<div class="one-image-wrapper">\n' +
+                        '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
+                        '</div>\n' +
+                        '<div class="one_title">' + result[i].title + '</div>\n' +
+                        '<div class="one-address">'+ result[i].province + ' ' + result[i].city + '</div>\n' +
+                        '</div>');
+                }
+            },
+
+            error:function () {}
+        });
+    }
+
+    //加载页面
+    function loadHot() {
+        $.ajax({
+            url: serverIp + "base/hot",
+            type:"POST",
+            data:{
+                userId:userId,
+                limit:6
+            },
+
+            success:function (result) {
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = result.data;
+                if(result == null || result.length <= 0) {
+                    $("#hot").hide();
+                    return;
+                }
+                for (var i = 0; i < result.length; i++) {
+                    $("#hot").append(
+                        '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
+                        '<div class="one-image-wrapper">\n' +
+                        '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
+                        '</div>\n' +
+                        '<div class="one_title">' + result[i].title + '</div>\n' +
+                        '<div class="one-address">'+ result[i].province + ' ' + result[i].city + '</div>\n' +
+                        '</div>');
+                }
+            },
+
+            error:function () {}
+        });
     }
 
     //加载页面

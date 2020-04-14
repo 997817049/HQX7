@@ -8,7 +8,8 @@
     margin-top: 30px;
     display: inline-block;
     text-align:center;
-    background-color:rgba(242, 242, 242, 1)
+    background-color:rgba(242, 242, 242, 1);
+    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
 }
 .base_image {
     width: 100%;

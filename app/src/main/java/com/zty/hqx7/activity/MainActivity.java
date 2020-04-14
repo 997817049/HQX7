@@ -28,6 +28,7 @@ import com.zty.hqx7.activity.study.ContentActivity;
 import com.zty.hqx7.activity.study.SubStudyActivity;
 import com.zty.hqx7.model.Article;
 import com.zty.hqx7.model.User;
+import com.zty.hqx7.util.AddressUtil;
 import com.zty.hqx7.util.MyDatabaseHelper;
 import com.zty.hqx7.util.SharedPreUtil;
 import com.zty.hqx7.util.WebViewUtil;
@@ -317,6 +318,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 //---------------------------------------我的---------------------------------------------------
+
+        @JavascriptInterface
+        public String getAddress(){
+            return AddressUtil.getInstance().getLocations(MainActivity.this);
+        }
 
         @JavascriptInterface
         public String getPara(){
