@@ -46,7 +46,6 @@
     var label = 1;
     var num = 0;
     var userId = window.android.getUserId();
-    console.log(userId);
     init();
     function init() {
         dealToTop();
@@ -97,7 +96,7 @@
                         return;
                     }
                     result = result.data;
-                    if(result.length <= 0){
+                    if(result == null || result.length <= 0){
                         $("#exam-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
                         return;
                     }
@@ -142,7 +141,7 @@
                     return;
                 }
                 result = result.data;
-                if(result.length <= 0){
+                if(result == null || result.length <= 0){
                     if(num === 0) {
                         $("#exam-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
                     } else {

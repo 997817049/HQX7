@@ -7,15 +7,43 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <link href="../../files/main/styles.css" type="text/css" rel="stylesheet"/>
     <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link href="../../files/study/exam/subExam.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/study/book/subBook.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/study/video/subTV.css" type="text/css" rel="stylesheet"/>
+    <link href="../../files/public/other.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="../../resources/scripts/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../../resources/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../resources/scripts/layer/layer.js"></script>
     <script type="text/javascript" src="../../resources/scripts/common.js"></script>
+    <script type="text/javascript" src="../../files/public/public.js"></script>
+    <script type="text/javascript" src="../../files/public/readContent.js"></script>
 </head>
-<style>*,body,html,div,p,img{border:0;margin:0;padding:0;} </style>
+<style>*,body,html,div,p,img{border:0;margin:0;padding:0;}
+.base-wrapper{
+    width: 90%;
+    height: 100px;
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 20px;
+    vertical-align:top;
+    overflow:hidden;
+}
+.base-image-wrapper{
+    width: 40%;
+    height: 100%;
+}
+.base_title {
+    height: 50px; margin-left: 43%; margin-top: -90px; font-size: 17px; font-weight: bold; overflow: hidden
+}
+.base-address{
+    margin-left: 43%; margin-top: 15px; font-size: 14px; font-weight: bold; color:#6C6C6C;
+}
+.base-image{
+    width: 100%; height: 100%
+}
+</style>
 <body>
-
-    <div id="articles">
+    <div id = "articles">
         <!--一条资讯-->
 <!--        <div onclick="window.android.toArticle('习近平同蒙古国总统巴特图勒嘎举行会谈', '人民网-国际频道', '2019-04-26','http://114.116.118.232:81/hqx_static/news/html/1.html', 'news', 1)" style="margin-top: -10px">-->
 <!--            <div style="margin: 15px;">-->
@@ -32,37 +60,55 @@
 <!--        </div>-->
 
     </div>
+    <div id = "exam-content" style="margin-top: 10px;"></div>
+    <div id = "book-content"></div>
+    <div id = "tv-content"></div>
+    <div id = "film-content"></div>
+    <div id = "variety-content"></div>
+    <div id = "documentary-content"></div>
+    <div id = "drama-content"></div>
+    <div id = "base-content"></div>
 </body>
 <script>
     var uid = window.android.getUid();
-    //var uid = 2;
+    // var uid = 1;
     // TODO 刚开始应该从app缓存中获取 点击右上角同步时才从服务器拿
-    loadArticles();
-
+    init();
+    function init() {
+        loadArticles();
+        loadBase();
+        loadExam();
+        loadBook();
+        loadVideo("teleplay");
+        loadVideo("film");
+        loadVideo("variety");
+        loadVideo("documentary");
+        loadVideo("drama");
+    }
     // 从服务器获取文章列表 同步时完成
     function loadArticles() {
         layer.msg('&nbsp;&nbsp;正在同步收藏', {
-          icon: 16,
-          shade: 0.3,
-          time: 100000
+            icon: 16,
+            shade: 0.3,
+            time: 100000
         });
 
         $.ajax({
             url: _url_()+"/collection/list",
             type:"POST",
             data:{
-              id:uid
+                id:uid
             },
             success:function(result) {
-              layer.closeAll();
-              if (result.code == 0) {
-                result = result.data;
-                showList(result, 1);
-              }
+                layer.closeAll();
+                if (result.code == 0) {
+                    result = result.data;
+                    showList(result, 1);
+                }
             },
             error:function(result) {
-              layer.closeAll();
-              layer.msg("请检查网络");
+                layer.closeAll();
+                layer.msg("请检查网络");
             }
         });
     }
@@ -72,13 +118,13 @@
             var articles = document.getElementById('articles').innerHTML;
             document.getElementById('articles').innerHTML = articles +
                 '<div onclick="window.android.toArticle(' + '\'' + result[i].htmlUrl + '\', ' + result[i].aid + ')" style="margin-top: -10px">'+
-                    '<div style="margin: 15px;">'+
-                        '<div class="text">'+
-                            '<p><span style="font-size: 15px;">' + result[i].title + '</span></p>'+
-                        '</div>'+
-                    '</div>'+
+                '<div style="margin: 15px;">'+
+                '<div class="text">'+
+                '<p><span style="font-size: 15px;">' + result[i].title + '</span></p>'+
+                '</div>'+
+                '</div>'+
                 '<div style="margin-top: -5px; margin-left: 15px; font-size:14px; color: #6C6C6C">'+
-                    '<p><span>' + result[i].type + '&nbsp; ' + result[i].date + '</span></p>'+
+                '<p><span>' + result[i].type + '&nbsp; ' + result[i].date + '</span></p>'+
                 '</div>'+
                 '<div style="margin-top:5px;"><img style="width: 100%" src="../../images/首页/u58.png"/></div></div>';
             num = result[i].id;
@@ -87,7 +133,177 @@
                 //sql.Date转化问题
                 //window.android.saveArticle(partName, JSON.stringify(result[i]));
             }
-         }
+        }
+    }
+
+    function loadBase() {
+        $("#base-content").html('');
+        $.ajax({
+            url: serverIp+"collect/load",
+            type:"POST",
+            data:{
+                userId:uid,
+                model:"base",
+                part:null
+            },
+            success:function(result) {
+                layer.closeAll();
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0) return;
+                for(var i = 0; i < result.length; i++) {
+                    $("#base-content").append(
+                        '<div class="base-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
+                        '<div class="base-image-wrapper">\n' +
+                        '<img src="'+ result[i].picUrl +'" class="base-image">\n' +
+                        '</div>\n' +
+                        '<div class="base_title">' + result[i].title + '</div>\n' +
+                        '<div class="base-address">'+ result[i].province + ' ' + result[i].city + '</div>\n' +
+                        '</div>');
+                }
+                $("#base-content").append('<div class="line-wrapper" style="display: block">\n' +
+                    '            <div class="dashed_line"></div>\n' +
+                    '            <div class="line_txt">我是一条分割线</div>\n' +
+                    '        </div>');
+            },
+            error:function(result) {
+                layer.closeAll();
+                layer.msg("请检查网络");
+            }
+        });
+    }
+
+    function loadExam() {
+        $("#exam-content").html('');
+        $.ajax({
+            url: serverIp+"collect/load",
+            type:"POST",
+            data:{
+                userId:uid,
+                model:"study",
+                part:"exam"
+            },
+            success:function(result) {
+                layer.closeAll();
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0) return;
+                for(var i = 0; i < result.length; i++) {
+                    $("#exam-content").append(
+                        '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">\n' +
+                        '<span class="exam-label">' + result[i].label.msg + '</span>' +
+                        '<span class="exam-title">' + result[i].title + '</span>' +
+                        '</div>' +
+                        '<div style="height: 10px; width: 100%"></div>');
+                }
+                $("#exam-content").append('<div class="line-wrapper" style="display: block">\n' +
+                    '            <div class="dashed_line"></div>\n' +
+                    '            <div class="line_txt">我是一条分割线</div>\n' +
+                    '        </div>');
+            },
+            error:function(result) {
+                layer.closeAll();
+                layer.msg("请检查网络");
+            }
+        });
+    }
+
+    function loadBook() {
+        $("#book-content").html('');
+        $.ajax({
+            url: serverIp+"collect/load",
+            type:"POST",
+            data:{
+                userId:uid,
+                model:"study",
+                part:"book"
+            },
+            success:function(result) {
+                layer.closeAll();
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0) return;
+                for(var i = 0; i < result.length; i++) {
+                    $("#book-content").append(
+                        '<div class="book-wrapper" onclick="readBook(\'' +result[i].id + '\')">\n' +
+                        '    <div class="book-img-wrapper">\n' +
+                        '        <img class="book-img" src="' + result[i].picUrl + '"/>\n' +
+                        '    </div>\n' +
+                        '    <div class="book-title">'+ result[i].title +'</div>\n' +
+                        '    <div class="book-synopsis">'+ result[i].synopsis + '</span>\n' +
+                        '    </div>\n' +
+                        '    <div class="book-bottom">\n' +
+                        '        <div class="book-author">'+ result[i].author + '</div>\n' +
+                        '        <div class="book-label">'+ result[i].label.msg + '</div>\n' +
+                        '    </div>\n' +
+                        '</div>');
+                }
+                $("#book-content").append('<div class="line-wrapper" style="display: block">\n' +
+                    '            <div class="dashed_line"></div>\n' +
+                    '            <div class="line_txt">我是一条分割线</div>\n' +
+                    '        </div>');
+            },
+            error:function(result) {
+                layer.closeAll();
+                layer.msg("请检查网络");
+            }
+        });
+    }
+
+    function loadVideo(part) {
+        $("#" + part + "-content").html('');
+        $.ajax({
+            url: serverIp+"collect/load",
+            type:"POST",
+            data:{
+                userId:uid,
+                model:"study",
+                part:part
+            },
+            success:function(result) {
+                layer.closeAll();
+                if(result.code === 1) {
+                    console.log("从服务器获取数据失败");
+                    return;
+                }
+                result = JSON.parse(result.data);
+                if(result.length === 0) return;
+                for(var i = 0; i < result.length; i++) {
+                    c.append(
+                        '<div class="tv" onclick="readVideo(\'' + part + '\',\'' + result[i].id +  '\')">' +
+                        '<div class="tv_image_div">' +
+                        '<img class="tv_image" src="'+ result[i].picUrl + '"/>' +
+                        '</div>' +
+                        '<div class="tv_title">' +
+                        '<span class="tv_title_text">' + result[i].title + '</span>' +
+                        '</div>' +
+                        '<div class="tv_character">' +
+                        '<span class="tv_text">' + result[i].actor + '</span>' +
+                        '</div>' +
+                        '<div class="tv_synopsis">' +
+                        '<span class="tv_text">' + result[i].synopsis + '</span>' +
+                        '</div>' +
+                        '</div>');
+                }
+                $("#" + part + "-content").append('<div class="line-wrapper" style="display: block">\n' +
+                    '            <div class="dashed_line"></div>\n' +
+                    '            <div class="line_txt">我是一条分割线</div>\n' +
+                    '        </div>');
+            },
+            error:function(result) {
+                layer.closeAll();
+                layer.msg("请检查网络");
+            }
+        });
     }
 </script>
 </html>

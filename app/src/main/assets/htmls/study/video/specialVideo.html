@@ -98,7 +98,7 @@
                         return;
                     }
                     result = result.data;
-                    if(result.length <= 0){
+                    if(result == null || result.length <= 0){
                         $("#video-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
                         window.android.loadNoMoreData();
                         return;
@@ -155,7 +155,7 @@
                     return;
                 }
                 result = result.data;
-                if(result.length <= 0){
+                if(result == null || result.length <= 0){
                     if(num === 0) {
                         $("#video-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
                     } else {

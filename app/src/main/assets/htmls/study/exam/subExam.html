@@ -61,8 +61,9 @@
                         return;
                     }
                     result = result.data;
-                    if(result.length <= 0){
+                    if(result == null || result.length <= 0){
                         $("#exam-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
+                        window.android.loadNoMoreData();
                         return;
                     }
                     for (var i = 0; i < result.length; i++) {
@@ -70,9 +71,7 @@
                         num = result[i].id;
                     }
                 },
-                error:function () {
-                    console.log("ajax失败");
-                }
+                error:function () {}
             })//loadContent();
         ).then(function (value) {//都成功时
             $("#mask").hide();
@@ -103,12 +102,8 @@
                     return;
                 }
                 result = result.data;
-                if(result.length <= 0){
-                    $("#exam-content").append(
-                        '<div class="line-wrapper">\n' +
-                        '<div class="solid_line"></div>\n' +
-                        '<div class="line_txt">我也是有底线的</div>\n' +
-                        '</div>');
+                if(result == null || result.length <= 0){
+                    $("#exam-content").html('<div class="no_data_info">暂无内容 敬请期待</div>');
                     window.android.loadNoMoreData();
                     return;
                 }
@@ -117,9 +112,7 @@
                     num = result[i].id;
                 }
             },
-            error:function () {
-                console.log("ajax失败");
-            }
+            error:function () {}
         });
     }
 

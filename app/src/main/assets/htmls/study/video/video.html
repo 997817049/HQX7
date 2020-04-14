@@ -326,7 +326,7 @@
             case "recent": subTitle = "今日推荐"; break;
             case "special": subTitle = "分类推荐"; htmlUrl = "study/video/specialVideo.html";break;
             case "collect": subTitle = "我的收藏"; htmlUrl = "study/video/collectVideo.html";break;
-            case "history":return;
+            case "history": subTitle = "我的追剧"; htmlUrl = "study/video/historyVideo.html";break;
         }
         window.android.toSub("study", para, sub, subTitle, htmlUrl);
     }
