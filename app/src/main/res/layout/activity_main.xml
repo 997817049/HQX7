@@ -38,28 +38,28 @@
                 android:orientation="horizontal"
                 android:background="@drawable/model_button_border"
                 android:layout_above="@+id/model_text">
-        <com.zty.hqx7.ztyClass.IconButton
+        <com.zty.hqx7.view.IconButton
                 android:id="@+id/rg_school"
                 style="@style/model_button"
                 android:textSize="27sp"
                 android:text="@string/rg_school"/>
-        <com.zty.hqx7.ztyClass.IconButton
+        <com.zty.hqx7.view.IconButton
                 android:id="@+id/rg_study"
                 style="@style/model_button"
                 android:textSize="23sp"
                 android:text="@string/rg_study"/>
-        <com.zty.hqx7.ztyClass.IconButton
+        <com.zty.hqx7.view.IconButton
                 android:id="@+id/rg_home"
                 style="@style/model_button"
                 android:textSize="22sp"
                 android:text="@string/rg_new"
                 android:checked="true"/>
-        <com.zty.hqx7.ztyClass.IconButton
+        <com.zty.hqx7.view.IconButton
                 android:id="@+id/rg_base"
                 style="@style/model_button"
                 android:textSize="23sp"
                 android:text="@string/rg_base"/>
-        <com.zty.hqx7.ztyClass.IconButton
+        <com.zty.hqx7.view.IconButton
                 android:id="@+id/rg_my"
                 style="@style/model_button"
                 android:textSize="25sp"

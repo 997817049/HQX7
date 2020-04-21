@@ -4,16 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.method.CharacterPickerDialog;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import android.widget.TextView;
 import com.zty.hqx7.R;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.util.SharedPreUtil;
-import com.zty.hqx7.ztyClass.IconView;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.utils.SharedPreUtil;
+import com.zty.hqx7.view.IconView;
 
 public class UserInfoActivity extends Activity {
     private WebView webView;

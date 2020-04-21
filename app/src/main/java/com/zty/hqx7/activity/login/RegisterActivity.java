@@ -9,8 +9,8 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.zty.hqx7.R;
-import com.zty.hqx7.util.MyDatabaseHelper;
-import com.zty.hqx7.util.WebViewUtil;
+import com.zty.hqx7.utils.MyDatabaseHelper;
+import com.zty.hqx7.utils.WebViewUtil;
 
 public class RegisterActivity extends Activity {
     private MyDatabaseHelper dbHelper;

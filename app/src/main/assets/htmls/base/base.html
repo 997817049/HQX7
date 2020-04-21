@@ -61,6 +61,9 @@
         /*background-color: #FFF1F0;*/
         /*color: #cd0a0a;*/
     }
+    .more{
+        font-size: 14px; color: #009dda; text-align: center;margin-top: 10px;
+    }
 </style>
 <body>
 <div id="mask" class="mask-wrapper">
@@ -84,12 +87,15 @@
     <!--附近-->
     <div id="around" class="model">
         <div class="model-title">我的附近</div>
+        <div id="around-content"></div>
+        <div class="more" onclick="jumpToSub('around')">更多>></div>
     </div>
     <!--热门-->
     <div id="hot" class="model">
         <div class="model-title">热门景点</div>
+        <div id="hot-content"></div>
+        <div class="more" onclick="jumpToSub('hot')">更多>></div>
     </div>
-    <!--<div style="margin-left: 10px; font-size: 18px;font-weight: bold;">全部内容</div>-->
     <div id="base" style="width: 100%;"></div>
 
     <div class="line-wrapper">
@@ -121,6 +127,7 @@
                     userId:userId,
                     province:addressArr[0],
                     city:addressArr[1],
+                    num:0,
                     limit:6
                 },
 
@@ -135,7 +142,7 @@
                         return;
                     }
                     for (var i = 0; i < result.length; i++) {
-                        $("#around").append(
+                        $("#around-content").append(
                             '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
                             '<div class="one-image-wrapper">\n' +
                             '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
@@ -144,6 +151,7 @@
                             '<div class="one-address">'+ result[i].province + ' ' + result[i].city + '</div>\n' +
                             '</div>');
                     }
+                    $("#around").append('');
                 },
 
                 error:function () {}
@@ -153,6 +161,7 @@
                 type:"POST",
                 data:{
                     userId:userId,
+                    num:0,
                     limit:6
                 },
 
@@ -167,7 +176,7 @@
                         return;
                     }
                     for (var i = 0; i < result.length; i++) {
-                        $("#hot").append(
+                        $("#hot-content").append(
                             '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
                             '<div class="one-image-wrapper">\n' +
                             '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
@@ -186,6 +195,7 @@
                 data:{
                     userId:userId,
                     num:num,
+                    limit:10
                 },
 
                 success:function (result) {
@@ -252,7 +262,7 @@
                     return;
                 }
                 for (var i = 0; i < result.length; i++) {
-                    $("#around").append(
+                    $("#around-content").append(
                         '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
                         '<div class="one-image-wrapper">\n' +
                         '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
@@ -274,6 +284,7 @@
             type:"POST",
             data:{
                 userId:userId,
+                num:0,
                 limit:6
             },
 
@@ -288,7 +299,7 @@
                     return;
                 }
                 for (var i = 0; i < result.length; i++) {
-                    $("#hot").append(
+                    $("#hot-content").append(
                         '<div class="one-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
                         '<div class="one-image-wrapper">\n' +
                         '<img src="'+ result[i].picUrl +'" class="one-image">\n' +
@@ -311,6 +322,7 @@
             data:{
                 userId:userId,
                 num:num,
+                limit:10
             },
 
             success:function (result) {
@@ -348,5 +360,15 @@
         city = "";
     }
 
+    function jumpToSub(sub) {
+        var subTitle = "";
+        var htmlUrl = "base/subBase.html";
+        switch (sub) {
+            case "hot": subTitle = "热门景点"; htmlUrl = "base/hotBase.html";break;
+            case "around": subTitle = "我的附近"; htmlUrl = "base/aroundBase.html";break;
+        }
+
+        window.android.toSub("base", null, sub, subTitle, htmlUrl);
+    }
 </script>
 </html>

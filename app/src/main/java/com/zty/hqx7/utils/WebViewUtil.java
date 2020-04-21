@@ -1,7 +1,6 @@
-package com.zty.hqx7.util;
+package com.zty.hqx7.utils;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;

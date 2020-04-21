@@ -9,11 +9,10 @@ import android.webkit.WebView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zty.hqx7.R;
-import com.zty.hqx7.activity.MainActivity;
 import com.zty.hqx7.activity.study.ContentActivity;
 import com.zty.hqx7.model.User;
-import com.zty.hqx7.util.SharedPreUtil;
-import com.zty.hqx7.util.WebViewUtil;
+import com.zty.hqx7.utils.SharedPreUtil;
+import com.zty.hqx7.utils.WebViewUtil;
 
 /**
  * 获取全部查找内容

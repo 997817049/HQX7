@@ -25,14 +25,14 @@ import com.zty.hqx7.activity.news.ArticleActivity;
 import com.zty.hqx7.activity.school.SchoolDetailActivity;
 import com.zty.hqx7.activity.search.SearchActivity;
 import com.zty.hqx7.activity.study.ContentActivity;
-import com.zty.hqx7.activity.study.SubStudyActivity;
+import com.zty.hqx7.activity.study.SubActivity;
 import com.zty.hqx7.model.Article;
 import com.zty.hqx7.model.User;
-import com.zty.hqx7.util.AddressUtil;
-import com.zty.hqx7.util.MyDatabaseHelper;
-import com.zty.hqx7.util.SharedPreUtil;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.ztyClass.IconView;
+import com.zty.hqx7.utils.AddressUtil;
+import com.zty.hqx7.utils.MyDatabaseHelper;
+import com.zty.hqx7.utils.SharedPreUtil;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.view.IconView;
 
 import java.util.List;
 
@@ -338,8 +338,8 @@ public class MainActivity extends AppCompatActivity {
             obj.put("sub", sub);
             obj.put("title", subTitle);
             obj.put("htmlUrl", htmlPath + htmlUrl);
-            SubStudyActivity.setPara(obj);
-            Intent intent = new Intent(MainActivity.this, SubStudyActivity.class);
+            SubActivity.setPara(obj);
+            Intent intent = new Intent(MainActivity.this, SubActivity.class);
             startActivity(intent);
         }
 

@@ -13,9 +13,9 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import com.zty.hqx7.R;
 import com.zty.hqx7.service.UpdateManager;
-import com.zty.hqx7.util.AppUtil;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.ztyClass.IconView;
+import com.zty.hqx7.utils.AppUtil;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.view.IconView;
 
 public class AboutActivity extends Activity {
     private WebView webView;

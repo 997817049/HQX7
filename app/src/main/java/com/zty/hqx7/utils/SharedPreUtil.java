@@ -1,11 +1,7 @@
-package com.zty.hqx7.util;
+package com.zty.hqx7.utils;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
-import android.util.JsonWriter;
-
-import org.json.JSONObject;
 
 /**
  * 用于存储用户登录状态以及退出登录的功能

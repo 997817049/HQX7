@@ -1,4 +1,4 @@
-package com.zty.hqx7.util;
+package com.zty.hqx7.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

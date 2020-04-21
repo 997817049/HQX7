@@ -1,7 +1,6 @@
 package com.zty.hqx7.activity.study;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,16 +13,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.zty.hqx7.R;
-import com.zty.hqx7.activity.MainActivity;
 import com.zty.hqx7.model.User;
-import com.zty.hqx7.util.SharedPreUtil;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.ztyClass.IconView;
+import com.zty.hqx7.utils.AddressUtil;
+import com.zty.hqx7.utils.SharedPreUtil;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.view.IconView;
 
 /**
  * 查看分类子模块
  * */
-public class SubStudyActivity extends AppCompatActivity {
+public class SubActivity extends AppCompatActivity {
     private static final String htmlPath = "file:///android_asset/htmls/";
     private static JSONObject para;
     private RefreshLayout refreshLayout;//刷新布局
@@ -31,7 +30,7 @@ public class SubStudyActivity extends AppCompatActivity {
     private IconView back;
 
     public static void setPara(JSONObject para) {
-        SubStudyActivity.para = para;
+        SubActivity.para = para;
     }
 
     @Override
@@ -42,13 +41,19 @@ public class SubStudyActivity extends AppCompatActivity {
         dealAllElement();
         dealBarColor();
         //设置刷新布局
-        WebViewUtil.dealRefreshLayout(SubStudyActivity.this, webView, refreshLayout);
+        WebViewUtil.dealRefreshLayout(SubActivity.this, webView, refreshLayout);
         //设置webview
         WebViewUtil.dealWebView(webView);
         //导入html
         webView.loadUrl(para.getString("htmlUrl"));
-        webView.addJavascriptInterface(new SubStudyActivity.SubStudyJSInterface(), "android");
+        webView.addJavascriptInterface(new SubActivity.SubStudyJSInterface(), "android");
         System.out.println("导入subStudy界面: " + para.get("model") + "-" + para.get("part") + "-" + para.get("sub"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        webView = WebViewUtil.destroyWebView(webView);
     }
 
     private void dealBarColor(){
@@ -68,14 +73,15 @@ public class SubStudyActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SubStudyActivity.this.finish();
+                SubActivity.this.finish();
             }
         });
         String title = (String) para.get("title");
         TextView titleView = findViewById(R.id.study_sub_title);
         titleView.setText(title);
+        String model = (String) para.get("model");
         String sub = (String) para.get("sub");
-        if(sub.equals("hot") || sub.equals("recent")){
+        if(model.equals("study") && (sub.equals("hot") || sub.equals("recent"))){
             refreshLayout.setEnableLoadMore(false);
         }
     }
@@ -83,7 +89,7 @@ public class SubStudyActivity extends AppCompatActivity {
     private class SubStudyJSInterface {
         @JavascriptInterface
         public String getPara(){
-            return SubStudyActivity.para.toJSONString();
+            return SubActivity.para.toJSONString();
         }
 
         @JavascriptInterface
@@ -98,7 +104,7 @@ public class SubStudyActivity extends AppCompatActivity {
             obj.put("part", part);
             obj.put("id", Integer.valueOf(id));
             ContentActivity.setPara(obj);
-            Intent intent = new Intent(SubStudyActivity.this, ContentActivity.class);
+            Intent intent = new Intent(SubActivity.this, ContentActivity.class);
             startActivity(intent);
         }
 
@@ -109,14 +115,19 @@ public class SubStudyActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public void finish(){
-            SubStudyActivity.this.finish();
+            SubActivity.this.finish();
         }
 
         @JavascriptInterface
         public int getUserId() {
-            String userStr = (String) SharedPreUtil.getParam(SubStudyActivity.this, SharedPreUtil.LOGIN_DATA, "");
+            String userStr = (String) SharedPreUtil.getParam(SubActivity.this, SharedPreUtil.LOGIN_DATA, "");
             User user = JSON.parseObject(userStr, User.class);
             return user.getId();
+        }
+
+        @JavascriptInterface
+        public String getAddress(){
+            return AddressUtil.getInstance().getLocations(SubActivity.this);
         }
     }
 }

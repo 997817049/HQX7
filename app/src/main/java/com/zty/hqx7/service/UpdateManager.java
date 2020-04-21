@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.zty.hqx7.R;
 import com.zty.hqx7.model.Version;
-import com.zty.hqx7.util.AppUtil;
+import com.zty.hqx7.utils.AppUtil;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.zty.hqx7.ztyClass;
+package com.zty.hqx7.view;
 
 import android.content.Context;
 import android.graphics.Typeface;

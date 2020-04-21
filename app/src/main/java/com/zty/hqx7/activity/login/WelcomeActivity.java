@@ -9,8 +9,8 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import com.zty.hqx7.R;
 import com.zty.hqx7.activity.MainActivity;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.util.SharedPreUtil;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.utils.SharedPreUtil;
 
 public class WelcomeActivity extends Activity {
 

@@ -88,7 +88,7 @@
     <div class="model-wrapper">
         <!--标题-->
         <div class="model-title-wrapper">
-            <div class="title" onclick="jumpToSub('hot')">热播>></div>
+            <div class="title" onclick="jumpToSub('hot')">推荐>></div>
         </div>
         <!--内容-->
         <div id="hot" class="model-content-wrapper"></div>
@@ -102,17 +102,6 @@
         </div>
         <!--内容-->
         <div id="recent" class="model-content-wrapper">
-        </div>
-    </div>
-
-    <!--猜你喜欢  根据算法计算-->
-    <div class="model-wrapper">
-        <!--标题-->
-        <div class="model-title-wrapper">
-            <div class="title">猜你喜欢>></div>
-        </div>
-        <!--内容-->
-        <div id="" class="model-content-wrapper">
         </div>
     </div>
 
@@ -216,9 +205,31 @@
                         return;
                     }
                     result = result.data;
-                    //滚动 & 在下方显示
+                    //滚动
+                    for(var i = 1; i <= result.length; i++) {
+                        $("#img" + i).html('<img src="' +  result[i - 1].picUrl + '">');
+                    }
+                },
+                error : function () {
+                    console.log("ajax失败");
+                }
+            }),//loadHot();
+            $.ajax({
+                url: serverIp + "study/video/personal",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part: para
+                },
+
+                success:function (result) {
+                    if(result.code === 1) {
+                        console.log("从服务器获取数据失败");
+                        return;
+                    }
+                    result = result.data;
+                    //在下方显示
                     for(var i = 0; i < result.length; i++) {
-                        $("#img" + i).html('<img src="' +  result[i].picUrl + '">');
                         $("#hot").append(
                             '<div class="tv3-wrapper" onclick="readContent(\'' + result[i].id +  '\')">\n' +
                             '<div class="tv3-img-wrapper">\n' +
@@ -231,7 +242,7 @@
                 error : function () {
                     console.log("ajax失败");
                 }
-            }),//loadHot();
+            }),//loadAround();
             $.ajax({
                 url: serverIp + "study/video/recent",
                 type:"POST",

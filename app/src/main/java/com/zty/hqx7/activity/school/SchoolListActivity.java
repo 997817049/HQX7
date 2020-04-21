@@ -12,8 +12,8 @@ import android.webkit.WebView;
 import com.alibaba.fastjson.JSON;
 import com.zty.hqx7.R;
 import com.zty.hqx7.model.Article;
-import com.zty.hqx7.util.MyDatabaseHelper;
-import com.zty.hqx7.util.WebViewUtil;
+import com.zty.hqx7.utils.MyDatabaseHelper;
+import com.zty.hqx7.utils.WebViewUtil;
 
 public class SchoolListActivity extends Activity {
     private WebView webView = null;

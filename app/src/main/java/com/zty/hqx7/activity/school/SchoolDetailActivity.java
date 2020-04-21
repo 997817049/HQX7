@@ -18,14 +18,13 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.zty.hqx7.R;
-import com.zty.hqx7.activity.my.AboutActivity;
 import com.zty.hqx7.activity.my.UserEditActivity;
 import com.zty.hqx7.model.Article;
 import com.zty.hqx7.model.User;
-import com.zty.hqx7.util.MyDatabaseHelper;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.util.SharedPreUtil;
-import com.zty.hqx7.ztyClass.IconView;
+import com.zty.hqx7.utils.MyDatabaseHelper;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.utils.SharedPreUtil;
+import com.zty.hqx7.view.IconView;
 
 import java.util.List;
 

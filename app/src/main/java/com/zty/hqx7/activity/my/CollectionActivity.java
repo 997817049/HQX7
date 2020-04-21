@@ -14,14 +14,13 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zty.hqx7.R;
-import com.zty.hqx7.activity.MainActivity;
 import com.zty.hqx7.activity.news.ArticleActivity;
 import com.zty.hqx7.activity.study.ContentActivity;
 import com.zty.hqx7.model.User;
-import com.zty.hqx7.util.MyDatabaseHelper;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.util.SharedPreUtil;
-import com.zty.hqx7.ztyClass.IconView;
+import com.zty.hqx7.utils.MyDatabaseHelper;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.utils.SharedPreUtil;
+import com.zty.hqx7.view.IconView;
 
 public class CollectionActivity extends Activity {
     private WebView webView;

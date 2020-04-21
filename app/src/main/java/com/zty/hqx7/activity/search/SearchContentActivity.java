@@ -1,7 +1,6 @@
 package com.zty.hqx7.activity.search;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +13,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.zty.hqx7.R;
-import com.zty.hqx7.activity.MainActivity;
 import com.zty.hqx7.activity.study.ContentActivity;
 import com.zty.hqx7.model.User;
-import com.zty.hqx7.util.SharedPreUtil;
-import com.zty.hqx7.util.WebViewUtil;
-import com.zty.hqx7.ztyClass.IconView;
+import com.zty.hqx7.utils.SharedPreUtil;
+import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.view.IconView;
 
 /**
  * 具体看某一项的查找内容
