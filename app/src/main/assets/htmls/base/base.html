@@ -127,7 +127,6 @@
                     userId:userId,
                     province:addressArr[0],
                     city:addressArr[1],
-                    num:0,
                     limit:6
                 },
 
@@ -161,7 +160,6 @@
                 type:"POST",
                 data:{
                     userId:userId,
-                    num:0,
                     limit:6
                 },
 
@@ -284,7 +282,6 @@
             type:"POST",
             data:{
                 userId:userId,
-                num:0,
                 limit:6
             },
 
@@ -352,12 +349,6 @@
                 console.log("ajax请求发生错误")
             }
         });
-    }
-
-    function clearPara() {
-        key = "";
-        province = "";
-        city = "";
     }
 
     function jumpToSub(sub) {

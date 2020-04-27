@@ -81,7 +81,8 @@ public class SubActivity extends AppCompatActivity {
         titleView.setText(title);
         String model = (String) para.get("model");
         String sub = (String) para.get("sub");
-        if(model.equals("study") && (sub.equals("hot") || sub.equals("recent"))){
+        if(model.equals("base")
+            || (model.equals("study") && (sub.equals("hot") || sub.equals("recommend") || sub.equals("recent")))){
             refreshLayout.setEnableLoadMore(false);
         }
     }

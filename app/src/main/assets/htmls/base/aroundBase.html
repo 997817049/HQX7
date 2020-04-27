@@ -87,9 +87,6 @@
 </div>
 </body>
 <script>
-    var num = 0;
-    $("#mask").hide();
-    $("#content").show();
     var userId = window.android.getUserId();
     var para = window.android.getPara();
     para = JSON.parse(para);
@@ -108,7 +105,6 @@
                     userId:userId,
                     province:addressArr[0],
                     city:addressArr[1],
-                    num:num,
                     limit:10
                 },
 
@@ -120,7 +116,6 @@
                     result = result.data;
                     if(result.length <= 0) {
                         $(".line-wrapper").show();
-                        window.android.loadNoMoreData();
                         return;
                     }
                     for (var i = 0; i < result.length; i++) {
@@ -129,7 +124,6 @@
                             '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
                             '<span class="base_title">' + result[i].title + '</span>' +
                             '</div>');
-                        num = result[i].id;
                     }
                 },//
                 error:function () {}
@@ -140,15 +134,12 @@
         }, function (reason) { //有一个失败时
             $("#load-txt").html("加载失败")
         });
-
     }
 
     function refresh() {
         $("#base").html("");
-        num = 0;
         loadContent();
     }
-
 
     //加载页面
     function loadContent() {
@@ -159,10 +150,8 @@
                 userId:userId,
                 province:addressArr[0],
                 city:addressArr[1],
-                num:num,
                 limit:10
             },
-
             success:function (result) {
                 if(result.code === 1) {
                     console.log("从服务器获取数据失败");
@@ -171,21 +160,16 @@
                 result = result.data;
                 if(result.length <= 0) {
                     $(".line-wrapper").show();
-                    window.android.loadNoMoreData();
                     return;
                 }
                 for (var i = 0; i < result.length; i++) {
-                    var context = $("#base").html();//该模块已有的数据
-                    console.log(result[i].id);
-                    $("#base").html(context +
+                    $("#base").append(
                         '<div class="base" onclick="readBase(\'' + result[i].htmlUrl+ '\',\'' + result[i].id + '\')">' +
                         '<img src="'+ result[i].picUrl +'" class="base_image"/>' +
                         '<span class="base_title">' + result[i].title + '</span>' +
                         '</div>');
-                    num = result[i].id;
                 }
             },
-
             error:function () {
                 console.log("ajax请求发生错误")
             }

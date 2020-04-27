@@ -84,11 +84,11 @@
     </div>
 
     <!--内容-->
-    <!--热播  根据count排序  6个-->
+    <!--个性化推荐  根据喜好词表 + 热度  6个-->
     <div class="model-wrapper">
         <!--标题-->
         <div class="model-title-wrapper">
-            <div class="title" onclick="jumpToSub('hot')">推荐>></div>
+            <div class="title" onclick="jumpToSub('recommend')">今日推荐>></div>
         </div>
         <!--内容-->
         <div id="hot" class="model-content-wrapper"></div>
@@ -98,7 +98,7 @@
     <div class="model-wrapper">
         <!--标题-->
         <div class="model-title-wrapper">
-            <div class="title" onclick="jumpToSub('recent')">今日推荐>></div>
+            <div class="title" onclick="jumpToSub('recent')">新剧热播>></div>
         </div>
         <!--内容-->
         <div id="recent" class="model-content-wrapper">
@@ -215,7 +215,7 @@
                 }
             }),//loadHot();
             $.ajax({
-                url: serverIp + "study/video/personal",
+                url: serverIp + "study/video/recommend",
                 type:"POST",
                 data:{
                     userId:userId,
@@ -333,8 +333,8 @@
         var subTitle = "";
         var htmlUrl = "study/video/subVideo.html";
         switch (sub) {
-            case "hot": subTitle = "热播"; break;
-            case "recent": subTitle = "今日推荐"; break;
+            case "recommend": subTitle = "今日推荐"; break;
+            case "recent": subTitle = "新剧热播"; break;
             case "special": subTitle = "分类推荐"; htmlUrl = "study/video/specialVideo.html";break;
             case "collect": subTitle = "我的收藏"; htmlUrl = "study/video/collectVideo.html";break;
             case "history": subTitle = "我的追剧"; htmlUrl = "study/video/historyVideo.html";break;
