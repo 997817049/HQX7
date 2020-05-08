@@ -36,7 +36,7 @@
             <span class="icon iconback"  style="font-size: 25px;color: white;" onclick="finish()"></span>
         </div>
         <div class="title_bar_right">
-            <span id="collect" class="icon iconmore" style="font-size: 22px; color: white" onclick=""></span>
+            <span id="collect" class="icon iconmark" style="font-size: 22px; color: white" onclick="dealCollect()"></span>
         </div>
     </div>
     <!--视频-->
@@ -59,24 +59,8 @@
             <div class="num">共16集</div>
         </div>
         <div id="url-wrapper">
-            <!--收藏-->
-            <div class="option-wrapper">
-                <div class="sub-option-wrapper">
-                    <img class="option-img"  src="../../../images/评论.png">
-                    <div class="option-txt">评论</div>
-                </div>
-                <div class="sub-option-wrapper" onclick="dealCollect()">
-                    <img id="collect-img" class="option-img" src="../../../images/黑收藏.png">
-                    <div id="collect-txt" class="option-txt">收藏</div>
-                </div>
-                <div class="sub-option-wrapper">
-                    <img class="option-img"   src="../../../images/报错.png">
-                    <div class="option-txt">报错</div>
-                </div>
-            </div>
             <div class="video-url-label">选集</div>
-            <div class="video-url-wrapper">
-            </div>
+            <div class="video-url-wrapper"></div>
         </div>
 
         <div id="detail-wrapper" class="detail-wrapper">
@@ -287,8 +271,7 @@
                 showMsg('取消收藏', 'center');
                 isCollect = !isCollect;
                 //发送取消收藏
-                $("#collect-img").attr('src','../../../images/黑收藏.png');
-                $("#collect-txt").html('收藏');
+                document.getElementById("collect").style.color = 'white';
             }
         }, function () { //有一个失败时
             if(isCollect){
@@ -316,8 +299,7 @@
             if(!isCollect){
                 showMsg('收藏成功', 'center');
                 isCollect = !isCollect;
-                $('#collect-img').attr('src','../../../images/红收藏.png');
-                $("#collect-txt").html('已收藏');
+                document.getElementById("collect").style.color = 'red';
             }
         }, function () { //有一个失败时
             if(!isCollect){
