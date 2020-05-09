@@ -192,12 +192,12 @@
     error = 0;
     question = null;//当前正在答的题
     var userId = window.android.getUserId();
+    para = window.android.getPara();
+    para = JSON.parse(para).id;
 
     init();
     function init() {
         document.body.style.minHeight =  screen_h + "px";
-        para = window.android.getPara();
-        para = JSON.parse(para).id;
         // para = 2;
         $.when(
             $.ajax({
@@ -240,7 +240,6 @@
                         $("#content").html("暂无试题");
                         return;
                     }
-                    console.log("result" + result);
                     questionList = result;
                     $("#time-model").show();
                     dealQuestion();
@@ -266,9 +265,7 @@
         $("#currentId").html(question.num);
         $(".question").html(question.question);
         document.getElementById(typeStr).style.display = 'block';
-        if(typeStr === '填空题') {
-
-        } else if (typeStr === '单选题') {
+        if (typeStr === '单选题') {
             document.getElementById('optionA1').innerHTML = question.optionA;
             document.getElementById('optionB1').innerHTML = question.optionB;
             document.getElementById('optionC1').innerHTML = question.optionC;
