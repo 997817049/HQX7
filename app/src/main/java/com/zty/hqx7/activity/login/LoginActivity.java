@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_content);
         webView = findViewById(R.id.content_webview);
         WebViewUtil.dealWebView(webView);
+//        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.loadUrl( "javascript:window.location.reload( true )" );
         // 从assets目录下面的加载html
         webView.loadUrl("file:///android_asset/htmls/login/login.html");

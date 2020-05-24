@@ -77,7 +77,6 @@ public class SetActivity extends Activity {
             SharedPreUtil.removeParam(SetActivity.this, SharedPreUtil.LOGIN_DATA);
             finish();
             MainActivity.finishMain();
-//            MeActivity.finishMe();
         }
 
 

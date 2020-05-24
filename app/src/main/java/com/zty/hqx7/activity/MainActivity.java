@@ -1,14 +1,19 @@
 package com.zty.hqx7.activity;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.HorizontalScrollView;
 import android.widget.RadioGroup;
@@ -28,6 +33,7 @@ import com.zty.hqx7.activity.study.ContentActivity;
 import com.zty.hqx7.activity.study.SubActivity;
 import com.zty.hqx7.model.Article;
 import com.zty.hqx7.model.User;
+import com.zty.hqx7.service.UpdateManager;
 import com.zty.hqx7.utils.AddressUtil;
 import com.zty.hqx7.utils.MyDatabaseHelper;
 import com.zty.hqx7.utils.SharedPreUtil;
@@ -54,9 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
     private String para;
 
-    protected static MyDatabaseHelper databaseHelper = null;
+    private static MyDatabaseHelper databaseHelper = null;
     private static MainActivity mainActivity;
-    private User user;
+
+    private static boolean isChecked = false;
+    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private final int PERMS_REQUEST_CODE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +83,34 @@ public class MainActivity extends AppCompatActivity {
 
         mainActivity = this;
 
-        String userInfo = (String) SharedPreUtil.getParam(MainActivity.this, SharedPreUtil.LOGIN_DATA, "");
-        //Toast.makeText(MeActivity.this,"===" +  userInfo, Toast.LENGTH_SHORT).show();
-        user = JSONObject.parseObject(userInfo, User.class);
+        // 设置缓存机制 2019/12/8
+        // 根据cache-control决定是否从网络上取数据。
+        // https://www.jianshu.com/p/f1efb0928ebc
+//        webSettings.setAppCacheEnabled(true);
+//        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+//
+//        overridePendingTransition(0, 0);
+//        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+
+        databaseHelper = new MyDatabaseHelper(MainActivity.this, "articls", null, 1);
+
+        if (!isChecked) {
+            //Android 6.0以上版本需要临时获取权限
+            if(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP_MR1&&
+                    PackageManager.PERMISSION_GRANTED!=checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                requestPermissions(perms,PERMS_REQUEST_CODE);
+            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Looper.prepare();
+                    new UpdateManager(MainActivity.this).checkUpdate(0);
+                    System.out.println("检查版本");
+                    isChecked = true;
+                    Looper.loop();
+                }
+            }).start();
+        }
     }
 
     public static void finishMain() {
@@ -137,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                         path = "news/news.html";
                         break;
                     case R.id.rg_base:
-                        mainRefreshLayout.setEnableRefresh(true);
                         mainRefreshLayout.setEnableLoadMore(true);
                         baseLabel.setVisibility(View.VISIBLE);
                         path = "base/base.html";

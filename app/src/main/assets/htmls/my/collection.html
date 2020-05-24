@@ -43,23 +43,7 @@
 }
 </style>
 <body>
-    <div id = "articles">
-        <!--一条资讯-->
-<!--        <div onclick="window.android.toArticle('习近平同蒙古国总统巴特图勒嘎举行会谈', '人民网-国际频道', '2019-04-26','http://114.116.118.232:81/hqx_static/news/html/1.html', 'news', 1)" style="margin-top: -10px">-->
-<!--            <div style="margin: 15px;">-->
-<!--                <div class="text">-->
-<!--                    <p><span style="font-size: 15px;">习近平同蒙古国总统巴特图勒嘎举行会谈</span></p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div style="margin-top: -5px; margin-left: 15px; font-size:14px; color: #6C6C6C">-->
-<!--                <p><span>人民网-国际频道&nbsp; 2019-04-26</span></p>-->
-<!--            </div>-->
-<!--            <div style="margin-top:5px;">-->
-<!--                <img style="width: 100%" src="images/首页/u58.png">-->
-<!--            </div>-->
-<!--        </div>-->
-
-    </div>
+    <div id = "articles"></div>
     <div id = "exam-content" style="margin-top: 10px;"></div>
     <div id = "book-content"></div>
     <div id = "tv-content"></div>
@@ -71,7 +55,6 @@
 </body>
 <script>
     var uid = window.android.getUid();
-    // var uid = 1;
     // TODO 刚开始应该从app缓存中获取 点击右上角同步时才从服务器拿
     init();
     function init() {
@@ -85,6 +68,7 @@
         loadVideo("documentary");
         loadVideo("drama");
     }
+
     // 从服务器获取文章列表 同步时完成
     function loadArticles() {
         layer.msg('&nbsp;&nbsp;正在同步收藏', {
@@ -104,6 +88,8 @@
                 if (result.code == 0) {
                     result = result.data;
                     showList(result, 1);
+                } else {
+                    $("#articles").hide();
                 }
             },
             error:function(result) {
@@ -112,6 +98,7 @@
             }
         });
     }
+
     // 显示文章列表 参数为文章list 和 标志(1:保存至缓存 其他:不保存)
     function showList(result, flag) {
         for (var i = 0; i < result.length; i++) {
@@ -149,11 +136,14 @@
             success:function(result) {
                 layer.closeAll();
                 if(result.code === 1) {
-                    console.log("从服务器获取数据失败");
+                    $("#base-content").hide();
                     return;
                 }
                 result = JSON.parse(result.data);
-                if(result.length <= 0) return;
+                if(result.length <= 0) {
+                    $("#base-content").hide();
+                    return;
+                }
                 for(var i = 0; i < result.length; i++) {
                     $("#base-content").append(
                         '<div class="base-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
@@ -189,11 +179,14 @@
             success:function(result) {
                 layer.closeAll();
                 if(result.code === 1) {
-                    console.log("从服务器获取数据失败");
+                    $("#exam-content").hide();
                     return;
                 }
                 result = JSON.parse(result.data);
-                if(result.length === 0) return;
+                if(result.length === 0) {
+                    $("#exam-content").hide();
+                    return;
+                }
                 for(var i = 0; i < result.length; i++) {
                     $("#exam-content").append(
                         '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">\n' +
@@ -227,11 +220,14 @@
             success:function(result) {
                 layer.closeAll();
                 if(result.code === 1) {
-                    console.log("从服务器获取数据失败");
+                    $("#book-content").hide();
                     return;
                 }
                 result = JSON.parse(result.data);
-                if(result.length === 0) return;
+                if(result.length === 0) {
+                    $("#book-content").hide();
+                    return;
+                }
                 for(var i = 0; i < result.length; i++) {
                     $("#book-content").append(
                         '<div class="book-wrapper" onclick="readBook(\'' +result[i].id + '\')">\n' +
@@ -272,11 +268,14 @@
             success:function(result) {
                 layer.closeAll();
                 if(result.code === 1) {
-                    console.log("从服务器获取数据失败");
+                    $("#" + part + "-content").hide();
                     return;
                 }
                 result = JSON.parse(result.data);
-                if(result.length === 0) return;
+                if(result.length === 0) {
+                    $("#" + part + "-content").hide();
+                    return;
+                }
                 for(var i = 0; i < result.length; i++) {
                     c.append(
                         '<div class="tv" onclick="readVideo(\'' + part + '\',\'' + result[i].id +  '\')">' +

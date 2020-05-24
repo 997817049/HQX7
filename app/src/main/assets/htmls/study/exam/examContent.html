@@ -31,9 +31,6 @@
         <div class="title_bar_left">
             <span class="icon iconback"  style="font-size: 25px;" onclick="finish()"></span>
         </div>
-        <div class="title_bar_right">
-            <span id="collect" class="icon iconmore" style="font-size: 22px;" onclick=""></span>
-        </div>
     </div>
 
     <!--倒计时-->
@@ -55,7 +52,7 @@
             <div id="type" class="question-title-bold"></div>
             <div id="count" class="question-count" style="margin-right: 10px;"></div>
             <div class="question-count">/</div>
-            <div id="currentId" class="question-id" style="font-weight: bold; ">id</div>
+            <div id="currentId" class="question-id" style="font-weight: bold;">id</div>
         </div>
         <!--题目-->
         <div class="question"></div>
@@ -198,7 +195,6 @@
     init();
     function init() {
         document.body.style.minHeight =  screen_h + "px";
-        // para = 2;
         $.when(
             $.ajax({
                 url: serverIp + "study/exam",
@@ -216,7 +212,6 @@
                     minute = result.time;
                     totalTime = result.time;
                     $("#min").html(minute);
-                    $("#count").html(result.count);
                 },
                 error : function () {
                     key = "";
@@ -241,6 +236,7 @@
                         return;
                     }
                     questionList = result;
+                    $("#count").html(questionList.length);
                     $("#time-model").show();
                     dealQuestion();
                     $("#question-model").show();
@@ -319,6 +315,7 @@
             $("#num").html(questionList.length);
             $("#error").html(error);
             var score = (questionList.length - error) / questionList.length * 100;
+            score = Math.round(score);
             $("#ratio").html(score + '%');
             var m_time = parseInt(time / 60);
             var s_time = time % 60;

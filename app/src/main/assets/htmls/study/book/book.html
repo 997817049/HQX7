@@ -128,8 +128,8 @@
 </div>
 </body>
 <script>
-   var userId = window.android.getUserId();
-	// userId = 1;
+    var userId = window.android.getUserId();
+
     init();
     function init() {
         $.when(
@@ -165,7 +165,7 @@
                 type:"POST",
                 data:{
                     userId:userId,
-                    limit:5
+                    limit:6
                 },
 
                 success:function (result) {
@@ -175,6 +175,7 @@
                     }
                     result = result.data;
                     for(var i = 0; i < result.length; i++) {
+                        if(result[i] == null) continue;
                         $("#hot").append(
                             '<div class="book-wrapper" onclick="readBook(\'' + result[i].id + '\')">' +
                             '    <div class="book-img-wrapper">' +
@@ -193,7 +194,7 @@
                 type:"POST",
                 data:{
                     userId:userId,
-                    limit:5
+                    limit:6
                 },
 
                 success:function (result) {

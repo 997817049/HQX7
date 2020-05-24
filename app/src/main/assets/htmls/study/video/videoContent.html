@@ -155,23 +155,26 @@
                 }
             }),
             $.ajax({
-            url:serverIp + "study/video/content",
-            type:"POST",
-            data:{
-                userId:userId,
-                part:para.part,
-                id:para.id//电视的编号
-            },
-            success:function (result) {
-                result = result.data;
-                for(var i = 0; i < result.length; i++){
-                    urlMap.set(result[i].num + "", result[i].videoUrl);
+                url:serverIp + "study/video/content",
+                type:"POST",
+                data:{
+                    userId:userId,
+                    part:para.part,
+                    id:para.id//电视的编号
+                },
+                success:function (result) {
+                    result = result.data;
+                    for(var i = 0; i < result.length; i++){
+                        urlMap.set(result[i].num + "", result[i].videoUrl);
+                    }
                 }
-            }
-        })//获取全部外链
+            })//获取全部外链
         ).then(function (value) {//都成功时
             $("#mask").hide();
             $("#content").show();
+            if(isCollect){
+                document.getElementById("collect").style.color = 'red';
+            }
             if(isCollect && progress > 0){
                 initVideo(progress);
             } else {

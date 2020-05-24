@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zty.hqx7.R;
+import com.zty.hqx7.activity.news.ArticleActivity;
 import com.zty.hqx7.activity.study.ContentActivity;
 import com.zty.hqx7.model.User;
 import com.zty.hqx7.utils.SharedPreUtil;
@@ -18,7 +19,7 @@ import com.zty.hqx7.utils.WebViewUtil;
  * 获取全部查找内容
  * */
 public class SearchActivity extends AppCompatActivity {
-    private static final String htmlPath = "file:///android_asset/htmls/";
+    private static final String rootPath = "file:///android_asset/htmls/";
     private WebView webView;
 
     @Override
@@ -29,7 +30,7 @@ public class SearchActivity extends AppCompatActivity {
         //设置webview
         WebViewUtil.dealWebView(webView);
         //导入html
-        webView.loadUrl(htmlPath + "search/search.html");
+        webView.loadUrl(rootPath + "search/search.html");
         System.out.println("导入search界面");
         webView.addJavascriptInterface(new SearchJSInterface(), "android");
     }
@@ -38,7 +39,11 @@ public class SearchActivity extends AppCompatActivity {
         @JavascriptInterface
         public void toContent(String htmlUrl, String model, String part, String id){
             JSONObject obj = new JSONObject();
-            obj.put("htmlUrl", htmlPath + htmlUrl);
+            if(model.equals("base") || model.equals("news")){
+                obj.put("htmlUrl",htmlUrl);
+            } else {
+                obj.put("htmlUrl",rootPath + htmlUrl);
+            }
             obj.put("model", model);
             obj.put("part", part);
             obj.put("id", Integer.valueOf(id));
@@ -46,6 +51,13 @@ public class SearchActivity extends AppCompatActivity {
             ContentActivity.setPara(obj);
             Intent intent = new Intent(SearchActivity.this, ContentActivity.class);
             startActivity(intent);
+        }
+
+        @JavascriptInterface
+        public void toArticle(String htmlUrl, int aid) {
+            ArticleActivity.setHtmlUrl(htmlUrl);
+            ArticleActivity.setArtId(aid);
+            startActivity(new Intent(SearchActivity.this, ArticleActivity.class));
         }
 
         @JavascriptInterface

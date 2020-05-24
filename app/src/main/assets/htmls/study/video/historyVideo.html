@@ -43,10 +43,8 @@
     userId = 1;
     init();
     function init() {
-        // para = window.android.getPara();
-        // para = JSON.parse(para);
-        para = new Object();
-        para.part = "teleplay";
+        para = window.android.getPara();
+        para = JSON.parse(para);
         dealToTop();
         $('.toTopH').fadeOut(100);
         $.when(

@@ -102,11 +102,14 @@ public class SearchContentActivity extends AppCompatActivity {
         @JavascriptInterface
         public void toContent(String htmlUrl, String model, String part, String id){
             JSONObject obj = new JSONObject();
-            obj.put("htmlUrl",rootPath + htmlUrl);
+            if(model.equals("base")){
+                obj.put("htmlUrl",htmlUrl);
+            } else {
+                obj.put("htmlUrl",rootPath + htmlUrl);
+            }
             obj.put("model", model);
             obj.put("part", part);
             obj.put("id", Integer.valueOf(id));
-            System.out.println(obj);
             ContentActivity.setPara(obj);
             Intent intent = new Intent(SearchContentActivity.this, ContentActivity.class);
             startActivity(intent);
