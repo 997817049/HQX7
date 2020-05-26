@@ -1,9 +1,12 @@
 package com.zty.hqx7.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,6 +14,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 public class AddressUtil {
     private LocationManager locationManager;

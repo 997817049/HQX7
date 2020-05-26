@@ -107,15 +107,12 @@
 </body>
 <script>
     var num = 0;
-    $("#mask").hide();
-    $("#content").show();
     var userId = window.android.getUserId();
     var address = window.android.getAddress();
     var addressArr = address.split(',');
 
     init();
     function init(){
-        console.log("base.html: 初始化base界面");
         dealToTop();
         $('.toTopH').fadeOut(200);
         $("#address").html(address);

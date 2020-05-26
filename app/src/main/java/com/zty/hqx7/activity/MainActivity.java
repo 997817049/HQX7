@@ -10,6 +10,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -110,6 +113,23 @@ public class MainActivity extends AppCompatActivity {
                     Looper.loop();
                 }
             }).start();
+        }
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){//未开启定位权限
+            //开启定位权限,200是标识码
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode) {
+            case 200:
+                if (grantResults[0]!=PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this,"未开启定位权限，请手动到设置去开去权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 

@@ -10,7 +10,6 @@
     <link href="../../files/study/video/subTV.css" type="text/css" rel="stylesheet"/>
     <link href="../../files/public/other.css" type="text/css" rel="stylesheet">
     <link href="../../files/icon/iconfont.css" type="text/css" rel="stylesheet"/>
-    <!--<link href="../../resources/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="../../files/main/styles.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="../../resources/scripts/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../../resources/scripts/bootstrap.min.js"></script>
@@ -224,9 +223,10 @@
 <script>
     wordArr = null; //历史查找词汇
     word = null;//正在查找词汇
+    isExist = false;
 
-    // var userId = window.android.getUserId();
-    userId = 1;
+    var userId = window.android.getUserId();
+
     init();
     function init() {
         $.when(
@@ -269,7 +269,11 @@
                     result = result.data;
                     wordArr = result;
                     $("#history-word").html('');
-                    for(var i = 0; i < result.length; i++) {
+                    if(result.length <= 0) {
+                        $(".history-model").hide();
+                        return;
+                    }
+                    for(var i = result.length - 1; i >= 0; i--) {
                         $("#history-word").prepend(
                             '<div id="' + result[i] + '" class="history-word" onclick="searchExistWord(\'' + result[i] +  '\')">' + result[i] + '</div>');
                     }
@@ -390,6 +394,7 @@
             },
             error : function () {
                 layer.closeAll();
+                layer.msg("请检查网络");
             }
         })
     }
@@ -428,6 +433,7 @@
             },
             error : function () {
                 layer.closeAll();
+                layer.msg("请检查网络");
             }
         })
     }
@@ -474,6 +480,7 @@
             },
             error : function () {
                 layer.closeAll();
+                layer.msg("请检查网络");
             }
         })
     }
@@ -522,6 +529,7 @@
             },
             error : function () {
                 layer.closeAll();
+                layer.msg("请检查网络");
             }
         })
     }

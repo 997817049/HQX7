@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <link href="../../files/main/styles.css" type="text/css" rel="stylesheet"/>
     <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-theme.min.css">
     <script type="text/javascript" src="../../resources/scripts/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../../resources/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../resources/scripts/common.js"></script>
@@ -22,6 +23,14 @@
                 <!-- 轮播（Carousel）项目 -->
                 <div class="carousel-inner" id="car"></div>
                 <!-- 轮播（Carousel）导航 -->
+                <!--<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">-->
+                    <!--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>-->
+                    <!--<span class="sr-only">Previous</span>-->
+                <!--</a>-->
+                <!--<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">-->
+                    <!--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
+                    <!--<span class="sr-only">Next</span>-->
+                <!--</a>-->
                 <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -52,15 +61,25 @@
     </div>
 </body>
 <script>
-    var id = window.android.getId();
-    var title = window.android.getTitle();
-    var initiator = window.android.getInitiator();
-    var detail = window.android.getDetail();
-    var when = window.android.getWhen();
-    var where = window.android.getWhere();
-    var pic1 = window.android.getPic1();
-    var pic2 = window.android.getPic2();
-    var pic3 = window.android.getPic3();
+    // var id = window.android.getId();
+    // var title = window.android.getTitle();
+    // var initiator = window.android.getInitiator();
+    // var detail = window.android.getDetail();
+    // var when = window.android.getWhen();
+    // var where = window.android.getWhere();
+    // var pic1 = window.android.getPic1();
+    // var pic2 = window.android.getPic2();
+    // var pic3 = window.android.getPic3();
+
+    var id = 1;
+    var title = "标题";
+    var initiator = "initiator";
+    var detail = "详情";
+    var when = "2020-02-03";
+    var where = "西安";
+    var pic1 = "http://49.4.114.114:81/hqx_static/ztyImage/158530132981141.bmp";
+    var pic2 = "http://49.4.114.114:81/hqx_static/ztyImage/158536357482991.bmp";
+    var pic3 = "http://49.4.114.114:81/hqx_static/ztyImage/158536357482958.bmp";
 
     load();
     already();
@@ -98,9 +117,6 @@
         }
     }
 
-
-
-
     var button = document.getElementById("button");
 
     // 进入页面 1.判断用户是否已经参加该活动 若已参加 则按钮变灰 颜色变白
@@ -110,7 +126,7 @@
             type:"POST",
             data:{
               id: id,
-              stuId: window.android.getStuId()
+              stuId: 2//window.android.getStuId()
             },
             success:function(result) {
               if (result.code == 0) {

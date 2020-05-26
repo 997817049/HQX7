@@ -226,7 +226,7 @@ public class UpdateManager {
      * @return 版本实例
      */
     private Version getkUpdate() throws IOException {
-        URL url = new URL("http://114.116.118.232:8081/version/checkUpdate");
+        URL url = new URL("http://49.4.114.114:8081/version/checkUpdate");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.connect();
 
