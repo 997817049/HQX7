@@ -128,7 +128,7 @@ public class SubActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public String getAddress(){
-            return AddressUtil.getInstance().getLocations(SubActivity.this);
+            return AddressUtil.getLocations(SubActivity.this);
         }
     }
 }

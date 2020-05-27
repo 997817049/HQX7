@@ -68,7 +68,7 @@
         <div class="scroll-inner-wrapper">
             <div class="score-content">
                 <div class="bar-wrapper" onclick="jumpToSub('special')">
-                    <img src="../../../images/全部内容.png" class="bar-img">
+                        <img src="../../../images/全部内容.png" class="bar-img">
                     <div class="bar-txt">全部内容</div>
                 </div>
                 <div class="bar-wrapper" onclick="jumpToSub('collect')">
@@ -162,9 +162,10 @@
     }
 </script>
 <script>
-    var userId = window.android.getUserId();
-
-    init();
+    // var userId = window.android.getUserId();
+    $("#mask").hide();
+    $("#content").show();
+    // init();
     function init() {
         para = window.android.getPara();
         console.log("para" + para);

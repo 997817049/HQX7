@@ -257,6 +257,7 @@
     function dealQuestion() {
         question = questionList[num];
         var typeStr = question.type.msg;
+        console.log(typeStr);
         document.getElementById("type").innerHTML = typeStr;
         $("#currentId").html(question.num);
         $(".question").html(question.question);

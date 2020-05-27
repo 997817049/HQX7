@@ -15,7 +15,7 @@
 <style>*,body,html,div,p,img{border:0;margin:0;padding:0;} </style>
 <body>
     <!--<div onclick="window.android.toArticle('character')">-->
-    <div style="margin-top: 45px;">
+    <div>
 <!--            <img style="width:100%; border-radius: 6px;" src="images/首页/schoolTest.jpg"/>-->
             <div id="myCarousel" class="carousel slide">
                 <!-- 轮播（Carousel）指标 -->
@@ -23,14 +23,6 @@
                 <!-- 轮播（Carousel）项目 -->
                 <div class="carousel-inner" id="car"></div>
                 <!-- 轮播（Carousel）导航 -->
-                <!--<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">-->
-                    <!--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>-->
-                    <!--<span class="sr-only">Previous</span>-->
-                <!--</a>-->
-                <!--<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">-->
-                    <!--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
-                    <!--<span class="sr-only">Next</span>-->
-                <!--</a>-->
                 <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -61,25 +53,15 @@
     </div>
 </body>
 <script>
-    // var id = window.android.getId();
-    // var title = window.android.getTitle();
-    // var initiator = window.android.getInitiator();
-    // var detail = window.android.getDetail();
-    // var when = window.android.getWhen();
-    // var where = window.android.getWhere();
-    // var pic1 = window.android.getPic1();
-    // var pic2 = window.android.getPic2();
-    // var pic3 = window.android.getPic3();
-
-    var id = 1;
-    var title = "标题";
-    var initiator = "initiator";
-    var detail = "详情";
-    var when = "2020-02-03";
-    var where = "西安";
-    var pic1 = "http://49.4.114.114:81/hqx_static/ztyImage/158530132981141.bmp";
-    var pic2 = "http://49.4.114.114:81/hqx_static/ztyImage/158536357482991.bmp";
-    var pic3 = "http://49.4.114.114:81/hqx_static/ztyImage/158536357482958.bmp";
+    var id = window.android.getId();
+    var title = window.android.getTitle();
+    var initiator = window.android.getInitiator();
+    var detail = window.android.getDetail();
+    var when = window.android.getWhen();
+    var where = window.android.getWhere();
+    var pic1 = window.android.getPic1();
+    var pic2 = window.android.getPic2();
+    var pic3 = window.android.getPic3();
 
     load();
     already();
@@ -126,7 +108,7 @@
             type:"POST",
             data:{
               id: id,
-              stuId: 2//window.android.getStuId()
+              stuId: window.android.getStuId()
             },
             success:function(result) {
               if (result.code == 0) {

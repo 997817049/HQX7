@@ -10,13 +10,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.HorizontalScrollView;
 import android.widget.RadioGroup;
@@ -37,10 +35,7 @@ import com.zty.hqx7.activity.study.SubActivity;
 import com.zty.hqx7.model.Article;
 import com.zty.hqx7.model.User;
 import com.zty.hqx7.service.UpdateManager;
-import com.zty.hqx7.utils.AddressUtil;
-import com.zty.hqx7.utils.MyDatabaseHelper;
-import com.zty.hqx7.utils.SharedPreUtil;
-import com.zty.hqx7.utils.WebViewUtil;
+import com.zty.hqx7.utils.*;
 import com.zty.hqx7.view.IconView;
 
 import java.util.List;
@@ -68,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static boolean isChecked = false;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    private final int PERMS_REQUEST_CODE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,50 +80,48 @@ public class MainActivity extends AppCompatActivity {
 
         mainActivity = this;
 
-        // 设置缓存机制 2019/12/8
-        // 根据cache-control决定是否从网络上取数据。
-        // https://www.jianshu.com/p/f1efb0928ebc
-//        webSettings.setAppCacheEnabled(true);
-//        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-//
 //        overridePendingTransition(0, 0);
-//        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
         databaseHelper = new MyDatabaseHelper(MainActivity.this, "articls", null, 1);
 
         if (!isChecked) {
             //Android 6.0以上版本需要临时获取权限
-            if(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP_MR1&&
-                    PackageManager.PERMISSION_GRANTED!=checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-                requestPermissions(perms,PERMS_REQUEST_CODE);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 &&
+                    PackageManager.PERMISSION_GRANTED != checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                int PERMS_REQUEST_CODE = 200;
+                requestPermissions(perms, PERMS_REQUEST_CODE);
             }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     Looper.prepare();
                     new UpdateManager(MainActivity.this).checkUpdate(0);
-                    System.out.println("检查版本");
                     isChecked = true;
                     Looper.loop();
                 }
             }).start();
         }
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){//未开启定位权限
+        //判断是否为android6.0系统版本，如果是，需要动态添加权限
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
             //开启定位权限,200是标识码
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+        }
+        //判断是否为android6.0系统版本，如果是，需要动态添加权限
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
+            //开启定位权限,200是标识码
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode) {
-            case 200:
-                if (grantResults[0]!=PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this,"未开启定位权限，请手动到设置去开去权限", Toast.LENGTH_SHORT).show();
-                }
-                break;
+        if (requestCode == 200) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "未开启定位权限，请手动到设置去开去权限", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -374,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public String getAddress(){
-            return AddressUtil.getInstance().getLocations(MainActivity.this);
+            return AddressUtil.getLocations(MainActivity.this);
         }
 
         @JavascriptInterface

@@ -33,6 +33,9 @@ public class WebViewUtil {
         webSettings.setAllowUniversalAccessFromFileURLs(true);
         //设置WebView运行中的一个文件方案被允许访问其他文件方案中的内容，默认值true
         webSettings.setAllowFileAccessFromFileURLs(true);
+        //缓存
+//        webSettings.setAppCacheEnabled(true);
+//        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         //设置滚动条风格，也可在配置文件中android:scrollbarStyle="insideInset"
         //该ScrollBar显示在视图(view)的边缘,不增加view的padding,该ScrollBar将被半透明覆盖
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
