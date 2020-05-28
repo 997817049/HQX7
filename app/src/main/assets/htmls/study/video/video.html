@@ -111,7 +111,7 @@
 </body>
 <script>
     var speed = 3000; //轮播速度
-    var num = 4; //轮播图片张数
+    var num = 6; //轮播图片张数
     var index = 1; //当前轮播图片序号
 
     $(function() {
@@ -139,7 +139,7 @@
         $(".left").click(function() {
             index = index - 2;
             if (index < 0) {
-                index = 3;
+                index = 5;
             }
             play();
         })
@@ -150,10 +150,8 @@
 
     /*轮播展示*/
     function play() {
-        var ele = $(".a-list a");
-        if (index == num) {
-            index = 0;
-        }
+        index  = index % 6;
+        console.log("下标：" + index);
         //轮播图片
         $(".a-list a").removeClass('current').eq(index).addClass('current');
         //轮播圆点
@@ -162,13 +160,11 @@
     }
 </script>
 <script>
-    // var userId = window.android.getUserId();
-    $("#mask").hide();
-    $("#content").show();
-    // init();
+    var userId = window.android.getUserId();
+    var para = window.android.getPara();
+
+    init();
     function init() {
-        para = window.android.getPara();
-        console.log("para" + para);
         $.when(
             $.ajax({
                 url: serverIp + "classify/study",

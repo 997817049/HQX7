@@ -46,7 +46,7 @@
     <div id = "articles"></div>
     <div id = "exam-content" style="margin-top: 10px;"></div>
     <div id = "book-content"></div>
-    <div id = "tv-content"></div>
+    <div id = "teleplay-content"></div>
     <div id = "film-content"></div>
     <div id = "variety-content"></div>
     <div id = "documentary-content"></div>
@@ -54,7 +54,8 @@
     <div id = "base-content"></div>
 </body>
 <script>
-    var uid = window.android.getUid();
+    // var uid = window.android.getUid();
+    uid = 1;
     // TODO 刚开始应该从app缓存中获取 点击右上角同步时才从服务器拿
     init();
     function init() {
@@ -88,6 +89,7 @@
                 if (result.code == 0) {
                     result = result.data;
                     showList(result, 1);
+                    $("#articles").show();
                 } else {
                     $("#articles").hide();
                 }
@@ -144,6 +146,7 @@
                     $("#base-content").hide();
                     return;
                 }
+                $("#base-content").show();
                 for(var i = 0; i < result.length; i++) {
                     $("#base-content").append(
                         '<div class="base-wrapper" onclick="readBase(\'' + result[i].htmlUrl + '\',\'' + result[i].id +  '\')">\n' +
@@ -187,6 +190,7 @@
                     $("#exam-content").hide();
                     return;
                 }
+                $("#exam-content").show();
                 for(var i = 0; i < result.length; i++) {
                     $("#exam-content").append(
                         '<div class="exam-wrapper" onclick="readExam(\'' + result[i].id + '\')">\n' +
@@ -247,6 +251,7 @@
                     '            <div class="dashed_line"></div>\n' +
                     '            <div class="line_txt">我是一条分割线</div>\n' +
                     '        </div>');
+                $("#book-content").show();
             },
             error:function(result) {
                 layer.closeAll();
@@ -276,8 +281,9 @@
                     $("#" + part + "-content").hide();
                     return;
                 }
+                $("#" + part + "-content").show();
                 for(var i = 0; i < result.length; i++) {
-                    c.append(
+                    $("#" + part + "-content").append(
                         '<div class="tv" onclick="readVideo(\'' + part + '\',\'' + result[i].id +  '\')">' +
                         '<div class="tv_image_div">' +
                         '<img class="tv_image" src="'+ result[i].picUrl + '"/>' +

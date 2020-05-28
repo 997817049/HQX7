@@ -35,11 +35,11 @@
 </body>
 <script>
     var userId = window.android.getUserId();
+    para = window.android.getPara();
+    para = JSON.parse(para);
 
     init();
     function init() {
-        para = window.android.getPara();
-        para = JSON.parse(para);
         dealToTop();
         $('.toTopH').fadeOut(100);
         $.when(
