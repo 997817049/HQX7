@@ -150,7 +150,7 @@
 
     function writeHtml(dom, obj) {
         obj = JSON.parse(obj);
-        var html = '<div class="tv" onclick="readContent()">\n' +
+        var html = '<div class="tv" onclick="readContent(\'' + result[i].id +  '\')">\n' +
             '            <div class="tv2-img-wrapper">\n' +
             '                <img src="' + obj.picUrl + '" class="tv-img"/>\n' +
             '            </div>\n' +
